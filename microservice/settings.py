@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'excel_parser'
+    'rest_frmework_swagger',
 ]
 
 MIDDLEWARE = [
