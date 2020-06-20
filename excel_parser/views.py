@@ -32,6 +32,7 @@ def daily_payment_report_view(request):
 
 
     if request.method == 'POST':
+
         excel_files = request.FILES.getlist("excel_file")
         for current_excel_file in excel_files:
             excel_file_name = current_excel_file.name
@@ -88,6 +89,14 @@ def daily_payment_report_view(request):
                     except KeyError:
                         continue
 
-                    # code to store into database should be done here...
+                      # code to store into database...
+                budget = Budget()
+                budget.MDA_name = df.MDA_name
+                budget.project_recipient_name = df.project_recipient_name
+                budget.project_name = df.organization_name
+                budget.project_amount = df.project_amount
+                budget.project_date = df.project_date
+                budget.save()
+                  
 
         return Response(status=status.HTTP_200_OK)

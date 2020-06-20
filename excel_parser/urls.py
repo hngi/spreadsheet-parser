@@ -4,7 +4,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 
 router = routers.DefaultRouter()
-router.register("budget", views.BudgetViewSet)
+router.register("budget", views.BudgetView)
 
 
 urlpatterns = [
