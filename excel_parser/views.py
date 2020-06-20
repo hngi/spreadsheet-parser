@@ -91,11 +91,11 @@ def daily_payment_report_view(request):
 
                       # code to store into database...
                 budget = Budget()
-                budget.MDA_name = "FEDERAL GOVERNMENT"
+                budget.MDA_name = df.MDA_name
                 budget.project_recipient_name = df.project_recipient_name
                 budget.project_name = df.organization_name
                 budget.project_amount = df.project_amount
-                budget.project_date = date
+                budget.project_date = df.project_date
                 budget.save()
                   
 
