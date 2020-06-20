@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Team-Granite-Backend
 A Spreadsheet Parser
 
@@ -47,3 +48,4 @@ If you're in team-granite-backend:
 - six==1.15.0
 - sqlparse==0.3.1
 - whitenoise==5.1.0
+

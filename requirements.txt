@@ -13,4 +13,7 @@ python-dotenv==0.13.0
 pytz==2020.1
 six==1.15.0
 sqlparse==0.3.1
-whitenoise==5.1.0
+whitenoise==5.1.0#
+xlrd==1.2.0
+coreapi==2.3.3
+pyyaml==5.1
