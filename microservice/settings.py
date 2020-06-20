@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'microservice.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'parser',
+        'NAME': 'parser2',
         'USER': 'shols',
         'PASSWORD': os.getenv('PASSWORD'),
         'HOST': 'localhost',

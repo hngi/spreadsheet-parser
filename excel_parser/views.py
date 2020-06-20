@@ -13,6 +13,7 @@ from django.conf import settings
 from .models import ExcelSaverModel, Budget
 from datetime import datetime
 import os
+from django.db.models import Q
 from .serializers import BudgetSerializer
 
 class BudgetView(viewsets.ModelViewSet): 
@@ -32,6 +33,7 @@ def daily_payment_report_view(request):
 
 
     if request.method == 'POST':
+
         excel_files = request.FILES.getlist("excel_file")
         for current_excel_file in excel_files:
             excel_file_name = current_excel_file.name
@@ -82,13 +84,23 @@ def daily_payment_report_view(request):
                                                              df['project_description'].str[10:],
                                                              df['project_description'])
                         df['MDA_name'] = 'FEDERAL GOVERNMENT'
+                        df['project_amount'] = df['project_amount'].apply(lambda x: '{:.2f}'.format(x))
 
                         # store data in dict form. this is the data to loop over to store into db
                         daily_expenses = df.to_dict(orient='records')
                     except KeyError:
                         continue
 
-                    # code to store into database should be done here...
+                    # code to store into database...
+                    for transaction in daily_expenses:
+                        budget = Budget()
+                        budget.MDA_name = transaction['MDA_name']
+                        budget.project_recipient_name = transaction['project_recipient_name']
+                        budget.project_name = transaction['organization_name']
+                        budget.project_amount = transaction['project_amount']
+                        budget.project_date = transaction['project_date']
+                        budget.save()
+                  
 
         return Response(status=status.HTTP_200_OK)
 
@@ -98,13 +110,19 @@ def get_daily_reports_view(request):
         day = request.GET.get('day')
         month = request.GET.get('month')
         year = request.GET.get('year')
-        try:
-            date_string = f'{day}-{month}-{year}'
-            date = datetime.strptime(date_string, '%d-%m-%Y').date()
-        except ValueError:
-            return Response("'Wrong Date Format'")
-        qs = Budget.objects.filter(project_date=date)
-        print('sfdsa',qs)
+        project_recipient_name = request.GET.get('project_recipient_name')
+        qs = []
+        if project_recipient_name:
+            qs = Budget.objects.filter(project_recipient_name=project_recipient_name)
+        if day != '' & month != '' & year != '':
+            try:
+                date_string = f'{day}-{month}-{year}'
+                date = datetime.strptime(date_string, '%d-%m-%Y').date()
+                qs = Budget.objects.filter(project_date=date)
+            except ValueError:
+                return Response("'Wrong Date Format'")
+
+
         serializer = BudgetSerializer(qs, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
