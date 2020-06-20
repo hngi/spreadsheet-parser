@@ -1,3 +1,15 @@
+<<<<<<< HEAD
+from django.shortcuts import render
+from rest_framework import viewsets 
+from .models import Budget
+from .serializers import BudgetSerializer
+
+class BudgetView(viewsets.ModelViewSet): 
+	queryset = Budget.objects.all() # this code is to call all object from the db 
+	serializer_class = BudgetSerializer # this code use the class defined in the serializers.py
+
+# Create your views here.
+=======
 import pandas
 import json
 import numpy as np
@@ -157,3 +169,4 @@ def daily_payment_report_view(request):
 
         # for testing , return the data in Json format as response until db is made
         return Response(json_data, status=status.HTTP_200_OK)
+>>>>>>> development
