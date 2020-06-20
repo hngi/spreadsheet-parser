@@ -91,14 +91,14 @@ def daily_payment_report_view(request):
                         continue
 
                       # code to store into database...
-                for each_data in daily_expenses:
-                    budget = Budget()
-                    budget.MDA_name = each_data['MDA_name']
-                    budget.project_recipient_name = each_data['project_recipient_name']
-                    budget.project_name = each_data['organization_name']
-                    budget.project_amount = each_data['project_amount']
-                    budget.project_date = each_data['project_date']
-                    budget.save()
+                    for each_data in daily_expenses:
+                        budget = Budget()
+                        budget.MDA_name = each_data['MDA_name']
+                        budget.project_recipient_name = each_data['project_recipient_name']
+                        budget.project_name = each_data['organization_name']
+                        budget.project_amount = each_data['project_amount']
+                        budget.project_date = each_data['project_date']
+                        budget.save()
                   
 
         return Response(status=status.HTTP_200_OK)
