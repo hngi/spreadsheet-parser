@@ -43,7 +43,6 @@ def daily_payment_report_view(request):
             if len(year) < 3:
                 year = '20' + year
             current_file_path = f'media/daily/{excel_file_name}'
-            print(current_file_path)
             if os.path.exists(current_file_path):
                 #  code to make sure all files are unique
                 continue
