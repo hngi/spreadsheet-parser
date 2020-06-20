@@ -159,3 +159,27 @@ def daily_payment_report_view(request):
         return Response(json_data, status=status.HTTP_200_OK)
 
 
+import xlrd
+import datetime
+
+def extractData(request):
+
+    name = "test"
+    sheetName = "Sheet1"
+    workbook = xlrd.open_workbook(name+'.xlsx')
+    worksheet = workbook.sheet_by_name(sheetName)
+    for line in range(worksheet.nrows):
+        ORGANIZATION_NAME = worksheet.cell_value(line,2)
+        Beneficiary_Name = worksheet.cell_value(line,3)
+        Amount = worksheet.cell_value(line,4)
+        name = worksheet.cell_value(line,1)
+
+        budget = Budget()
+        budget.MDA_name = ORGANIZATION_NAME
+        budget.project_recipient_name = Beneficiary_Name
+        budget.project_name = name 
+        if isinstance(Amount, float):
+            budget.project_amount = Amount
+        budget.project_date = datetime.datetime.now()
+        budget.save()
+    return HttpResponse("Done")
