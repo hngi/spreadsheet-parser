@@ -157,3 +157,5 @@ def daily_payment_report_view(request):
 
         # for testing , return the data in Json format as response until db is made
         return Response(json_data, status=status.HTTP_200_OK)
+
+
