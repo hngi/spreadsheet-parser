@@ -8,4 +8,7 @@ class Budget(models.Model):
     project_recipient_name = models.CharField(max_length=45)
     project_name = models.TextField()
     project_amount = models.FloatField()
-    project_date = models.DateTimeField()
+    project_date = models.DateField()
+   
+    def ___str___(self):
+        return self.MDA_name
