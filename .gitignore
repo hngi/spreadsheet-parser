@@ -1,4 +1,15 @@
+<<<<<<< HEAD
 venv
 .idea
 .vscode
 .ve
+=======
+venv
+.idea
+.vscode
+.sqlite3
+__pycache__
+.pyc
+parser/
+.env
+>>>>>>> development
