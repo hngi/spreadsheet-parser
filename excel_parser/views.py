@@ -83,6 +83,7 @@ def daily_payment_report_view(request):
                                                              df['project_description'].str[10:],
                                                              df['project_description'])
                         df['MDA_name'] = 'FEDERAL GOVERNMENT'
+                        df['project_amount'] = df["project_amount"].apply(lambda x: {':.2f'}.format(x))
 
                         # store data in dict form. this is the data to loop over to store into db
                         daily_expenses = df.to_dict(orient='records')
@@ -90,13 +91,13 @@ def daily_payment_report_view(request):
                         continue
 
                       # code to store into database...
-                for data in daily_expenses:
+                for each_data in daily_expenses:
                     budget = Budget()
-                    budget.MDA_name = data['MDA_name']
-                    budget.project_recipient_name = data['project_recipient_name']
-                    budget.project_name = data['organization_name']
-                    budget.project_amount = data['project_amount']
-                    budget.project_date = data['project_date']
+                    budget.MDA_name = each_data['MDA_name']
+                    budget.project_recipient_name = each_data['project_recipient_name']
+                    budget.project_name = each_data['organization_name']
+                    budget.project_amount = each_data['project_amount']
+                    budget.project_date = each_data['project_date']
                     budget.save()
                   
 
