@@ -76,14 +76,13 @@ def daily_payment_report_view(request):
                         name = f'{day}-{month}-{year}'
                         date = datetime.strptime(name, '%d-%m-%Y').date()
                         df['project_date'] = date
-                        print(data2[:6])
                         valid_data = ['JAN', 'FEB', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
                         pattern = ' 20|'.join(valid_data)
                         df['project_description'] = np.where(df['project_description'].str.contains(pattern, na=False),
                                                              df['project_description'].str[10:],
                                                              df['project_description'])
                         df['MDA_name'] = 'FEDERAL GOVERNMENT'
-                        df['project_amount'] = df["project_amount"].apply(lambda x: {':.2f'}.format(x))
+                        df['project_amount'] = df["project_amount"].apply(lambda x: '{:.2f}'.format(x))
 
                         # store data in dict form. this is the data to loop over to store into db
                         daily_expenses = df.to_dict(orient='records')
