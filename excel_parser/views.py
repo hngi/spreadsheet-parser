@@ -1,3 +1,6 @@
+from django.shortcuts import render
+from rest_framework import viewsets 
+from .models import Budget
 import pandas
 import json
 import numpy as np
@@ -6,11 +9,15 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
 from rest_framework import status
-from django.utils.datastructures import MultiValueDictKeyError
 from django.conf import settings
 from .models import ExcelSaverModel, Budget
 from datetime import datetime
 import os
+from .serializers import BudgetSerializer
+
+class BudgetView(viewsets.ModelViewSet): 
+	queryset = Budget.objects.all() # this code is to call all object from the db 
+	serializer_class = BudgetSerializer # this code use the class defined in the serializers.py
 
 # get project media url
 media_url = settings.MEDIA_URL
@@ -84,3 +91,4 @@ def daily_payment_report_view(request):
                     # code to store into database should be done here...
 
         return Response(status=status.HTTP_200_OK)
+
