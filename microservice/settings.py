@@ -43,7 +43,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'excel_parser'
+    'excel_parser',
+
+    #added restframe wort to installed_Apps
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -132,3 +135,5 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+REST_FRAMEWORK = {'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'}
+
