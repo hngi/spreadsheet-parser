@@ -25,10 +25,10 @@ media_url = settings.MEDIA_URL
 # this code block accepts several files at once or just one
 # this only works for daily payment reports excel sheets
 
-@api_view(['POST', 'GET'])
+@api_view(['POST'])
 def daily_payment_report_view(request):
-    # if to get all daily reports for one month, provide only year and month params
-    # if to ge reports for a particular day, provide year, month and day params
+# if to get all daily reports for one month, provide only year and month params
+# if to ge reports for a particular day, provide year, month and day params
 
 
     if request.method == 'POST':
@@ -91,7 +91,20 @@ def daily_payment_report_view(request):
                     # code to store into database should be done here...
 
         return Response(status=status.HTTP_200_OK)
-<<<<<<< HEAD
 
-=======
->>>>>>> 5c812ba2be4955c65a255d92f61163e32f249c8c
+@api_view(['GET', ])
+def get_daily_reports_view(request):
+    if request.method == 'GET':
+        day = request.GET.get('day')
+        month = request.GET.get('month')
+        year = request.GET.get('year')
+        try:
+            date_string = f'{day}-{month}-{year}'
+            date = datetime.strptime(date_string, '%d-%m-%Y').date()
+        except ValueError:
+            return Response("'Wrong Date Format'")
+        qs = Budget.objects.filter(project_date=date)
+        print('sfdsa',qs)
+        serializer = BudgetSerializer(qs, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)

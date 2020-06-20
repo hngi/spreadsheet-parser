@@ -83,11 +83,11 @@ WSGI_APPLICATION = 'microservice.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'hvdptmsr',
-        'USER': os.getenv('USER'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'parser',
+        'USER': 'shols',
         'PASSWORD': os.getenv('PASSWORD'),
-        'HOST': 'ruby.db.elephantsql.com',
+        'HOST': 'localhost',
         'PORT': '5432'
     }
 }
