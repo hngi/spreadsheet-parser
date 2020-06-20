@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'excel_parser',
+
     #added restframe wort to installed_Apps
     'rest_framework',
 ]
@@ -90,7 +91,6 @@ DATABASES = {
         'PASSWORD': os.getenv('PASSWORD'),
         'HOST': 'ruby.db.elephantsql.com',
         'PORT': '5432'
-      
     }
 }
 

@@ -28,4 +28,3 @@ urlpatterns = [
     path('schema/', schema_view),
     path('docs/', include_docs_urls(title="MicroService")),
 ]
-

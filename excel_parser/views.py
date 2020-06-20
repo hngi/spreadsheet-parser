@@ -91,4 +91,3 @@ def daily_payment_report_view(request):
                     # code to store into database should be done here...
 
         return Response(status=status.HTTP_200_OK)
-
