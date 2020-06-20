@@ -97,7 +97,6 @@ def daily_payment_report_view(request):
                 budget.project_amount = df.project_amount
                 budget.project_date = date
                 budget.save()
-                print(df.organization_name)
                   
 
         return Response(status=status.HTTP_200_OK)
