@@ -1,0 +1,9 @@
+venv
+fenv
+.idea
+.vscode
+.sqlite3
+__pycache__
+.pyc
+parser/
+.env
