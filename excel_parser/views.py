@@ -114,16 +114,24 @@ def get_daily_reports_view(request):
         qs = []
 
 
-        if project_recipient_name:
-            qs = Budget.objects.filter(project_recipient_name=project_recipient_name)
-        if day & month & year:
+        if project_recipient_name and day and month and year:
+            try:
+                date_string = f'{day}-{month}-{year}'
+                date = datetime.strptime(date_string, '%d-%m-%Y').date()
+                qs = Budget.objects.filter(
+                    Q(project_recipient_name__icontains=project_recipient_name) & Q(project_date=date)
+                )
+            except ValueError:
+                return Response("'Wrong Date Format'")
+        elif project_recipient_name:
+            qs = Budget.objects.filter(project_recipient_name__icontains=project_recipient_name)
+        elif day and month and year:
             try:
                 date_string = f'{day}-{month}-{year}'
                 date = datetime.strptime(date_string, '%d-%m-%Y').date()
                 qs = Budget.objects.filter(project_date=date)
             except ValueError:
-                return Response("'Wrong Date Format'")
+                return Response("Wrong Date Format")
 
         serializer = BudgetSerializer(qs, many=True)
-
         return Response(serializer.data, status=status.HTTP_200_OK)
