@@ -6,4 +6,5 @@ fenv
 __pycache__
 .pyc
 parser/
+env
 .env
