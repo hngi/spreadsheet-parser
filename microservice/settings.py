@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'excel_parser',
 
-    #added restframe wort to installed_Apps
+    #added restframe work to installed_Apps
     'rest_framework',
 ]
 
@@ -85,12 +85,12 @@ WSGI_APPLICATION = 'microservice.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'hvdptmsr',
-        'USER': os.getenv('USER'),
-        'PASSWORD': os.getenv('PASSWORD'),
-        'HOST': 'ruby.db.elephantsql.com',
-        'PORT': '5432'
+        'ENGINE': "django.db.backends.postgresql_psycopg2",
+        'NAME': "parser",
+        'USER': "postgres",
+        'PASSWORD':"password",
+        'HOST': "localhost",
+        'PORT': "5432",
     }
 }
 

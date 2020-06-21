@@ -13,11 +13,16 @@ from django.conf import settings
 from .models import ExcelSaverModel, Budget
 from datetime import datetime
 import os
-from .serializers import BudgetSerializer
+from . import serializers
 
-class BudgetView(viewsets.ModelViewSet): 
-	queryset = Budget.objects.all() # this code is to call all object from the db 
-	serializer_class = BudgetSerializer # this code use the class defined in the serializers.py
+from .serializers import BudgetSerializer
+from . import models
+
+
+class BudgetViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.BudgetSerializer
+    queryset = models.Budget.objects.all()
+	
 
 # get project media url
 media_url = settings.MEDIA_URL
