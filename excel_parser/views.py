@@ -43,7 +43,6 @@ def daily_payment_report_view(request):
             if len(year) < 3:
                 year = '20' + year
             current_file_path = f'media/daily/{excel_file_name}'
-            print(current_file_path)
             if os.path.exists(current_file_path):
                 #  code to make sure all files are unique
                 continue
@@ -76,13 +75,13 @@ def daily_payment_report_view(request):
                         name = f'{day}-{month}-{year}'
                         date = datetime.strptime(name, '%d-%m-%Y').date()
                         df['project_date'] = date
-                        print(data2[:6])
                         valid_data = ['JAN', 'FEB', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
                         pattern = ' 20|'.join(valid_data)
                         df['project_description'] = np.where(df['project_description'].str.contains(pattern, na=False),
                                                              df['project_description'].str[10:],
                                                              df['project_description'])
                         df['MDA_name'] = 'FEDERAL GOVERNMENT'
+                        df['project_amount'] = df["project_amount"].apply(lambda x: '{:.2f}'.format(x))
 
                         # store data in dict form. this is the data to loop over to store into db
                         daily_expenses = df.to_dict(orient='records')
@@ -90,13 +89,13 @@ def daily_payment_report_view(request):
                         continue
 
                       # code to store into database...
-                budget = Budget()
-                budget.MDA_name = df.MDA_name
-                budget.project_recipient_name = df.project_recipient_name
-                budget.project_name = df.organization_name
-                budget.project_amount = df.project_amount
-                budget.project_date = df.project_date
-                budget.save()
-                  
+                    for each_data in daily_expenses:
+                        budget = Budget()
+                        budget.MDA_name = each_data['MDA_name']
+                        budget.project_recipient_name = each_data['project_recipient_name']
+                        budget.project_name = each_data['organization_name']
+                        budget.project_amount = each_data['project_amount']
+                        budget.project_date = each_data['project_date']
+                        budget.save()
 
         return Response(status=status.HTTP_200_OK)
