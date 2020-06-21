@@ -17,8 +17,9 @@ from django.db.models import Q
 from .serializers import BudgetSerializer
 
 class BudgetView(viewsets.ModelViewSet):
-	queryset = Budget.objects.all() # this code is to call all object from the db
-	serializer_class = BudgetSerializer # this code use the class defined in the serializers.py
+    serializer_class = BudgetSerializer
+    queryset = Budget.objects.all() 
+	
 
 # get project media url
 media_url = settings.MEDIA_URL
