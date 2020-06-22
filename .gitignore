@@ -7,3 +7,4 @@ __pycache__
 .pyc
 parser/
 .env
+env

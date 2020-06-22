@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'excel_parser',
 
-    #added restframe wort to installed_Apps
+    #added restframe work to installed_Apps
     'rest_framework',
 ]
 
