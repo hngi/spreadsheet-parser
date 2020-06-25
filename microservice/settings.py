@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'excel_parser',
+    'monthly_budget', 
 
     #added restframe wort to installed_Apps
     'rest_framework',
@@ -87,6 +88,7 @@ DATABASES = {
         'NAME': os.getenv('NAME'),
         'USER': os.getenv('USER'),
         'PASSWORD': os.getenv('PASSWORD'),
+        
         'HOST': 'ec2-35-173-94-156.compute-1.amazonaws.com',
         'PORT': '5432'
     }
