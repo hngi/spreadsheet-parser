@@ -1,15 +1,6 @@
 from django.db import models
-import datetime
 
 # Create your models here.
-
-
-# def real_time():
-#     day = datetime.date.today()
-#     months = ['zero', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
-#               'November', 'December']
-#     current_month = months[day.month]
-#     return current_month
 
 """
 This model is to parse the data from the SECTORS in the Monthly Administrative Excel file into the Database. Each 
