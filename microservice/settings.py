@@ -88,7 +88,6 @@ DATABASES = {
         'NAME': os.getenv('NAME'),
         'USER': os.getenv('USER'),
         'PASSWORD': os.getenv('PASSWORD'),
-        
         'HOST': 'ec2-35-173-94-156.compute-1.amazonaws.com',
         'PORT': '5432'
     }
