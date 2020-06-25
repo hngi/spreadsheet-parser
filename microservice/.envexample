@@ -1,0 +1,4 @@
+export SECRET_KEY=INPUT ANY 25 RANDOM STRINGS
+export NAME=reach out to the team lead for the Database Name
+export USER=reach out to the team lead for the Database User
+export PASSWORD=reach out to the team lead for the Database Password
