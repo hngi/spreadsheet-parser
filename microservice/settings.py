@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = 'js%rz!e)px18ppy)w=$3_o)j0t9zkthski+i3dzgn=r=x2@89^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -83,11 +83,11 @@ WSGI_APPLICATION = 'microservice.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgres',
-        'NAME': os.getenv('NAME'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'USER': os.getenv('USER'),
         'PASSWORD': os.getenv('PASSWORD'),
-        'HOST': 'ec2-35-173-94-156.compute-1.amazonaws.com',
+        'HOST': 'ruby.db.elephantsql.com',
         'PORT': '5432'
     }
 }

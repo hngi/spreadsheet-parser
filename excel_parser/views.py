@@ -3,6 +3,7 @@ from rest_framework import viewsets
 from .models import Budget
 import pandas
 import json
+from django.db.models import Count
 import numpy as np
 from django.shortcuts import render
 from rest_framework.response import Response
@@ -14,7 +15,7 @@ from .models import ExcelSaverModel, Budget
 from datetime import datetime
 import os
 from django.db.models import Q
-from .serializers import BudgetSerializer
+from .serializers import BudgetSerializer, BudgetAnnotationsSerializer
 
 class BudgetView(viewsets.ModelViewSet):
 	queryset = Budget.objects.all() # this code is to call all object from the db
@@ -129,6 +130,10 @@ def get_daily_reports_view(request):
                 qs = Budget.objects.filter(project_date=date)
             except ValueError:
                 return Response("Wrong Date Format")
-
+        print(qs)
         serializer = BudgetSerializer(qs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+
