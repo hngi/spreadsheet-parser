@@ -12,5 +12,5 @@ router.register("home", views.BudgetView)
 urlpatterns = [
     path("", include(router.urls)),
     path('daily-payment-report/', views.daily_payment_report_view),
-    path('get_daily_reports_view/', views.get_daily_reports_view)
+    path('get_daily_reports_view/', views.get_daily_reports_view),
 ]
