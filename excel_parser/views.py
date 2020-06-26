@@ -3,6 +3,7 @@ from rest_framework import viewsets
 from .models import Budget
 import pandas
 import json
+from django.db.models import Count
 import numpy as np
 from django.shortcuts import render
 from rest_framework.response import Response
@@ -129,6 +130,9 @@ def get_daily_reports_view(request):
                 qs = Budget.objects.filter(project_date=date)
             except ValueError:
                 return Response("Wrong Date Format")
-
         serializer = BudgetSerializer(qs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+
