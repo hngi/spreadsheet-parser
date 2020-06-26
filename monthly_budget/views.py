@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from .models import ExcelSaverModel
 import pandas as pd
-import json
+from rest_framework.response import Response
+from rest_framework import status
 import os
 from django.conf import settings
 # imported serializers class MonthlySerializer from serializers.py 
@@ -17,7 +18,12 @@ class MonthlyView(viewsets.ModelViewSet):
 
 
 def monthly_report(request):
+	"""A Views Function that extracts data from the database and store as a list of dictionaries, to make it easy to be stored into the database
+	If you are to assigned to store in database
+	please be aware that the file is stored in 'final_data' and the month is stored in 'month' . cheers"""
 	excel_files = request.FILES.getlist("excel_file")
+
+	# a loop to get the files from the media folder
 	for current_excel_file in excel_files:
 		excel_file_name = current_excel_file.name
 		current_file_path = f'media/monthly/{excel_file_name}'
@@ -25,30 +31,35 @@ def monthly_report(request):
 			continue
 		elif excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
 			ExcelSaverModel.objects.get_or_create(monthly_file=current_excel_file)
-			monthly_files_url = media_url + f'daily/'
+			monthly_files_url = media_url + f'monthly/'
 
             # gets all files in Monthly folder
 			for file in os.listdir(monthly_files_url):
 				try:
 					absolute_file_path = monthly_files_url +f"/{file}"
-					df = pd.read_excel("Excel_files/MARCH.xlsx", usecols = "B:G",encoding='utf-8' )
+					# reading the excel file
+					df = pd.read_excel(absolute_file_path, usecols = "B:G",encoding='utf-8' )
+					# Dropping the unneccessary columns
 					data = df.dropna(axis = 0, how= "any")
 					data.columns = data.iloc[0]
 					data2 = data.iloc[1:,].reindex()
-					date = data2.columns[2]
+					# here is month, the variable in which the month is stored in
+					month = data2.columns[2]
 					data2.columns = data2.columns.map(lambda x: x.replace('\n', ''))
-					da = data2.rename(columns = {
-							"Name":"sector",
-							'BUDGET AMOUNT  ': "budget",
-							"MARCH  " : "allocation",
-							"YR PMTS TO DATE  " : "total_allocation",
-							"BUDGET BALANCE  ": "balance"
-							})
-					#this one is joking with me
-					#this is where oluwa ran mi lowo dey
-					print(da.columns)
+					data2.columns = ["sector", "budget", "allocation","total_allocation","balance","percentage"]
+					# we dont need percentage... dropping it
+					data2.drop(["percentage"], axis = 1, inplace = True)
+
+					# formatting the floats to make sure they all have uniform decimal points
+					#initially they are returning floats in the form of exponentials.
+					data2["budget"] = data2["budget"].apply(lambda x: "{:.2f}".format(x))
+					data2["allocation"] = data2["allocation"].apply(lambda x: "{:.2f}".format(x))
+					data2["total_allocation"] = data2["total_allocation"].apply(lambda x: "{:.2f}".format(x))
+					data2["balance"] = data2["balance"].apply(lambda x: "{:.2f}".format(x))
+					# here is final_data, the list of dictionaries that can be easily stored in the database
+					final_data = data2.to_dict(orient = "records")
 				except KeyError:
 					continue
-
+	return Response(status=status.HTTP_200_OK)
 
 	
