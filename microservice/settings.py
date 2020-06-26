@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'excel_parser',
+    'monthly_budget', 
 
     #added restframe wort to installed_Apps
     'rest_framework',
