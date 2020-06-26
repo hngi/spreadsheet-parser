@@ -18,7 +18,7 @@ class AdministrativeBudget(models.Model):
     allocation = models.FloatField(max_length=50, null=True)
     total_allocation = models.FloatField(max_length=50, null=True)
     balance = models.FloatField(max_length=50, null=True)
-    month = models.real_time()
+    # month = models.real_time()
 
     def __str__(self):
         return self.sector
@@ -40,7 +40,7 @@ class MDABudget(models.Model):
     allocation = models.FloatField(max_length=50, null=True)
     total_allocation = models.FloatField(max_length=50, null=True)
     balance = models.FloatField(max_length=50, null=True)
-    month = models.real_time()
+    # month = models.real_time()
 
     def __str__(self):
         return self.mda
