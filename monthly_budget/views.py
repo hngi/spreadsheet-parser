@@ -5,6 +5,11 @@ from rest_framework.response import Response
 from rest_framework import status
 import os
 from django.conf import settings
+from django.shortcuts import render
+from rest_framework import mixins
+from rest_framework import generics
+from .models import MDABudget, AdministrativeBudget
+from .serializers import MDABudgetSerializer, MonthlySerializer
 # imported serializers class MonthlySerializer from serializers.py 
 from excel_parser.serializers import MonthlySerializer
 media_url = settings.MEDIA_URL
@@ -15,12 +20,27 @@ class MonthlyView(viewsets.ModelViewSet):
 	serializer_class = MonthlySerializer # this code use the class defined in the serializers.py
 
 
+'''
+added a C.B view for returning a list of all MDA transactions available in the database
+assumed a serializer of name MDABudgetSerializer has already been made.
+'''
+class MDABudgetView(mixins.ListModelMixin,generics.GenericAPIView):
+    queryset = MDABudget.objects.all()
+    serializer_class = MDABudgetSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+
+
 
 
 def monthly_report(request):
-	"""A Views Function that extracts data from the database and store as a list of dictionaries, to make it easy to be stored into the database
+	"""
+	A Views Function that extracts data from the database and store as a list of dictionaries, to make it easy to be stored into the database
 	If you are to assigned to store in database
-	please be aware that the file is stored in 'final_data' and the month is stored in 'month' . cheers"""
+	please be aware that the file is stored in 'final_data' and the month is stored in 'month' . cheers from ferrum
+	"""
 	excel_files = request.FILES.getlist("excel_file")
 
 	# a loop to get the files from the media folder
@@ -63,3 +83,6 @@ def monthly_report(request):
 	return Response(status=status.HTTP_200_OK)
 
 	
+
+
+
