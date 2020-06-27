@@ -48,15 +48,12 @@ def daily_payment_report_view(request):
             if len(year) < 3:
                 year = '20' + year
             current_file_path = f'media/daily/{excel_file_name}'
-            if os.path.exists(current_file_path):
-                #  code to make sure all files are unique
-                continue
-            elif excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
+            if excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
                 ExcelSaverModel.objects.get_or_create(daily_report_file=current_excel_file)
-
                 # gets all files in daily folder
                 try:
                     data = pandas.read_excel(current_file_path, sheet_name=0, usecols='C:F')
+                    os.remove(current_file_path)
                     data1 = data.dropna(axis=0, how='all', thresh=3)
                     data2 = data1.dropna(axis=1, how='all')
                     try:
@@ -92,13 +89,19 @@ def daily_payment_report_view(request):
 
                 # code to store into database...
                 for transaction in daily_expenses:
-                    budget = Budget()
-                    budget.MDA_name = transaction['MDA_name']
-                    budget.project_recipient_name = transaction['project_recipient_name']
-                    budget.project_name = transaction['organization_name']
-                    budget.project_amount = transaction['project_amount']
-                    budget.project_date = transaction['project_date']
-                    budget.save()
+                    if not Budget.objects.filter(MDA_name=transaction['MDA_name'],
+                                                 project_recipient_name=transaction['project_recipient_name'],
+                                                 project_name=transaction['organization_name'],
+                                                 project_amount = transaction['project_amount'],
+                                                 project_date=transaction['project_date']
+                                                 ).exists():
+                        budget = Budget()
+                        budget.MDA_name = transaction['MDA_name']
+                        budget.project_recipient_name = transaction['project_recipient_name']
+                        budget.project_name = transaction['organization_name']
+                        budget.project_amount = transaction['project_amount']
+                        budget.project_date = transaction['project_date']
+                        budget.save()
         return Response(status=status.HTTP_200_OK)
 
 
@@ -131,4 +134,3 @@ def get_daily_reports_view(request):
                 return Response("Wrong Date Format")
         serializer = BudgetSerializer(qs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
