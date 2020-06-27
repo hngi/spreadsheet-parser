@@ -205,22 +205,22 @@ def get_expenditure_values(request):
                                         'allocation': sheet.cell(i, 3).value,
                                         'total_allocation': sheet.cell(i, 4).value, 'balance': sheet.cell(i, 5).value}
                             # print(row_data)
-                            required_values.append(row_data)
-                            required_values(excel_output):
-                                    arr = []
-                                    for i in range(len(excel_output)):
-                                        data = excel_output[i]
-                                        arr.append()
-                                        EconomicExpenditure(
-                                            name = data['name']
-                                            budget = data['budget']
-                                            allocation = data['allocation']
-                                            total_allocation = data['total_allocation']
-                                            balance = data['balance']
+                        required_values.append(row_data)
+                        required_values(excel_output)
+                                arr = []
+                                for i in range(len(excel_output)):
+                                    data = excel_output[i]
+                                    arr.append()
+                                    EconomicExpenditure(
+                                        name = data['name']
+                                        budget = data['budget']
+                                        allocation = data['allocation']
+                                        total_allocation = data['total_allocation']
+                                        balance = data['balance']
 
-                                            )
-                                
-                                        )    
+                                        )
+                            
+                                    )    
         
 
             EconomicExpenditure.objects.bulk_create(arr)
