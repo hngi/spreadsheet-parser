@@ -85,12 +85,6 @@ def monthly_report(request):
 
     return Response(status=status.HTTP_200_OK)
 
-
-
-class MonthlyView(viewsets.ModelViewSet):
-    queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
-    serializer_class = AdministrativeExpensesSerializer  # this code use the class defined in the serializers.py
-
 '''
 added a C.B view for returning a list of all MDA transactions available in the database
 assumed a serializer of name MDABudgetSerializer has already been made.
