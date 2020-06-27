@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from .models import ExcelSaverModelMonthly
 from django.http import JsonResponse
@@ -14,12 +15,16 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import MDABudget, AdministrativeBudget, EconomicExpenditure
 # from .serializers import MDABudgetSerializer, MonthlySerializer, EconomicExpenditureSerializer
+
 media_url = settings.MEDIA_URL
 
+
 # Create your views here.
+
+
 class MonthlyView(viewsets.ModelViewSet):
-	queryset = AdministrativeBudget.objects.all() # this code is to call all object from the db
-	serializer_class = MonthlySerializer # this code use the class defined in the serializers.py
+    queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
+    serializer_class = MonthlySerializer  # this code use the class defined in the serializers.py
 
 
 @api_view(['POST', ])
@@ -73,26 +78,6 @@ def monthly_report(request):
     return Response(status=status.HTTP_200_OK)
 
 
-'''
-this function when called, takes json data in the format 
-[{"mda":"Test","budget":100000,"allocation":27934783353.5,"total_allocation":686919637.6900000572,
-"balance":2106428472.8900001049},{"mda":"Test","budget":100000,"allocation":27934783353.5,
-"total_allocation":686919637.6900000572,"balance":2106428472.8900001049},
-{"mda":"Test","budget":100000,"allocation":27934783353.5,"total_allocation":686919637.6900000572,
-"balance":2106428472.8900001049}] and saves each of the rows to the database.
-'''
-
-
-def save_mda(json_data):
-    length = len(json_data)
-    for i in range(length):
-        row = json_data[i]
-        serializer = MDABudgetSerializer(data=row)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
-
 
 '''
 added a C.B view for returning a list of all MDA transactions available in the database
@@ -106,7 +91,6 @@ class MDABudgetView(mixins.ListModelMixin, generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
-
 
 '''
 added a view for returning a list of all  Economic expenditures available in the database for each month
@@ -122,3 +106,4 @@ def get_economic_expenditure(request):
                     'status': 'failure',
                     'data': {'message': 'Something went wrong'}
                 })
+
