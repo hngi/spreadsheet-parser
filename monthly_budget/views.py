@@ -77,6 +77,11 @@ def monthly_report(request):
                 final_data = data2.to_dict(orient = "records")
 
                 # code to store into the DB goes here, data is in variable final_data
+                for transaction in final_data:
+                    AdministrativeBudget.objects.create(budget=budget,
+                                        allocation=allocation,
+                                        total_allocation=total_allocation,
+                                        balance=balance)
 
             except KeyError:
                 continue
