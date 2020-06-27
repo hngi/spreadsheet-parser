@@ -17,21 +17,23 @@ import os
 from django.db.models import Q
 from .serializers import BudgetSerializer
 
+
 class BudgetView(viewsets.ModelViewSet):
-	queryset = Budget.objects.all() # this code is to call all object from the db
-	serializer_class = BudgetSerializer # this code use the class defined in the serializers.py
+    queryset = Budget.objects.all()  # this code is to call all object from the db
+    serializer_class = BudgetSerializer  # this code use the class defined in the serializers.py
+
 
 # get project media url
 media_url = settings.MEDIA_URL
+
 
 # this code block accepts several files at once or just one
 # this only works for daily payment reports excel sheets
 
 @api_view(['POST'])
 def daily_payment_report_view(request):
-# if to get all daily reports for one month, provide only year and month params
-# if to ge reports for a particular day, provide year, month and day params
-
+    # if to get all daily reports for one month, provide only year and month params
+    # if to ge reports for a particular day, provide year, month and day params
 
     if request.method == 'POST':
 
@@ -72,8 +74,9 @@ def daily_payment_report_view(request):
                             continue
 
                         data2.columns = data2.columns.str.lower()
-                        df = data2.rename(columns={'beneficiary name': 'project_recipient_name', 'amount': 'project_amount',
-                                                    'description': 'project_description', 'organization name': 'organization_name'})
+                        df = data2.rename(
+                            columns={'beneficiary name': 'project_recipient_name', 'amount': 'project_amount',
+                                     'description': 'project_description', 'organization name': 'organization_name'})
 
                         name = f'{day}-{month}-{year}'
                         date = datetime.strptime(name, '%d-%m-%Y').date()
