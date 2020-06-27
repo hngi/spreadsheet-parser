@@ -14,7 +14,6 @@ router.register('Monthlyadminsitrativebudget', views.AdministrativeView)
 # router.register('economicrevenue', views.EconomicRevenueView)
 
 urlpatterns = [
-
     path('', include(router.urls)),
     path('daily-payment-report-monthly/', views.AdministrativeView),
     path('administrative_budget/', views.administrative_budget),

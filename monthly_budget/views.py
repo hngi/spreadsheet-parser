@@ -56,10 +56,9 @@ def administrative_budget(request):
         excel_file_name = current_excel_file.name
         current_file_path = f'media/monthly/Administrative/{excel_file_name}'
 
+
         if excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
             ExcelSaverModelMonthlyAdministrative.objects.get_or_create(monthly_file=current_excel_file)
-
-            # gets all files in Monthly folder
             try:
                 # reading the excel file
                 df = pd.read_excel(current_file_path, usecols="B:G", encoding='utf-8')
@@ -114,6 +113,10 @@ name = name
 revenue = MONTH -ACTUAL =N=
 total_revenue = YEAR TO DATE
 '''
+
+class MDABudgetView(mixins.ListModelMixin, generics.GenericAPIView):
+    queryset = MDABudget.objects.all()
+    serializer_class = MDABudgetSerializer
 
 
 @api_view(['POST', ])
