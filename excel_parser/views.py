@@ -63,7 +63,6 @@ def daily_payment_report_view(request):
                         data2.columns = data2.iloc[0]
                         if 'Description' in data2.columns:
                             data2 = data2.iloc[1:, ].reindex()
-
                         else:
                             data2.columns = data2.iloc[1]
                             data2 = data2.iloc[2:, ].reindex()
