@@ -202,3 +202,33 @@ def get_expenditure_values(request):
             return JsonResponse(required_values, status=201, safe=False)
         else:
             break
+            
+  
+
+'''
+This is not a view function
+It takes data extracted from MDA Budget excel sheet in the format below and saves them all to the database at once.
+
+Please note that the data passed to it must be in this format, 
+if you can't get your data to be in that format please call my attention to modify the code to suite your format.
+
+ [{"mda": "LOSS ON INVENTORY", "budget": 2454037551812.8213, "allocation": 217515280304.7, "total_allocation": 854641653160.53, 
+ "balance": 1599395898652.2913}, {"mda": "IMPAIRMENT CHARGES - INVESTMENT PROPERTY - LAND & BUILDING - OFFICE", "budget": 1055706358677.2299, 
+ "allocation": 66004017316.47, "total_allocation": 333894644535.48, "balance": 721811714141.7499}]
+
+'''
+
+def savemda(excel_output):
+    arr = []
+    for i in range(len(excel_output)):
+        data = excel_output[i]
+        arr.append(
+        MDABudget(
+            mda=data['mda'],
+            budget=data['budget'],
+            allocation=data['allocation'],
+            total_allocation=data['total_allocation'],
+            balance=data['balance']
+            )
+        )
+    MDABudget.objects.bulk_create(arr) 
