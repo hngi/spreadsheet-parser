@@ -1,6 +1,5 @@
 from django.db import models
 import datetime
-
 # Create your models here.
 
 
@@ -120,3 +119,9 @@ class GovernmentFunctions(models.Model):
 
     def __str__(self):
         return self.name
+
+
+
+
+
+

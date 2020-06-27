@@ -13,6 +13,7 @@ from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from datetime import datetime, timedelta
 from .models import MDABudget, AdministrativeBudget, EconomicExpenditure
 # from .serializers import MDABudgetSerializer, MonthlySerializer, EconomicExpenditureSerializer
 
@@ -21,10 +22,11 @@ media_url = settings.MEDIA_URL
 
 # Create your views here.
 
-
 class MonthlyView(viewsets.ModelViewSet):
     queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
     serializer_class = MonthlySerializer  # this code use the class defined in the serializers.py
+
+
 
 
 @api_view(['POST', ])
@@ -47,9 +49,10 @@ def monthly_report(request):
 
         # gets all files in Monthly folder
             try:
-                absolute_file_path = current_file_path
                 # reading the excel file
-                df = pd.read_excel(absolute_file_path, usecols = "B:G",encoding='utf-8' )
+                df = pd.read_excel(current_file_path, usecols = "B:G",encoding='utf-8' )
+                # removing excel file after its been read
+                os.remove(current_file_path)
                 # Dropping the unneccessary columns
                 data = df.dropna(axis = 0, how= "any")
                 data.columns = data.iloc[0]
@@ -106,4 +109,6 @@ def get_economic_expenditure(request):
                     'status': 'failure',
                     'data': {'message': 'Something went wrong'}
                 })
+
+
 
