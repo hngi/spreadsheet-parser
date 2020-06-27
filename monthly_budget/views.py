@@ -12,20 +12,16 @@ from rest_framework import mixins
 from rest_framework import generics
 from .models import MDABudget, AdministrativeBudget, EconomicExpenditure
 from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer, EconomicExpenditureSerializer
-<<<<<<< HEAD
 # imported serializers class MonthlySerializer from serializers.py 
 
-=======
 from rest_framework import viewsets
 import xlrd
->>>>>>> d34f9d7d30e7a612010ec1d553003de81c0c5cf6
 
 
 media_url = settings.MEDIA_URL
 
 # Create your views here.
 
-<<<<<<< HEAD
 
 class MonthlyView(viewsets.ModelViewSet):
     queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
@@ -34,11 +30,10 @@ class MonthlyView(viewsets.ModelViewSet):
 
 '''
 added a C.B view for returning a list of all MDA transactions available in the database
-=======
+'''
 '''
 This function is to call the data in the AdministrativeBudget models which is a table name in our db. it 
 calls all object from the db under the name AdministrativeBudget and passes it on to the serializers class 
->>>>>>> d34f9d7d30e7a612010ec1d553003de81c0c5cf6
 '''
 
 class AdministrativeView(viewsets.ModelViewSet):
@@ -211,7 +206,27 @@ def get_expenditure_values(request):
                                         'total_allocation': sheet.cell(i, 4).value, 'balance': sheet.cell(i, 5).value}
                             # print(row_data)
                             required_values.append(row_data)
-            # print(required_values)
-            return JsonResponse(required_values, status=201, safe=False)
-        else:
-            break
+                            required_values(excel_output):
+                                    arr = []
+                                    for i in range(len(excel_output)):
+                                        data = excel_output[i]
+                                        arr.append()
+                                        EconomicExpenditure(
+                                            name = data['name']
+                                            budget = data['budget']
+                                            allocation = data['allocation']
+                                            total_allocation = data['total_allocation']
+                                            balance = data['balance']
+
+                                            )
+                                
+                                        )    
+        
+
+            EconomicExpenditure.objects.bulk_create(arr)
+    # print(required_values)
+                return JsonResponse(required_values, status=201, safe=False)
+            else:
+                break
+
+
