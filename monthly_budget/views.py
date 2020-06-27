@@ -1,41 +1,39 @@
-from django.http import JsonResponse
-from django.shortcuts import render
 from excel_parser.models import ExcelSaverModel
 from .models import ExcelSaverModelMonthly
 from django.http import JsonResponse
 import pandas as pd
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, viewsets
 import os
 from django.conf import settings
-from django.shortcuts import render
 from rest_framework import mixins
 from rest_framework import generics
 from .models import MDABudget, AdministrativeBudget, EconomicExpenditure
 from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer, EconomicExpenditureSerializer
-# imported serializers class MonthlySerializer from serializers.py 
 import xlrd
-from os import path, _exists
-from django.views.decorators.csrf import csrf_exempt
+
 
 media_url = settings.MEDIA_URL
 
 # Create your views here.
+
+
 '''
-This function is to call the data in the AdminstrativeBuget models which is a table name in our db. it 
-calls all object from the db under the name AdminstrativeBudget and passes it on to the serializers class 
+This function is to call the data in the AdministrativeBudget models which is a table name in our db. it 
+calls all object from the db under the name AdministrativeBudget and passes it on to the serializers class 
 '''
+
+
+class AdministrativeView(viewsets.ModelViewSet):
+    queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
+    serializer_class = AdministrativeExpensesSerializer  # this code use the class defined in the serializers.py
+
 
 '''
 added a C.B view for returning a list of all MDA transactions available in the database
 assumed a serializer of name MDABudgetSerializer has already been made.
 '''
-
-
-class MonthlyView(viewsets.ModelViewSet):
-    queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
-    serializer_class = AdministrativeExpensesSerializer  # this code use the class defined in the serializers.py
 
 
 class MDABudgetView(mixins.ListModelMixin, generics.GenericAPIView):
