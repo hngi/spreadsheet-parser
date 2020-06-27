@@ -24,23 +24,17 @@ media_url = settings.MEDIA_URL
 # Create your views here.
 
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-
 '''
 This function is to call the data in the AdminstrativeBuget models which is a table name in our db. it 
 calls all object from the db under the name AdminstrativeBudget and passes it on to the serializers class 
 '''
+
+
 class AdministrativeView(viewsets.ModelViewSet):
     queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
     serializer_class = AdministrativeExpensesSerializer  # this code use the class defined in the serializers.py
 
 
-
-=======
->>>>>>> 442756fa9aba71db5ac4a82753e2e51feeaa0cea
->>>>>>> fb273f1f4c1d0b516d80b7d36c5877bbd973fd08
 '''
 added a C.B view for returning a list of all MDA transactions available in the database
 assumed a serializer of name MDABudgetSerializer has already been made.
