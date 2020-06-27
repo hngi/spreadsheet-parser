@@ -1,5 +1,23 @@
+<<<<<<< HEAD
 from excel_parser.models import ExcelSaverModel
 from .models import ExcelSaverModelMonthly
+=======
+<<<<<<< HEAD
+=======
+from django.shortcuts import render
+from .models import ExcelSaverModel
+>>>>>>> 20746ba74cdcf2420e92d528a7fe97b48f823a78
+>>>>>>> 7513b44bee24d3868297406f4a19aeb9695f2fde
+from django.http import JsonResponse
+import pandas as pd
+from rest_framework.response import Response
+from rest_framework import status, viewsets
+import os
+from django.conf import settings
+<<<<<<< HEAD
+=======
+from django.shortcuts import render
+from .models import ExcelSaverModelMonthlyEconomic,ExcelSaverModelMonthlyAdministrative,ExcelSaverModelMonthly
 from django.http import JsonResponse
 import pandas as pd
 from rest_framework.decorators import api_view
@@ -7,27 +25,125 @@ from rest_framework.response import Response
 from rest_framework import status, viewsets
 import os
 from django.conf import settings
+>>>>>>> 7513b44bee24d3868297406f4a19aeb9695f2fde
 from rest_framework import mixins
 from rest_framework import generics
+<<<<<<< HEAD
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 from .models import MDABudget, AdministrativeBudget, EconomicExpenditure
 from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer, EconomicExpenditureSerializer
+<<<<<<< HEAD
 import xlrd
 
+=======
+from rest_framework import viewsets
+import xlrd
+>>>>>>> 7513b44bee24d3868297406f4a19aeb9695f2fde
 
+
+=======
+from .models import MDABudget, AdministrativeBudget
+from .serializers import MDABudgetSerializer, MonthlySerializer
+# imported serializers class MonthlySerializer from serializers.py 
+from excel_parser.serializers import MonthlySerializer
+>>>>>>> 20746ba74cdcf2420e92d528a7fe97b48f823a78
 media_url = settings.MEDIA_URL
 
 # Create your views here.
+<<<<<<< HEAD
+=======
+class MonthlyView(viewsets.ModelViewSet):
+	queryset = AdministrativeBudget.objects.all() # this code is to call all object from the db
+	serializer_class = MonthlySerializer # this code use the class defined in the serializers.py
+>>>>>>> 7513b44bee24d3868297406f4a19aeb9695f2fde
 
 
 '''
 This function is to call the data in the AdministrativeBudget models which is a table name in our db. it 
 calls all object from the db under the name AdministrativeBudget and passes it on to the serializers class 
 '''
+class MDABudgetView(mixins.ListModelMixin,generics.GenericAPIView):
+    queryset = MDABudget.objects.all()
+    serializer_class = MDABudgetSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
 
+
+<<<<<<< HEAD
 class AdministrativeView(viewsets.ModelViewSet):
+=======
+
+
+def monthly_report(request):
+	"""
+	A Views Function that extracts data from the database and store as a list of dictionaries, to make it easy to be stored into the database
+	If you are to assigned to store in database
+	please be aware that the file is stored in 'final_data' and the month is stored in 'month' . cheers from ferrum
+	"""
+	excel_files = request.FILES.getlist("excel_file")
+
+	# a loop to get the files from the media folder
+	for current_excel_file in excel_files:
+		excel_file_name = current_excel_file.name
+		current_file_path = f'media/monthly/{excel_file_name}'
+		if os.path.exists(current_file_path):
+			continue
+		elif excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
+			ExcelSaverModel.objects.get_or_create(monthly_file=current_excel_file)
+			monthly_files_url = media_url + f'monthly/'
+
+            # gets all files in Monthly folder
+			for file in os.listdir(monthly_files_url):
+				try:
+					absolute_file_path = monthly_files_url +f"/{file}"
+					# reading the excel file
+					df = pd.read_excel(absolute_file_path, usecols = "B:G",encoding='utf-8' )
+					# Dropping the unneccessary columns
+					data = df.dropna(axis = 0, how= "any")
+					data.columns = data.iloc[0]
+					data2 = data.iloc[1:,].reindex()
+					# here is month, the variable in which the month is stored in
+					month = data2.columns[2]
+					data2.columns = data2.columns.map(lambda x: x.replace('\n', ''))
+					data2.columns = ["sector", "budget", "allocation","total_allocation","balance","percentage"]
+					# we dont need percentage... dropping it
+					data2.drop(["percentage"], axis = 1, inplace = True)
+
+					# formatting the floats to make sure they all have uniform decimal points
+					#initially they are returning floats in the form of exponentials.
+					data2["budget"] = data2["budget"].apply(lambda x: "{:.2f}".format(x))
+					data2["allocation"] = data2["allocation"].apply(lambda x: "{:.2f}".format(x))
+					data2["total_allocation"] = data2["total_allocation"].apply(lambda x: "{:.2f}".format(x))
+					data2["balance"] = data2["balance"].apply(lambda x: "{:.2f}".format(x))
+					# here is final_data, the list of dictionaries that can be easily stored in the database
+					final_data = data2.to_dict(orient = "records")
+				except KeyError:
+					continue
+	return Response(status=status.HTTP_200_OK)
+
+	
+
+'''
+This function is to call the data in the AdministrativeBudget models which is a table name in our db. it 
+calls all object from the db under the name AdministrativeBudget and passes it on to the serializers class 
+'''
+
+<<<<<<< HEAD
+class MonthlyView(viewsets.ModelViewSet):
+>>>>>>> 7513b44bee24d3868297406f4a19aeb9695f2fde
     queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
     serializer_class = AdministrativeExpensesSerializer  # this code use the class defined in the serializers.py
+=======
+
+>>>>>>> 20746ba74cdcf2420e92d528a7fe97b48f823a78
+
+'''
+added a C.B view for returning a list of all MDA transactions available in the database
+'''
 
 
 '''
@@ -44,54 +160,156 @@ class MDABudgetView(mixins.ListModelMixin, generics.GenericAPIView):
         return self.list(request, *args, **kwargs)
 
 
-"""
-A Views Function that extracts data from the database and store as a list of dictionaries, to make it easy to be
+
+
+<<<<<<< HEAD
+
+class AdministrativeView(viewsets.ModelViewSet):
+    queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
+    serializer_class = AdministrativeExpensesSerializer  # this code use the class defined in the serializers.py
+
+
+  """
+A Views Function that extracts data from the administrative excel and store as a list of dictionaries, to make it easy to be
 stored into the database. If you are to assigned to store in database please be aware that the file is stored in
 'final_data' and the month is stored in 'month' . cheers from ferrum
 """
 
-
+@api_view(['POST', ])
 def administrative_budget(request):
     excel_files = request.FILES.getlist("excel_file")
 
     # a loop to get the files from the media folder
     for current_excel_file in excel_files:
         excel_file_name = current_excel_file.name
-        current_file_path = f'media/monthly/{excel_file_name}'
+        current_file_path = f'media/monthly/Administrative/{excel_file_name}'
         if os.path.exists(current_file_path):
             continue
         elif excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
-            ExcelSaverModel.objects.get_or_create(monthly_file=current_excel_file)
-            monthly_files_url = media_url + f'monthly/'
+            ExcelSaverModelMonthlyAdministrative.objects.get_or_create(monthly_file=current_excel_file)
+            monthly_files_url = media_url + f'monthly/Administrative/'
 
-            # gets all files in Monthly folder
-            for file in os.listdir(monthly_files_url):
+
+        # gets all files in Monthly folder
+            try:
+                # reading the excel file
+                df = pd.read_excel(current_file_path, usecols = "B:G",encoding='utf-8' )
+                # removing excel file after its been read
+                os.remove(current_file_path)
+                # Dropping the unneccessary columns
+                data = df.dropna(axis = 0, how= "any")
+                data.columns = data.iloc[0]
+                data2 = data.iloc[1:,].reindex()
+                # here is month, the variable in which the month is stored in
+                month = data2.columns[2]
+                data2.columns = data2.columns.map(lambda x: x.replace('\n', ''))
+                data2.columns = ["sector", "budget", "allocation","total_allocation","balance","percentage"]
+                # we dont need percentage... dropping it
+                data2.drop(["percentage"], axis = 1, inplace = True)
+                # formatting the floats to make sure they all have uniform decimal points
+                #initially they are returning floats in the form of exponentials.
+                data2["budget"] = data2["budget"].apply(lambda x: "{:.2f}".format(x))
+                data2["allocation"] = data2["allocation"].apply(lambda x: "{:.2f}".format(x))
+                data2["total_allocation"] = data2["total_allocation"].apply(lambda x: "{:.2f}".format(x))
+                data2["balance"] = data2["balance"].apply(lambda x: "{:.2f}".format(x))
+                # here is final_data, the list of dictionaries that can be easily stored in the database
+                final_data = data2.to_dict(orient = "records")
+
+                # code to store into the DB goes here, data is in variable final_data
+                for transaction in final_data:
+                    AdministrativeBudget.objects.create(budget=budget,
+                                        allocation=allocation,
+                                        total_allocation=total_allocation,
+                                        balance=balance)
+
+            except KeyError:
+                continue
+
+    return Response(status=status.HTTP_200_OK)
+
+'''
+added a C.B view for returning a list of all MDA transactions available in the database
+assumed a serializer of name MDABudgetSerializer has already been made.
+'''
+class MDABudgetView(mixins.ListModelMixin, generics.GenericAPIView):
+    queryset = MDABudget.objects.all()
+    serializer_class = MDABudgetSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+
+'''
+A view for the extraction of data from the excel file for the Economic revenue!
+The extracted data is stored as a list of dictionary in a variable called economic_final_data  the month is stored in variable economic_month
+And the data is parsed as follow:
+name = name
+revenue = MONTH -ACTUAL =N=
+total_revenue = YEAR TO DATE
+
+'''
+@api_view(['POST', ])
+def economic_revenue(request):
+    excel_files = request.FILES.getlist("excel_file")
+
+    for current_excel_file in excel_files:
+        excel_file_name = current_excel_file.name
+        current_file_path = f'media/monthly/Economic/{excel_file_name}'
+
+        if os.path.exists(current_file_path):
+            continue
+        elif excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
+            ExcelSaverModelMonthlyEconomic.objects.get_or_create(monthly_file=current_excel_file)
+            economic_monthly_files_url = media_url + f'monthly/Economic/'
+
+
+            for file in os.listdir(economic_monthly_files_url):
                 try:
-                    absolute_file_path = monthly_files_url + f"/{file}"
+                    absolute_file_path = economic_monthly_files_url + f"/{file}"
                     # reading the excel file
-                    df = pd.read_excel(absolute_file_path, usecols="B:G", encoding='utf-8')
-                    # Dropping the unnecessary columns
-                    data = df.dropna(axis=0, how="any")
+                    df = pd.read_excel(absolute_file_path, usecols = "B:G",encoding='utf-8' )
+                    # Dropping the unneccessary columns
+                    data = df.dropna(axis = 0, how= "any")
                     data.columns = data.iloc[0]
-                    data2 = data.iloc[1:, ].reindex()
-                    # here is month, the variable in which the month is stored in
-                    month = data2.columns[2]
+                    data2 = data.iloc[1:,].reindex()
+                    # economic month, the variable in which the month is stored in, splitting to get the neccessary data
+                    economic_month = data2.columns[2]
+                    economic_month = economic_month.split()
+                    economic_month = economic_month[0]
+
+                    # replacing the break lines for easy parsing
                     data2.columns = data2.columns.map(lambda x: x.replace('\n', ''))
-                    data2.columns = ["sector", "budget", "allocation", "total_allocation", "balance", "percentage"]
-                    # we dont need percentage... dropping it
-                    data2.drop(["percentage"], axis=1, inplace=True)
+                    data2.columns = ["name", "budget", "revenue","total_revenue","balance","percentage"]
+                    # dropping the columns that are not needed
+                    data2.drop(["percentage","budget", "balance"], axis = 1, inplace = True)
 
                     # formatting the floats to make sure they all have uniform decimal points
-                    # initially they are returning floats in the form of exponentials.
-                    data2["budget"] = data2["budget"].apply(lambda x: "{:.2f}".format(x))
-                    data2["allocation"] = data2["allocation"].apply(lambda x: "{:.2f}".format(x))
-                    data2["total_allocation"] = data2["total_allocation"].apply(lambda x: "{:.2f}".format(x))
-                    data2["balance"] = data2["balance"].apply(lambda x: "{:.2f}".format(x))
+                    #initially they are returning floats in the form of exponentials.
+                   
+                    data2["revenue"] = data2["revenue"].apply(lambda x: "{:.2f}".format(x))
+                    data2["total_revenue"] = data2["total_revenue"].apply(lambda x: "{:.2f}".format(x))
+                    
                     # here is final_data, the list of dictionaries that can be easily stored in the database
-                    final_data = data2.to_dict(orient="records")
+                    economic_final_data = data2.to_dict(orient = "records")
+                    
                 except KeyError:
                     continue
     return Response(status=status.HTTP_200_OK)
+
+'''
+added a view for returning a list of all  Economic expenditures available in the database for each month
+assumed a serializer of name EconomicExpenditureSerializer has already been made.
+'''
+@api_view(['GET', ])
+def get_economic_expenditure(request):
+    if request.method == 'GET':
+        qs = EconomicExpenditure.objects.all()
+        serializer = EconomicExpenditureSerializer(qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response({
+                    'status': 'failure',
+                    'data': {'message': 'Something went wrong'}
+                })
 
 
 '''
@@ -181,3 +399,5 @@ def get_expenditure_values(request):
             return JsonResponse(required_values, status=201, safe=False)
         else:
             break
+=======
+>>>>>>> 20746ba74cdcf2420e92d528a7fe97b48f823a78
