@@ -130,16 +130,4 @@ def get_daily_reports_view(request):
             except ValueError:
                 return Response("Wrong Date Format")
         serializer = BudgetSerializer(qs, many=True)
-<<<<<<< HEAD
-
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-=======
-        return Response(serializer.data, status=status.HTTP_200_OK)
->>>>>>> 442756fa9aba71db5ac4a82753e2e51feeaa0cea
