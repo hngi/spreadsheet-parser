@@ -23,17 +23,14 @@ media_url = settings.MEDIA_URL
 # Create your views here.
 
 
-<<<<<<< HEAD
 class MonthlyView(viewsets.ModelViewSet):
     queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
     serializer_class = AdministrativeExpensesSerializer  # this code use the class defined in the serializers.py
 
 
-=======
->>>>>>> 442756fa9aba71db5ac4a82753e2e51feeaa0cea
 '''
 added a C.B view for returning a list of all MDA transactions available in the database
-
+'''
 
 
 class MDABudgetView(mixins.ListModelMixin, generics.GenericAPIView):
@@ -94,8 +91,8 @@ def administrative_budget(request):
     return Response(status=status.HTTP_200_OK)
 
 
-'''
-added a view for returning a list of all  Economic expenditures available in the database for each month
+
+'''added a view for returning a list of all  Economic expenditures available in the database for each month
 assumed a serializer of name EconomicExpenditureSerializer has already been made.
 '''
 
