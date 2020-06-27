@@ -11,6 +11,17 @@ def real_time():
     current_month = months[day.month]
     return current_month
 
+def administrative_monthly_file_handler(instance, file):
+    return f'monthly/Administrative/{file}'
+
+
+def economic_monthly_file_handler(instance, file):
+    return f'monthly/Economic/{file}'
+
+class ExcelSaverModelMonthly(models.Model):
+    monthly_file = models.FileField(upload_to=monthly_file_handler, null=True)
+
+
 
 """
 This model is to parse the data from the SECTORS in the Monthly Administrative Excel file into the Database. Each 
@@ -28,19 +39,18 @@ class AdministrativeBudget(models.Model):
     allocation = models.FloatField(max_length=50, null=True)
     total_allocation = models.FloatField(max_length=50, null=True)
     balance = models.FloatField(max_length=50, null=True)
-    month = real_time()
+    month =  models.CharField(max_length=20, null=True)
 
     def __str__(self):
         return self.sector
 
 
-"""
-This model is to parse the data from the MDA in the Monthly Administrative Excel file into the Database. Each 
-variable correlates to a column in the Database and Rows in the parsing excel file. The mda variable is to be 
-filled with either of the mda in the excel file, budget variable is the Budget Amount budgeted for each mda, 
-allocation variable is the amount released into for each mda for the month of MAY, total_allocation variable is the 
-total amount released so far for each mda, balance variable is the amount left from each mda's Budget. The month variable 
-automatically uploads the month.
+"""This model is to parse the data from the MDA in the Monthly Administrative Excel file into the Database. Each 
+variable correlates to a column in the Database and Rows in the parsing excel file. The mda variable is to be filled 
+with either of the mda in the excel file, budget variable is the Budget Amount budgeted for each mda, allocation 
+variable is the amount released into for each mda for the month of MAY, total_allocation variable is the total amount 
+released so far for each mda, balance variable is the amount left from each mda's Budget. The month variable 
+automatically uploads the month. 
 """
 
 
@@ -50,7 +60,7 @@ class MDABudget(models.Model):
     allocation = models.FloatField(max_length=50, null=True)
     total_allocation = models.FloatField(max_length=50, null=True)
     balance = models.FloatField(max_length=50, null=True)
-    month = real_time()
+    month =  models.CharField(max_length=20, null=True)
 
     def __str__(self):
         return self.mda
@@ -59,15 +69,15 @@ class MDABudget(models.Model):
 """
 This model is to parse the data from the REVENUES in the Monthly Economic Excel file into the Database. Each 
 variable correlates to a column in the Database and Rows in the parsing excel file. The name variable is to be 
-filled with the name of revenues generated, allocation variable is the amount generated for the month of MAY, 
-total_allocation variable is the total amount generated so far. The month variable automatically uploads the month.
+filled with the name of revenues generated, revenue variable is the amount generated for the month of MAY, 
+total_revenue variable is the total amount generated so far. The month variable automatically uploads the month.
 """
 
 
 class EconomicRevenue(models.Model):
     name = models.CharField(max_length=100, null=True)
-    allocation = models.FloatField(max_length=50, null=True)
-    total_allocation = models.FloatField(max_length=50, null=True)
+    revenue = models.FloatField(max_length=50, null=True)
+    total_revenue = models.FloatField(max_length=50, null=True)
     month = real_time()
 
     def __str__(self):
@@ -94,3 +104,23 @@ class EconomicExpenditure(models.Model):
     def __str__(self):
         return self.name
 
+
+"""This model is to parse the data from the FUNCTIONS OF GOVERNMENT excel file into the Database. Each 
+variable correlates to a column in the Database and Rows in the parsing excel file. The name variable is to be filled 
+with either of the government function in the excel file, budget variable is the Budget Amount budgeted for each 
+government function, allocation variable is the amount released into for each mda for the month of MAY, 
+total_allocation variable is the total amount released so far for each government function, balance variable is the 
+amount left from each government function Budget. The month variable automatically uploads the month. 
+"""
+
+
+class GovernmentFunctions(models.Model):
+    name = models.CharField(max_length=100, null=True)
+    budget = models.FloatField(max_length=50, null=True)
+    allocation = models.FloatField(max_length=50, null=True)
+    total_allocation = models.FloatField(max_length=50, null=True)
+    balance = models.FloatField(max_length=50, null=True)
+    month = real_time()
+
+    def __str__(self):
+        return self.name
