@@ -22,23 +22,37 @@ from django.views.decorators.csrf import csrf_exempt
 media_url = settings.MEDIA_URL
 
 # Create your views here.
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 2ec9f631ff060e0721f7006a621c35a39b748a2d
 '''
 This function is to call the data in the AdminstrativeBuget models which is a table name in our db. it 
 calls all object from the db under the name AdminstrativeBudget and passes it on to the serializers class 
 '''
+<<<<<<< HEAD
 
 
 class AdministrativeView(viewsets.ModelViewSet):
     queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
     serializer_class = AdministrativeExpensesSerializer  # this code use the class defined in the serializers.py
 
+=======
+>>>>>>> 2ec9f631ff060e0721f7006a621c35a39b748a2d
 
 '''
 added a C.B view for returning a list of all MDA transactions available in the database
 assumed a serializer of name MDABudgetSerializer has already been made.
 '''
+<<<<<<< HEAD
+=======
+
+
+class MonthlyView(viewsets.ModelViewSet):
+    queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
+    serializer_class = AdministrativeExpensesSerializer  # this code use the class defined in the serializers.py
+>>>>>>> 2ec9f631ff060e0721f7006a621c35a39b748a2d
 
 
 class MDABudgetView(mixins.ListModelMixin, generics.GenericAPIView):
