@@ -15,7 +15,9 @@ from rest_framework import generics
 from .models import MDABudget, AdministrativeBudget, EconomicExpenditure
 from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer, EconomicExpenditureSerializer
 # imported serializers class MonthlySerializer from serializers.py 
-
+import xlrd
+from os import path, _exists
+from django.views.decorators.csrf import csrf_exempt
 
 media_url = settings.MEDIA_URL
 
@@ -110,3 +112,70 @@ def get_economic_expenditure(request):
                     'status': 'failure',
                     'data': {'message': 'Something went wrong'}
                 })
+                
+         
+         
+         
+'''
+This function will extract the required economic expenditure data in the expenditure table to json, like this: 
+ [{"name": "SALARY", "budget": 2454037551812.8213, "allocation": 217515280304.7, "total_allocation": 854641653160.53, "balance": 1599395898652.2913},
+ {"name": "NON REGULAR ALLOWANCES", "budget": 1055706358677.2299, "allocation": 66004017316.47, "total_allocation": 333894644535.48, "balance": 721811714141.7499}]
+
+NB: I added json response on lines 155 and 175 for testing purposes. 
+'''         
+         
+@api_view(['POST' ])
+def getexpenditurevalues(request):
+        excel_files = request.FILES.getlist("excel_file")
+
+        # a loop to get the files from the media folder
+        for current_excel_file in excel_files:
+            excel_file_name = current_excel_file.name
+            current_file_path = f'media/monthly/{excel_file_name}'
+            if os.path.exists(current_file_path):
+                loc = current_file_path
+                requiredvalues = []
+                wb = xlrd.open_workbook(loc)
+                sheet = wb.sheet_by_index(0)
+                numrows = sheet.nrows
+                numcols = sheet.ncols
+                for i in range(numrows):
+                    firstrowvalue = sheet.cell(i,0).value
+                    if type(firstrowvalue) == str:
+                        typeofdata = "string"
+                        # print(str(firstrowvalue) + ' is of type ' + typeofdata)
+                        if firstrowvalue.replace('.','',1).isdigit():
+                            newfirstrowvalue = int(firstrowvalue)
+                            if newfirstrowvalue > 20000000:
+                                rowcheckvalue = newfirstrowvalue
+                                rowdata = {'name': sheet.cell(i,1).value, 'budget' : sheet.cell(i,2).value, 'allocation' : sheet.cell(i,3).value, 'total_allocation' : sheet.cell(i,4).value, 'balance' : sheet.cell(i,5).value}
+                                # print(rowdata)
+                                requiredvalues.append(rowdata)
+                # print(requiredvalues)
+                return JsonResponse(requiredvalues, status=201, safe=False) 
+            elif excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
+                ExcelSaverModelMonthly.objects.get_or_create(monthly_file=current_excel_file)
+
+            # if request.method == 'POST':
+                loc = current_file_path
+                requiredvalues = []
+                wb = xlrd.open_workbook(loc)
+                sheet = wb.sheet_by_index(0)
+                numrows = sheet.nrows
+                numcols = sheet.ncols
+                for i in range(numrows):
+                    firstrowvalue = sheet.cell(i,0).value
+                    if type(firstrowvalue) == str:
+                        typeofdata = "string"
+                        # print(str(firstrowvalue) + ' is of type ' + typeofdata)
+                        if firstrowvalue.replace('.','',1).isdigit():
+                            newfirstrowvalue = int(firstrowvalue)
+                            if newfirstrowvalue > 20000000:
+                                rowcheckvalue = newfirstrowvalue
+                                rowdata = {'name': sheet.cell(i,1).value, 'budget' : sheet.cell(i,2).value, 'allocation' : sheet.cell(i,3).value, 'total_allocation' : sheet.cell(i,4).value, 'balance' : sheet.cell(i,5).value}
+                                # print(rowdata)
+                                requiredvalues.append(rowdata)
+                # print(requiredvalues)
+                return JsonResponse(requiredvalues, status=201, safe=False) 
+            else:
+                break
