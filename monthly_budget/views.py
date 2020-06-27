@@ -11,9 +11,9 @@ from django.shortcuts import render
 from rest_framework import mixins
 from rest_framework import generics
 from .models import MDABudget, AdministrativeBudget
-from .serializers import MDABudgetSerializer, MonthlySerializer
+from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer
 # imported serializers class MonthlySerializer from serializers.py 
-from excel_parser.serializers import MonthlySerializer
+
 
 media_url = settings.MEDIA_URL
 
@@ -23,7 +23,7 @@ media_url = settings.MEDIA_URL
 
 class MonthlyView(viewsets.ModelViewSet):
     queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
-    serializer_class = MonthlySerializer  # this code use the class defined in the serializers.py
+    serializer_class = AdministrativeExpensesSerializer  # this code use the class defined in the serializers.py
 
 
 '''
