@@ -1,8 +1,10 @@
 from django.http import JsonResponse
 from django.shortcuts import render
-from .models import ExcelSaverModel
+from excel_parser.models import ExcelSaverModel
+from .models import ExcelSaverModelMonthly
 from django.http import JsonResponse
 import pandas as pd
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 import os
@@ -10,8 +12,8 @@ from django.conf import settings
 from django.shortcuts import render
 from rest_framework import mixins
 from rest_framework import generics
-from .models import MDABudget, AdministrativeBudget
-from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer
+from .models import MDABudget, AdministrativeBudget, EconomicExpenditure
+from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer, EconomicExpenditureSerializer
 # imported serializers class MonthlySerializer from serializers.py 
 
 
@@ -21,15 +23,17 @@ media_url = settings.MEDIA_URL
 # Create your views here.
 
 
+<<<<<<< HEAD
 class MonthlyView(viewsets.ModelViewSet):
     queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
     serializer_class = AdministrativeExpensesSerializer  # this code use the class defined in the serializers.py
 
 
+=======
+>>>>>>> 442756fa9aba71db5ac4a82753e2e51feeaa0cea
 '''
 added a C.B view for returning a list of all MDA transactions available in the database
-assumed a serializer of name MDABudgetSerializer has already been made.
-'''
+
 
 
 class MDABudgetView(mixins.ListModelMixin, generics.GenericAPIView):
@@ -88,3 +92,21 @@ def administrative_budget(request):
                 except KeyError:
                     continue
     return Response(status=status.HTTP_200_OK)
+
+
+'''
+added a view for returning a list of all  Economic expenditures available in the database for each month
+assumed a serializer of name EconomicExpenditureSerializer has already been made.
+'''
+
+
+@api_view(['GET', ])
+def get_economic_expenditure(request):
+    if request.method == 'GET':
+        qs = EconomicExpenditure.objects.all()
+        serializer = EconomicExpenditureSerializer(qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response({
+                    'status': 'failure',
+                    'data': {'message': 'Something went wrong'}
+                })
