@@ -8,7 +8,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-
+/venv
 build/
 develop-eggs/
 dist/
@@ -134,3 +134,4 @@ dmypy.json
 .env
 /venv/
 /.idea/
+parser/

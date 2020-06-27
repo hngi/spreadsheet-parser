@@ -13,6 +13,7 @@ def real_time():
 def monthly_file_handler(instance, file):
     return f'monthly/{file}'
 
+
 class ExcelSaverModelMonthly(models.Model):
     monthly_file = models.FileField(upload_to=monthly_file_handler, null=True)
 
