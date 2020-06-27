@@ -41,11 +41,6 @@ assumed a serializer of name MDABudgetSerializer has already been made.
 '''
 
 
-class MonthlyView(viewsets.ModelViewSet):
-    queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
-    serializer_class = AdministrativeExpensesSerializer  # this code use the class defined in the serializers.py
-
-
 class MDABudgetView(mixins.ListModelMixin, generics.GenericAPIView):
     queryset = MDABudget.objects.all()
     serializer_class = MDABudgetSerializer
