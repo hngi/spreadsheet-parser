@@ -11,6 +11,13 @@ def real_time():
     current_month = months[day.month]
     return current_month
 
+def monthly_file_handler(instance, file):
+    return f'monthly/{file}'
+
+class ExcelSaverModelMonthly(models.Model):
+    monthly_file = models.FileField(upload_to=monthly_file_handler, null=True)
+
+
 
 """
 This model is to parse the data from the SECTORS in the Monthly Administrative Excel file into the Database. Each 
