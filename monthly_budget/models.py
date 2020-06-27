@@ -10,12 +10,25 @@ def real_time():
     current_month = months[day.month]
     return current_month
 
+def administrative_monthly_file_handler(instance, file):
+    return f'monthly/Administrative/{file}'
+
+
+def economic_monthly_file_handler(instance, file):
+    return f'monthly/Economic/{file}'
+
 def monthly_file_handler(instance, file):
     return f'monthly/{file}'
 
-
 class ExcelSaverModelMonthly(models.Model):
     monthly_file = models.FileField(upload_to=monthly_file_handler, null=True)
+
+
+class ExcelSaverModelMonthlyEconomic(models.Model):
+    monthly_file = models.FileField(upload_to=economic_monthly_file_handler, null=True)
+
+class ExcelSaverModelMonthlyAdministrative(models.Model):
+    monthly_file = models.FileField(upload_to=administrative_monthly_file_handler, null=True)
 
 
 
@@ -35,7 +48,7 @@ class AdministrativeBudget(models.Model):
     allocation = models.FloatField(max_length=50, null=True)
     total_allocation = models.FloatField(max_length=50, null=True)
     balance = models.FloatField(max_length=50, null=True)
-    month = real_time()
+    month =  models.CharField(max_length=20, null=True)
 
     def __str__(self):
         return self.sector
@@ -56,7 +69,7 @@ class MDABudget(models.Model):
     allocation = models.FloatField(max_length=50, null=True)
     total_allocation = models.FloatField(max_length=50, null=True)
     balance = models.FloatField(max_length=50, null=True)
-    month = real_time()
+    month =  models.CharField(max_length=20, null=True)
 
     def __str__(self):
         return self.mda
