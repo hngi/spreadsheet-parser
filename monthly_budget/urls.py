@@ -15,7 +15,8 @@ router.register('Monthlyadminsitrativebudget', views.AdministrativeView)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('daily-payment-report-monthly/', views.AdministrativeView),
     path('administrative_budget/', views.administrative_budget),
-    path('administrative_budget/data', views.AdministrativeView.as_view({'get':'list'})),
+    path('administrative_budget/data', views.AdministrativeView.as_view({'get': 'list'})),
+    path('economic_revenue/data', views.stored_economic_revenue),
+    path('economic_revenue/', views.economic_revenue),
 ]

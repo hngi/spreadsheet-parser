@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = '0#iz6gmldf!6jvht^n6ub#^%m=zd85e&xw7-q3l5enrkwn%@p3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -80,15 +80,10 @@ WSGI_APPLICATION = 'microservice.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 
-
 DATABASES = {
     'default': {
-    'ENGINE': 'django.db.backends.postgresql',
-    'NAME': os.getenv('NAME'),
-    'USER': os.getenv('USER'),
-    'PASSWORD': os.getenv('PASSWORD'),
-    'HOST': 'ec2-35-173-94-156.compute-1.amazonaws.com',
-    'PORT': '5432'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
