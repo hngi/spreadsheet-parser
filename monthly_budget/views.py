@@ -1,22 +1,21 @@
-
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from .models import ExcelSaverModelMonthlyEconomic, ExcelSaverModelMonthlyAdministrative, ExcelSaverModelMonthly, \
     EconomicRevenue
 from django.http import JsonResponse
 import pandas as pd
 import os
 from django.conf import settings
-from rest_framework import mixins
+from rest_framework import mixins, status
 from rest_framework import generics
 from .models import MDABudget, AdministrativeBudget, EconomicExpenditure
-from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer, EconomicExpenditureSerializer
-# imported serializers class MonthlySerializer from serializers.py 
-
 from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer, EconomicExpenditureSerializer, \
     EconomicRevenueSerializer
 from rest_framework import viewsets
 import xlrd
 
 media_url = settings.MEDIA_URL
+
 
 # Create your views here.
 
@@ -45,6 +44,7 @@ added a C.B view for returning a list of all MDA transactions available in the d
 assumed a serializer of name MDABudgetSerializer has already been made.
 '''
 
+
 class MDABudgetView(mixins.ListModelMixin, generics.GenericAPIView):
     queryset = MDABudget.objects.all()
     serializer_class = MDABudgetSerializer
@@ -58,6 +58,7 @@ A Views Function that extracts data from the administrative excel and store as a
 to be stored into the database. If you are to assigned to store in database please be aware that the file is stored in
 'final_data' and the month is stored in 'month' . cheers from ferrum
 """
+
 
 @api_view(['POST', ])
 def administrative_budget(request):
@@ -124,6 +125,7 @@ name = name
 revenue = MONTH -ACTUAL =N=
 total_revenue = YEAR TO DATE
 '''
+
 
 class MDABudgetView(mixins.ListModelMixin, generics.GenericAPIView):
     queryset = MDABudget.objects.all()
@@ -226,10 +228,10 @@ def government_functions(request):
 
                 # The code to store into the db goes here using the final_data list
 
-
             except KeyError:
                 continue
     return Response(status=status.HTTP_200_OK)
+
 
 '''
 Added a view to export stored revenue data from DB, serializes and returns JSON output,
@@ -249,6 +251,7 @@ def stored_economic_revenue(request):
 added a view for returning a list of all  Economic expenditures available in the database for each month
 assumed a serializer of name EconomicExpenditureSerializer has already been made.
 '''
+
 
 @api_view(['GET', ])
 def get_economic_expenditure(request):
@@ -357,47 +360,20 @@ def get_mda_budget_values(request):
             ExcelSaverModelMonthly.objects.get_or_create(monthly_file=current_excel_file)
 
 
-
 def economic_expenditure_data(current_excel_file):
     arr = []
     for i in range(len(current_excel_file)):
         data = current_excel_file[i]
         arr.append(
-        EconomicExpenditure(
-            name=data['name'],
-            budget=data['budget'],
-            allocation=data['allocation'],
-            total_allocation=data['total_allocation'],
-            balance=data['balance']
-            )
-        )
-    EconomicExpenditure.objects.bulk_create(arr)
-'''
-This is not a view function
-It takes data extracted from MDA Budget excel sheet in the format below and saves them all to the database at once.
-[{"mda": "LOSS ON INVENTORY", "budget": 2454037551812.8213, "allocation": 217515280304.7, 
-"total_allocation": 854641653160.53, "balance": 1599395898652.2913}, {"mda": "IMPAIRMENT CHARGES - INVESTMENT PROPERTY 
-- LAND & BUILDING - OFFICE", "budget": 1055706358677.2299, "allocation": 66004017316.47, 
-"total_allocation": 333894644535.48, "balance": 721811714141.7499}]
-'''
-
-
-def save_mda(excel_output):
-    arr = []
-    for i in range(len(excel_output)):
-        data = excel_output[i]
-        arr.append(
-            MDABudget(
-                mda=data['mda'],
+            EconomicExpenditure(
+                name=data['name'],
                 budget=data['budget'],
                 allocation=data['allocation'],
                 total_allocation=data['total_allocation'],
                 balance=data['balance']
             )
         )
-    MDABudget.objects.bulk_create(arr)
-<<<<<<< HEAD
-=======
+    EconomicExpenditure.objects.bulk_create(arr)
 
 
 '''
@@ -475,4 +451,29 @@ def get_mda_budget_values(request):
             return JsonResponse(required_values, status=201, safe=False)
         else:
             break
->>>>>>> a3560bbf4706eb62cd9d3b05aed0739efb2131c3
+
+
+'''
+This is not a view function
+It takes data extracted from MDA Budget excel sheet in the format below and saves them all to the database at once.
+[{"mda": "LOSS ON INVENTORY", "budget": 2454037551812.8213, "allocation": 217515280304.7, 
+"total_allocation": 854641653160.53, "balance": 1599395898652.2913}, {"mda": "IMPAIRMENT CHARGES - INVESTMENT PROPERTY 
+- LAND & BUILDING - OFFICE", "budget": 1055706358677.2299, "allocation": 66004017316.47, 
+"total_allocation": 333894644535.48, "balance": 721811714141.7499}]
+'''
+
+
+def save_mda(excel_output):
+    arr = []
+    for i in range(len(excel_output)):
+        data = excel_output[i]
+        arr.append(
+            MDABudget(
+                mda=data['mda'],
+                budget=data['budget'],
+                allocation=data['allocation'],
+                total_allocation=data['total_allocation'],
+                balance=data['balance']
+            )
+        )
+    MDABudget.objects.bulk_create(arr)
