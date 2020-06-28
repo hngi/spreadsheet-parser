@@ -10,7 +10,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .models import MDABudget, AdministrativeBudget, EconomicExpenditure
-from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer, EconomicExpenditureSerializer
+from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer, EconomicExpenditureSerializer, \
+    EconomicRevenueSerializer
 from rest_framework import viewsets
 import xlrd
 
@@ -179,6 +180,20 @@ def economic_revenue(request):
             except KeyError:
                 continue
     return Response(status=status.HTTP_200_OK)
+
+
+'''
+Added a view to export stored revenue data from DB, serializes and returns JSON output,
+Serializer has been created, awaiting url. nifemi 
+'''
+
+
+@api_view(['GET'])
+def stored_economic_revenue(request):
+    if request.method == 'GET':
+        qs = EconomicRevenue.objects.all()
+        serializer = EconomicRevenueSerializer(qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 '''
