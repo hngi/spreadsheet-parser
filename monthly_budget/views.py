@@ -7,14 +7,11 @@ from django.conf import settings
 from rest_framework import mixins
 from rest_framework import generics
 from .models import MDABudget, AdministrativeBudget, EconomicExpenditure
-<<<<<<< HEAD
 from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer, EconomicExpenditureSerializer
 # imported serializers class MonthlySerializer from serializers.py 
 
-=======
 from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer, EconomicExpenditureSerializer, \
     EconomicRevenueSerializer
->>>>>>> f8519faf1a57a7059844926619c0b5aaae0b4bb9
 from rest_framework import viewsets
 import xlrd
 
@@ -194,15 +191,9 @@ def economic_revenue(request):
     return Response(status=status.HTTP_200_OK)
 
 
-<<<<<<< HEAD
-
-'''added a view for returning a list of all  Economic expenditures available in the database for each month
-assumed a serializer of name EconomicExpenditureSerializer has already been made.
-=======
 '''
 Added a view to export stored revenue data from DB, serializes and returns JSON output,
 Serializer has been created, awaiting url. nifemi 
->>>>>>> f8519faf1a57a7059844926619c0b5aaae0b4bb9
 '''
 
 
@@ -303,11 +294,10 @@ def get_expenditure_values(request):
             break
 
 
-<<<<<<< HEAD
-def save_data(rows):
+def economic_expenditure_data(current_excel_file):
     arr = []
-    for i in range(len(rows)):
-        data = rows[i]
+    for i in range(len(current_excel_file)):
+        data = current_excel_file[i]
         arr.append(
         EconomicExpenditure(
             name=data['name'],
@@ -318,7 +308,6 @@ def save_data(rows):
             )
         )
     EconomicExpenditure.objects.bulk_create(arr)
-=======
 '''
 This is not a view function
 It takes data extracted from MDA Budget excel sheet in the format below and saves them all to the database at once.
@@ -419,4 +408,3 @@ def get_mda_budget_values(request):
             return JsonResponse(required_values, status=201, safe=False)
         else:
             break
->>>>>>> f8519faf1a57a7059844926619c0b5aaae0b4bb9
