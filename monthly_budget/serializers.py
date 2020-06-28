@@ -8,7 +8,7 @@ from .models import AdministrativeBudget, MDABudget,  EconomicExpenditure
 class AdministrativeExpensesSerializer(serializers.ModelSerializer):
     class Meta:
         model = AdministrativeBudget
-        fields = ['id', 'sector', 'budget', 'allocation', 'total_allocation', 'balance']
+        fields = ['id', 'sector', 'budget', 'allocation', 'total_allocation', 'balance', 'month']
 
 
 class MDABudgetSerializer(serializers.ModelSerializer):
