@@ -1,4 +1,4 @@
-# serializers convert the data in our db to and from js 
+# serializers convert the data in our db to and from js
 # and serve them unto our web pages
 
 from rest_framework import serializers
@@ -21,5 +21,9 @@ class EconomicExpenditureSerializer(serializers.ModelSerializer):
     class Meta:
         model = EconomicExpenditure
         fields = "__all__"
-        
 
+
+class EconomicRevenueSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EconomicRevenue
+        fields = "__all__"
