@@ -2,13 +2,13 @@
 # and serve them unto our web pages
 
 from rest_framework import serializers
-from .models import AdministrativeBudget, MDABudget,  EconomicExpenditure
+from .models import AdministrativeBudget, MDABudget, EconomicExpenditure, EconomicRevenue
 
 
 class AdministrativeExpensesSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = AdministrativeBudget
-        fields = ['id', 'sector', 'budget', 'allocation', 'total_allocation', 'balance']
+    class Meta:
+        model = AdministrativeBudget
+        fields = ['id', 'sector', 'budget', 'allocation', 'total_allocation', 'balance', 'month']
 
 
 class MDABudgetSerializer(serializers.ModelSerializer):
@@ -22,3 +22,4 @@ class EconomicExpenditureSerializer(serializers.ModelSerializer):
         model = EconomicExpenditure
         fields = "__all__"
         
+
