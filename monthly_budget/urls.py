@@ -19,4 +19,5 @@ urlpatterns = [
     path('administrative_budget/data', views.AdministrativeView.as_view({'get': 'list'})),
     path('economic_revenue/data', views.stored_economic_revenue),
     path('economic_revenue/', views.economic_revenue),
+    path('government_functions/', views.government_functions),
 ]

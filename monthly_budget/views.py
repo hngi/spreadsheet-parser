@@ -177,6 +177,51 @@ def economic_revenue(request):
                 continue
     return Response(status=status.HTTP_200_OK)
 
+
+@api_view(['POST', ])
+def government_functions(request):
+    excel_files = request.FILES.getlist("excel_file")
+
+    for current_excel_file in excel_files:
+        excel_file_name = current_excel_file.name
+        current_file_path = f'media/monthly/Economic/{excel_file_name}'
+        if excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
+            ExcelSaverModelMonthlyEconomic.objects.get_or_create(monthly_file=current_excel_file)
+            try:
+                # reading the excel file
+                df = pd.read_excel(current_file_path, usecols="A:G", encoding='utf-8')
+
+                # remove file after being read
+                os.remove(current_file_path)
+
+                # Dropping the unnecessary columns
+                data = df.dropna(axis=0, how="any")
+                data.columns = data.iloc[0]
+                data2 = data.iloc[1:, ].reindex()
+
+                month = data2.columns[3].split()[0]
+
+                data2.columns = data2.columns.map(lambda x: x.replace('\n', ''))
+                data2.columns = ["code", "name", "budget", "month", "expenses", "balance", "percentage"]
+
+                # dropping the columns that are not needed
+                data2.drop(["month"], axis=1, inplace=True)
+
+                # formatting the floats to make sure they all have uniform decimal points
+                data2["expenses"] = data2["expenses"].apply(lambda x: "{:.2f}".format(x))
+
+                data2["code"] = data2["code"].str.split('-').str[-1]
+
+                # here is final_data, the list of dictionaries that can be easily stored in the database
+                final_data = data2.to_dict(orient="records")
+
+                # The code to store into the db goes here using the final_data list
+
+
+            except KeyError:
+                continue
+    return Response(status=status.HTTP_200_OK)
+
 '''
 Added a view to export stored revenue data from DB, serializes and returns JSON output,
 Serializer has been created, awaiting url. nifemi 
