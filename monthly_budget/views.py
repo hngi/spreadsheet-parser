@@ -6,10 +6,10 @@ import os
 from django.conf import settings
 from rest_framework import mixins
 from rest_framework import generics
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
 from .models import MDABudget, AdministrativeBudget, EconomicExpenditure
+from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer, EconomicExpenditureSerializer
+# imported serializers class MonthlySerializer from serializers.py 
+
 from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer, EconomicExpenditureSerializer, \
     EconomicRevenueSerializer
 from rest_framework import viewsets
@@ -19,6 +19,15 @@ media_url = settings.MEDIA_URL
 
 # Create your views here.
 
+
+class MonthlyView(viewsets.ModelViewSet):
+    queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
+    serializer_class = AdministrativeExpensesSerializer  # this code use the class defined in the serializers.py
+
+
+'''
+added a C.B view for returning a list of all MDA transactions available in the database
+'''
 '''
 This function is to call the data in the AdministrativeBuget models which is a table name in our db. it 
 calls all object from the db under the name AdministrativeBudget and passes it on to the serializers class 
@@ -285,6 +294,20 @@ def get_expenditure_values(request):
             break
 
 
+def economic_expenditure_data(current_excel_file):
+    arr = []
+    for i in range(len(current_excel_file)):
+        data = current_excel_file[i]
+        arr.append(
+        EconomicExpenditure(
+            name=data['name'],
+            budget=data['budget'],
+            allocation=data['allocation'],
+            total_allocation=data['total_allocation'],
+            balance=data['balance']
+            )
+        )
+    EconomicExpenditure.objects.bulk_create(arr)
 '''
 This is not a view function
 It takes data extracted from MDA Budget excel sheet in the format below and saves them all to the database at once.
