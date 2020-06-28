@@ -1,4 +1,5 @@
-from .models import ExcelSaverModelMonthlyEconomic, ExcelSaverModelMonthlyAdministrative, ExcelSaverModelMonthly
+from .models import ExcelSaverModelMonthlyEconomic, ExcelSaverModelMonthlyAdministrative, ExcelSaverModelMonthly, \
+    EconomicRevenue
 from django.http import JsonResponse
 import pandas as pd
 import os
@@ -13,7 +14,6 @@ from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer, 
 from rest_framework import viewsets
 import xlrd
 
-
 media_url = settings.MEDIA_URL
 
 # Create your views here.
@@ -23,14 +23,17 @@ This function is to call the data in the AdministrativeBuget models which is a t
 calls all object from the db under the name AdministrativeBudget and passes it on to the serializers class 
 '''
 
+
 class AdministrativeView(viewsets.ModelViewSet):
     queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
     serializer_class = AdministrativeExpensesSerializer  # this code use the class defined in the serializers.py
+
 
 '''
 added a C.B view for returning a list of all MDA transactions available in the database
 assumed a serializer of name MDABudgetSerializer has already been made.
 '''
+
 
 class MDABudgetView(mixins.ListModelMixin, generics.GenericAPIView):
     queryset = MDABudget.objects.all()
@@ -39,11 +42,13 @@ class MDABudgetView(mixins.ListModelMixin, generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
+
 """
 A Views Function that extracts data from the administrative excel and store as a list of dictionaries, to make it easy to be
 stored into the database. If you are to assigned to store in database please be aware that the file is stored in
 'final_data' and the month is stored in 'month' . cheers from ferrum
 """
+
 
 @api_view(['POST', ])
 def administrative_budget(request):
@@ -59,7 +64,6 @@ def administrative_budget(request):
         #     ExcelSaverModelMonthlyAdministrative.objects.get_or_create(monthly_file=current_excel_file)
         #     monthly_files_url = media_url + f'monthly/Administrative/'
         #     # gets all files in Monthly folder
-
 
         if excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
             ExcelSaverModelMonthlyAdministrative.objects.get_or_create(monthly_file=current_excel_file)
@@ -111,8 +115,8 @@ def administrative_budget(request):
 
 '''
 A view for the extraction of data from the excel file for the Economic revenue!
-The extracted data is stored as a list of dictionary in a variable called economic_final_data  the month is stored in variable economic_month
-And the data is parsed as follow:
+The extracted data is stored as a list of dictionary in a variable called economic_final_data  the month is stored in 
+variable economic_month. And the data is parsed as follow:
 name = name
 revenue = MONTH -ACTUAL =N=
 total_revenue = YEAR TO DATE
@@ -158,8 +162,19 @@ def economic_revenue(request):
                 data2["revenue"] = data2["revenue"].apply(lambda x: "{:.2f}".format(x))
                 data2["total_revenue"] = data2["total_revenue"].apply(lambda x: "{:.2f}".format(x))
 
-                # here is final_data, the list of dictionaries that can be easily stored in the database
+                # here is final data, the list of dictionaries that can be easily stored in the database
                 economic_final_data = data2.to_dict(orient="records")
+
+                """This code stores the returned data in the dictionary into the Table."""
+                for revenues in economic_final_data:
+                    if not EconomicRevenue.objects.filter(name=revenues['name'],
+                                                          revenue=revenues['revenue'],
+                                                          total_revenue=revenues['total_revenue'],
+                                                          month=economic_month).exists():
+                        EconomicRevenue.objects.create(name=revenues['name'],
+                                                       revenue=revenues['revenue'],
+                                                       total_revenue=revenues['total_revenue'],
+                                                       month=economic_month)
 
             except KeyError:
                 continue
