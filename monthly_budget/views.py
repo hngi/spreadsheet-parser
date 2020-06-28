@@ -44,8 +44,8 @@ class MDABudgetView(mixins.ListModelMixin, generics.GenericAPIView):
 
 
 """
-A Views Function that extracts data from the administrative excel and store as a list of dictionaries, to make it easy to be
-stored into the database. If you are to assigned to store in database please be aware that the file is stored in
+A Views Function that extracts data from the administrative excel and store as a list of dictionaries, to make it easy 
+to be stored into the database. If you are to assigned to store in database please be aware that the file is stored in
 'final_data' and the month is stored in 'month' . cheers from ferrum
 """
 
