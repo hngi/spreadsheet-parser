@@ -1,3 +1,4 @@
+
 from .models import ExcelSaverModelMonthlyEconomic, ExcelSaverModelMonthlyAdministrative, ExcelSaverModelMonthly, \
     EconomicRevenue
 from django.http import JsonResponse
@@ -6,10 +7,10 @@ import os
 from django.conf import settings
 from rest_framework import mixins
 from rest_framework import generics
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
 from .models import MDABudget, AdministrativeBudget, EconomicExpenditure
+from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer, EconomicExpenditureSerializer
+# imported serializers class MonthlySerializer from serializers.py 
+
 from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer, EconomicExpenditureSerializer, \
     EconomicRevenueSerializer
 from rest_framework import viewsets
@@ -19,6 +20,15 @@ media_url = settings.MEDIA_URL
 
 # Create your views here.
 
+
+class MonthlyView(viewsets.ModelViewSet):
+    queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
+    serializer_class = AdministrativeExpensesSerializer  # this code use the class defined in the serializers.py
+
+
+'''
+added a C.B view for returning a list of all MDA transactions available in the database
+'''
 '''
 This function is to call the data in the AdministrativeBuget models which is a table name in our db. it 
 calls all object from the db under the name AdministrativeBudget and passes it on to the serializers class 
@@ -35,7 +45,6 @@ added a C.B view for returning a list of all MDA transactions available in the d
 assumed a serializer of name MDABudgetSerializer has already been made.
 '''
 
-
 class MDABudgetView(mixins.ListModelMixin, generics.GenericAPIView):
     queryset = MDABudget.objects.all()
     serializer_class = MDABudgetSerializer
@@ -50,7 +59,6 @@ to be stored into the database. If you are to assigned to store in database plea
 'final_data' and the month is stored in 'month' . cheers from ferrum
 """
 
-
 @api_view(['POST', ])
 def administrative_budget(request):
     excel_files = request.FILES.getlist("excel_file")
@@ -59,12 +67,6 @@ def administrative_budget(request):
     for current_excel_file in excel_files:
         excel_file_name = current_excel_file.name
         current_file_path = f'media/monthly/Administrative/{excel_file_name}'
-        # if os.path.exists(current_file_path):
-        #     continue
-        # elif excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
-        #     ExcelSaverModelMonthlyAdministrative.objects.get_or_create(monthly_file=current_excel_file)
-        #     monthly_files_url = media_url + f'monthly/Administrative/'
-        #     # gets all files in Monthly folder
 
         if excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
             ExcelSaverModelMonthlyAdministrative.objects.get_or_create(monthly_file=current_excel_file)
@@ -123,6 +125,10 @@ revenue = MONTH -ACTUAL =N=
 total_revenue = YEAR TO DATE
 '''
 
+class MDABudgetView(mixins.ListModelMixin, generics.GenericAPIView):
+    queryset = MDABudget.objects.all()
+    serializer_class = MDABudgetSerializer
+
 
 @api_view(['POST', ])
 def economic_revenue(request):
@@ -134,14 +140,13 @@ def economic_revenue(request):
 
         if excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
             ExcelSaverModelMonthlyEconomic.objects.get_or_create(monthly_file=current_excel_file)
-            economic_monthly_files_url = media_url + f'monthly/Economic/'
             try:
                 # reading the excel file
                 df = pd.read_excel(current_file_path, usecols="B:G", encoding='utf-8')
 
                 # remove file after being read
                 os.remove(current_file_path)
-
+                print('done')
                 # Dropping the unnecessary columns
                 data = df.dropna(axis=0, how="any")
                 data.columns = data.iloc[0]
@@ -163,7 +168,7 @@ def economic_revenue(request):
                 data2["revenue"] = data2["revenue"].apply(lambda x: "{:.2f}".format(x))
                 data2["total_revenue"] = data2["total_revenue"].apply(lambda x: "{:.2f}".format(x))
 
-                # here is final data, the list of dictionaries that can be easily stored in the database
+                # here is final_data, the list of dictionaries that can be easily stored in the database
                 economic_final_data = data2.to_dict(orient="records")
 
                 """This code stores the returned data in the dictionary into the Table."""
@@ -181,6 +186,50 @@ def economic_revenue(request):
                 continue
     return Response(status=status.HTTP_200_OK)
 
+
+@api_view(['POST', ])
+def government_functions(request):
+    excel_files = request.FILES.getlist("excel_file")
+
+    for current_excel_file in excel_files:
+        excel_file_name = current_excel_file.name
+        current_file_path = f'media/monthly/Economic/{excel_file_name}'
+        if excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
+            ExcelSaverModelMonthlyEconomic.objects.get_or_create(monthly_file=current_excel_file)
+            try:
+                # reading the excel file
+                df = pd.read_excel(current_file_path, usecols="A:G", encoding='utf-8')
+
+                # remove file after being read
+                os.remove(current_file_path)
+
+                # Dropping the unnecessary columns
+                data = df.dropna(axis=0, how="any")
+                data.columns = data.iloc[0]
+                data2 = data.iloc[1:, ].reindex()
+
+                month = data2.columns[3].split()[0]
+
+                data2.columns = data2.columns.map(lambda x: x.replace('\n', ''))
+                data2.columns = ["code", "name", "budget", "month", "expenses", "balance", "percentage"]
+
+                # dropping the columns that are not needed
+                data2.drop(["month"], axis=1, inplace=True)
+
+                # formatting the floats to make sure they all have uniform decimal points
+                data2["expenses"] = data2["expenses"].apply(lambda x: "{:.2f}".format(x))
+
+                data2["code"] = data2["code"].str.split('-').str[-1]
+
+                # here is final_data, the list of dictionaries that can be easily stored in the database
+                final_data = data2.to_dict(orient="records")
+
+                # The code to store into the db goes here using the final_data list
+
+
+            except KeyError:
+                continue
+    return Response(status=status.HTTP_200_OK)
 
 '''
 Added a view to export stored revenue data from DB, serializes and returns JSON output,
@@ -200,7 +249,6 @@ def stored_economic_revenue(request):
 added a view for returning a list of all  Economic expenditures available in the database for each month
 assumed a serializer of name EconomicExpenditureSerializer has already been made.
 '''
-
 
 @api_view(['GET', ])
 def get_economic_expenditure(request):
@@ -301,6 +349,7 @@ def get_mda_budget_values(request):
                                         'balance': sheet.cell(i, 5).value}
                             # print(row_data)
                             required_values.append(row_data)
+                            print(required_values)
             # print(required_values)
             save_mda(required_values)
             return JsonResponse(required_values, status=201, safe=False)
@@ -308,6 +357,21 @@ def get_mda_budget_values(request):
             ExcelSaverModelMonthly.objects.get_or_create(monthly_file=current_excel_file)
 
 
+
+def economic_expenditure_data(current_excel_file):
+    arr = []
+    for i in range(len(current_excel_file)):
+        data = current_excel_file[i]
+        arr.append(
+        EconomicExpenditure(
+            name=data['name'],
+            budget=data['budget'],
+            allocation=data['allocation'],
+            total_allocation=data['total_allocation'],
+            balance=data['balance']
+            )
+        )
+    EconomicExpenditure.objects.bulk_create(arr)
 '''
 This is not a view function
 It takes data extracted from MDA Budget excel sheet in the format below and saves them all to the database at once.
@@ -332,3 +396,83 @@ def save_mda(excel_output):
             )
         )
     MDABudget.objects.bulk_create(arr)
+<<<<<<< HEAD
+=======
+
+
+'''
+This view function takes post request with key as excel_file and value as an upload excel file. It extracts the 
+necessary MDA budget data from the file and saves it using the savemda() function above to the database. 
+Data output format:
+[{"mda": "LOSS ON INVENTORY", "budget": 2454037551812.8213, "allocation": 217515280304.7, 
+"total_allocation": 854641653160.53, "balance": 1599395898652.2913}, {"mda": "IMPAIRMENT CHARGES - INVESTMENT PROPERTY 
+- LAND & BUILDING - OFFICE", "budget": 1055706358677.2299, "allocation": 66004017316.47, 
+"total_allocation": 333894644535.48, "balance": 721811714141.7499}]
+NB: it returns the data saved to the database in Json Format, for testing purposes.
+'''
+
+
+@api_view(['POST'])
+def get_mda_budget_values(request):
+    excel_files = request.FILES.getlist("excel_file")
+
+    # a loop to get the files from the media folder
+    for current_excel_file in excel_files:
+        excel_file_name = current_excel_file.name
+        current_file_path = f'media/monthly/{excel_file_name}'
+        if os.path.exists(current_file_path):
+            loc = current_file_path
+            required_values = []
+            wb = xlrd.open_workbook(loc)
+            sheet = wb.sheet_by_index(0)
+            num_rows = sheet.nrows
+            num_cols = sheet.ncols
+            for i in range(num_rows):
+                first_row_value = sheet.cell(i, 0).value
+                if type(first_row_value) == str:
+                    type_of_data = "string"
+                    # print(str(first_row_value) + ' is of type ' + type_of_data)
+                    if first_row_value.replace('.', '', 1).isdigit():
+                        new_first_row_value = int(first_row_value)
+                        if new_first_row_value > 100000000:
+                            row_check_value = new_first_row_value
+                            row_data = {'mda': sheet.cell(i, 1).value, 'budget': sheet.cell(i, 2).value,
+                                        'allocation': sheet.cell(i, 3).value,
+                                        'total_allocation': sheet.cell(i, 4).value,
+                                        'balance': sheet.cell(i, 5).value}
+                            # print(row_data)
+                            required_values.append(row_data)
+            # print(required_values)
+            save_mda(required_values)
+            return JsonResponse(required_values, status=201, safe=False)
+        elif excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
+            ExcelSaverModelMonthly.objects.get_or_create(monthly_file=current_excel_file)
+
+            # if request.method == 'POST':
+            loc = current_file_path
+            required_values = []
+            wb = xlrd.open_workbook(loc)
+            sheet = wb.sheet_by_index(0)
+            num_rows = sheet.nrows
+            num_cols = sheet.ncols
+            for i in range(num_rows):
+                first_row_value = sheet.cell(i, 0).value
+                if type(first_row_value) == str:
+                    type_of_data = "string"
+                    # print(str(first_row_value) + ' is of type ' + type_of_data)
+                    if first_row_value.replace('.', '', 1).isdigit():
+                        new_first_row_value = int(first_row_value)
+                        if new_first_row_value > 100000000:
+                            row_check_value = new_first_row_value
+                            row_data = {'mda': sheet.cell(i, 1).value, 'budget': sheet.cell(i, 2).value,
+                                        'allocation': sheet.cell(i, 3).value,
+                                        'total_allocation': sheet.cell(i, 4).value,
+                                        'balance': sheet.cell(i, 5).value}
+                            # print(row_data)
+                            required_values.append(row_data)
+            # print(required_values)
+            save_mda(required_values)
+            return JsonResponse(required_values, status=201, safe=False)
+        else:
+            break
+>>>>>>> a3560bbf4706eb62cd9d3b05aed0739efb2131c3

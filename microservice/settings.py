@@ -82,12 +82,12 @@ WSGI_APPLICATION = 'microservice.wsgi.application'
 
 DATABASES = {
     'default': {
-    'ENGINE': 'django.db.backends.postgresql',
-    'NAME': os.getenv('NAME'),
-    'USER': os.getenv('USER'),
-    'PASSWORD': os.getenv('PASSWORD'),
-    'HOST': 'ec2-35-173-94-156.compute-1.amazonaws.com',
-    'PORT': '5432'
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('NAME'),
+        'USER': os.getenv('USER'),
+        'PASSWORD': os.getenv('PASSWORD'),
+        'HOST': 'ec2-35-173-94-156.compute-1.amazonaws.com',
+        'PORT': '5432'
     }
 }
 
