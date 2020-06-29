@@ -123,20 +123,20 @@ def administrative_budget(request):
                 final_data = data2.to_dict(orient="records")
 
                 # code to store into the DB goes here, data is in variable final_data
+
                 for transaction in final_data:
-                    if not AdministrativeBudget.objects.filter(sector=transaction['sector'],
+                    if not AdministrativeBudget.objects.filter(name=transaction['name'],
                                                                budget=transaction['budget'],
-                                                               allocation=transaction['allocation'],
-                                                               total_allocation=transaction['total_allocation'],
+                                                               expenses=transaction['expenses'],
+                                                               total_expenses=transaction['total_expenses'],
                                                                balance=transaction['balance'],
                                                                month=month).exists():
-                        AdministrativeBudget.objects.create(budget=transaction['budget'],
-                                                            sector=transaction['sector'],
-                                                            allocation=transaction['allocation'],
-                                                            total_allocation=transaction['total_allocation'],
+                        AdministrativeBudget.objects.create(name=transaction['name'],
+                                                            budget=transaction['budget'],
+                                                            expenses=transaction['expenses'],
+                                                            total_expenses=transaction['total_expenses'],
                                                             balance=transaction['balance'],
                                                             month=month)
-
             except KeyError:
                 continue
 
