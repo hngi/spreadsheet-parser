@@ -10,7 +10,7 @@ routers and all routers are inclusive in the url path by including routers.urls
 
 router = routers.DefaultRouter()
 router.register('Monthlyadminsitrativebudget', views.AdministrativeView)
-# router.register('mbabudget', views.MDABudgetView)
+router.register('mbabudget', views.MDABudgetView)
 router.register('economicrevenue', views.EconomicRevenueView)
 
 urlpatterns = [
