@@ -25,7 +25,7 @@ media_url = settings.MEDIA_URL
 # this only works for daily payment reports excel sheets
 
 @api_view(['POST'])
-def daily_payment_report_view(request):
+def store_daily_payments_data(request):
     # if to get all daily reports for one month, provide only year and month params
     # if to ge reports for a particular day, provide year, month and day params
 
@@ -127,9 +127,6 @@ def get_daily_reports_view(request):
             except ValueError:
                 return Response("Wrong Date Format")
         serializer = BudgetSerializer(qs, many=True)
+
         return Response(serializer.data, status=status.HTTP_200_OK)
-'''
-        return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-'''
+
