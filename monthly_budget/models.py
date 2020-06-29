@@ -128,12 +128,11 @@ The month variable is the month when the transactions took place as one would th
 
 
 class GovernmentFunctions(models.Model):
-    code = models.CharField(max_length=20, null=True)
     name = models.CharField(max_length=100, null=True)
     budget = models.FloatField(max_length=50, null=True)
     expenses = models.FloatField(max_length=50, null=True)
+    total_expenses = models.FloatField(max_length=50, null=True)
     balance = models.FloatField(max_length=50, null=True)
-    percentage = models.FloatField(max_length=50, null=True)
     month = models.CharField(max_length=15, null=True)
 
     def __str__(self):
