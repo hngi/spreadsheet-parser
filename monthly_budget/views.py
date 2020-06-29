@@ -19,6 +19,24 @@ media_url = settings.MEDIA_URL
 
 
 # Create your views here.
+class MonthlyView(viewsets.ModelViewSet):
+	queryset = AdministrativeBudget.objects.all() # this code is to call all object from the db
+	serializer_class = MonthlySerializer # this code use the class defined in the serializers.py
+
+
+'''
+added a C.B view for returning a list of all MDA transactions available in the database
+assumed a serializer of name MDABudgetSerializer has already been made.
+'''
+class MDABudgetView(mixins.ListModelMixin,generics.GenericAPIView):
+    queryset = MDABudget.objects.all()
+    serializer_class = MDABudgetSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+
+	
 
 
 '''
@@ -61,23 +79,6 @@ def get_economic_expenditure(request):
     if request.method == 'GET':
         qs = EconomicExpenditure.objects.all()
         serializer = EconomicExpenditureSerializer(qs, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    return Response({
-        'status': 'failure',
-        'data': {'message': 'Something went wrong'}
-    })
-
-
-"""
-This connects to the serializer of GovernmentFunctions, which converts the stored data in the DB to JSON when queried.
-"""
-
-
-@api_view(['GET', ])
-def get_government_function(request):
-    if request.method == 'GET':
-        qs = GovernmentFunctions.objects.all()
-        serializer = GovernmentFunctionsSerializer(qs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response({
         'status': 'failure',
@@ -460,4 +461,23 @@ def economic_expenditure_data(current_excel_file):
             )
     EconomicExpenditure.objects.bulk_create(arr)
 
+
+'''
+Query to extract government funtion from the database
+'''
+
+@api_view(["GET", ])
+def getGovtFunc(request):
+    if request.method = "GET":
+        # call on all objects in the database
+        query_set = GovernmentFunctions.objects.all()
+        # serializing each item with a serializer class
+        serializer = GovernmentFunctionsSerializer(query_set, many = True)
+        #returning serialize data as a list.
+        return Response(serializer.data, status = status.HTTP_200_OK)
+    return Response({
+        'status': 'failure',
+        'output': {'message': 'Something went wrong'}
+    })
+        
 
