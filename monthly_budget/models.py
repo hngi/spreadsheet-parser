@@ -27,9 +27,9 @@ class ExcelSaverModelMonthly(models.Model):
 class ExcelSaverModelMonthlyEconomic(models.Model):
     monthly_file = models.FileField(upload_to=economic_monthly_file_handler, null=True)
 
+
 class ExcelSaverModelMonthlyAdministrative(models.Model):
     monthly_file = models.FileField(upload_to=administrative_monthly_file_handler, null=True)
-
 
 
 """
@@ -48,13 +48,14 @@ class AdministrativeBudget(models.Model):
     allocation = models.FloatField(max_length=50, null=True)
     total_allocation = models.FloatField(max_length=50, null=True)
     balance = models.FloatField(max_length=50, null=True)
-    month =  models.CharField(max_length=20, null=True)
+    month = models.CharField(max_length=20, null=True)
 
     def __str__(self):
         return self.sector
 
 
-"""This model is to parse the data from the MDA in the Monthly Administrative Excel file into the Database. Each 
+"""
+This model is to parse the data from the MDA in the Monthly Administrative Excel file into the Database. Each 
 variable correlates to a column in the Database and Rows in the parsing excel file. The mda variable is to be filled 
 with either of the mda in the excel file, budget variable is the Budget Amount budgeted for each mda, allocation 
 variable is the amount released into for each mda for the month of MAY, total_allocation variable is the total amount 
@@ -69,7 +70,7 @@ class MDABudget(models.Model):
     allocation = models.FloatField(max_length=50, null=True)
     total_allocation = models.FloatField(max_length=50, null=True)
     balance = models.FloatField(max_length=50, null=True)
-    month =  models.CharField(max_length=20, null=True)
+    month = models.CharField(max_length=20, null=True)
 
     def __str__(self):
         return self.mda
@@ -87,7 +88,7 @@ class EconomicRevenue(models.Model):
     name = models.CharField(max_length=100, null=True)
     revenue = models.FloatField(max_length=50, null=True)
     total_revenue = models.FloatField(max_length=50, null=True)
-    month = real_time()
+    month = models.CharField(max_length=20, null=True)
 
     def __str__(self):
         return self.name
@@ -117,25 +118,19 @@ class EconomicExpenditure(models.Model):
 """This model is to parse the data from the FUNCTIONS OF GOVERNMENT excel file into the Database. Each 
 variable correlates to a column in the Database and Rows in the parsing excel file. The name variable is to be filled 
 with either of the government function in the excel file, budget variable is the Budget Amount budgeted for each 
-government function, allocation variable is the amount released into for each mda for the month of MAY, 
-total_allocation variable is the total amount released so far for each government function, balance variable is the 
-amount left from each government function Budget. The month variable automatically uploads the month. 
+government function, expenses variable is the amount spent by each mda for the month,balance variable is the 
+amount left from each government function Budget.The percentage is the depicts the amount spent compared to amount given.
+The month variable is the month when the transactions took place as one would think. 
 """
 
 
 class GovernmentFunctions(models.Model):
     name = models.CharField(max_length=100, null=True)
     budget = models.FloatField(max_length=50, null=True)
-    allocation = models.FloatField(max_length=50, null=True)
-    total_allocation = models.FloatField(max_length=50, null=True)
+    expenses = models.FloatField(max_length=50, null=True)
+    total_expenses = models.FloatField(max_length=50, null=True)
     balance = models.FloatField(max_length=50, null=True)
-    month = real_time()
+    month = models.CharField(max_length=15, null=True)
 
     def __str__(self):
         return self.name
-
-
-
-
-
-
