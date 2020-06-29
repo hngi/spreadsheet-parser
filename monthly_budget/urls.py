@@ -13,6 +13,7 @@ router.register('Monthlyadminsitrativebudget', views.AdministrativeView)
 # router.register('mbabudget', views.MDABudgetView)
 # router.register('economicrevenue', views.EconomicRevenueView)
 
+
 urlpatterns = [
     path('', include(router.urls)),
     path('administrative_budget/', views.administrative_budget),
@@ -22,7 +23,7 @@ urlpatterns = [
     path('economic_expenditure/', views.get_economic_expenditure),
     path('economic_expenditure/data/', views.get_expenditure_values),
     path('government_functions/', views.government_functions),
-    path('government_functions/data/', views.gov_functions_view),
+    path('government_functions/data/', views.get_government_function),
     path('mda_budget/', views.get_mda_budget_values),
     path('mda_budget/data/', views.mda_budget_view),
 ]
