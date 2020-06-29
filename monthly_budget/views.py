@@ -49,6 +49,7 @@ def mda_budget_view(request):
     })
 
 
+
 """
 A Views Function that extracts data from the administrative excel and store as a list of dictionaries, to make it easy to be
 stored into the database. If you are to assigned to store in database please be aware that the file is stored in
@@ -422,4 +423,23 @@ def economic_expenditure_data(current_excel_file):
             )
     EconomicExpenditure.objects.bulk_create(arr)
 
+
+'''
+Query to extract government funtion from the database
+'''
+
+@api_view(["GET", ])
+def getGovtFunc(request):
+    if request.method == "GET":
+        # call on all objects in the database
+        query_set = GovernmentFunctions.objects.all()
+        # serializing each item with a serializer class
+        serializer = GovernmentFunctionsSerializer(query_set, many = True)
+        #returning serialize data as a list.
+        return Response(serializer.data, status = status.HTTP_200_OK)
+    return Response({
+        'status': 'failure',
+        'output': {'message': 'Something went wrong'}
+    })
+        
 
