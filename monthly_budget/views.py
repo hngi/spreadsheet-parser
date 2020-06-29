@@ -51,7 +51,6 @@ Serializer has been created, awaiting url. nifemi
 '''
 
 
-<<<<<<< HEAD
 @api_view(['GET', ])
 def get_economic_expenditure(request):
     if request.method == 'GET':
@@ -74,28 +73,6 @@ def get_government_function(request):
     if request.method == 'GET':
         qs = GovernmentFunctions.objects.all()
         serializer = GovernmentFunctionsSerializer(qs, many=True)
-=======
-@api_view(['GET'])
-def stored_economic_revenue(request):
-    if request.method == 'GET':
-        qs = EconomicRevenue.objects.all()
-        serializer = EconomicRevenueSerializer(qs, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-'''
-added a view for returning a list of all  Economic expenditures available in the database for each month
-assumed a serializer of name EconomicExpenditureSerializer has already been made.
-'''
-
-
-@api_view(['GET', ])
-def get_economic_expenditure(request):
-    if request.method == 'GET':
-        qs = EconomicExpenditure.objects.all()
-        serializer = EconomicExpenditureSerializer(qs, many=True)
->>>>>>> fcfcb1a594e397316f0b1240da712f68326581eb
-        return Response(serializer.data, status=status.HTTP_200_OK)
     return Response({
         'status': 'failure',
         'data': {'message': 'Something went wrong'}
