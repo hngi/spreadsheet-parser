@@ -20,7 +20,6 @@ class Budget(models.Model):
     project_name = models.TextField()
     project_amount = models.FloatField()
     project_date = models.DateField()
-    posting_date = models.DateTimeField(auto_now_add=True)
 
     def ___str___(self):
         return self.MDA_name
