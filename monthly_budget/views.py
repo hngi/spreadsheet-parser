@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 from django.shortcuts import render
 from .models import ExcelSaverModel
->>>>>>> 20746ba74cdcf2420e92d528a7fe97b48f823a78
 from django.http import JsonResponse
 import pandas as pd
 from rest_framework.response import Response
@@ -20,7 +17,6 @@ import os
 from django.conf import settings
 from rest_framework import mixins
 from rest_framework import generics
-<<<<<<< HEAD
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -30,19 +26,11 @@ from rest_framework import viewsets
 import xlrd
 
 
-=======
 from .models import MDABudget, AdministrativeBudget
 from .serializers import MDABudgetSerializer, MonthlySerializer
 # imported serializers class MonthlySerializer from serializers.py 
 from excel_parser.serializers import MonthlySerializer
->>>>>>> 20746ba74cdcf2420e92d528a7fe97b48f823a78
 media_url = settings.MEDIA_URL
-
-# Create your views here.
-class MonthlyView(viewsets.ModelViewSet):
-	queryset = AdministrativeBudget.objects.all() # this code is to call all object from the db
-	serializer_class = MonthlySerializer # this code use the class defined in the serializers.py
-
 
 '''
 added a C.B view for returning a list of all MDA transactions available in the database
@@ -113,13 +101,10 @@ This function is to call the data in the AdministrativeBudget models which is a 
 calls all object from the db under the name AdministrativeBudget and passes it on to the serializers class 
 '''
 
-<<<<<<< HEAD
-class MonthlyView(viewsets.ModelViewSet):
-    queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
-    serializer_class = AdministrativeExpensesSerializer  # this code use the class defined in the serializers.py
-=======
+# class MonthlyView(viewsets.ModelViewSet):
+#     queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
+#     serializer_class = AdministrativeExpensesSerializer  # this code use the class defined in the serializers.py
 
->>>>>>> 20746ba74cdcf2420e92d528a7fe97b48f823a78
 
 '''
 added a C.B view for returning a list of all MDA transactions available in the database
@@ -136,7 +121,6 @@ class MDABudgetView(mixins.ListModelMixin, generics.GenericAPIView):
 
 
 
-<<<<<<< HEAD
 
 class AdministrativeView(viewsets.ModelViewSet):
     queryset = AdministrativeBudget.objects.all()  # this code is to call all object from the db
@@ -281,22 +265,6 @@ def get_economic_expenditure(request):
                 })
 
 
-'''
-added a view for returning a list of all  Economic expenditures available in the database for each month
-assumed a serializer of name EconomicExpenditureSerializer has already been made.
-'''
-
-
-@api_view(['GET', ])
-def get_economic_expenditure(request):
-    if request.method == 'GET':
-        qs = EconomicExpenditure.objects.all()
-        serializer = EconomicExpenditureSerializer(qs, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    return Response({
-        'status': 'failure',
-        'data': {'message': 'Something went wrong'}
-    })
 
 
 '''
@@ -368,5 +336,3 @@ def get_expenditure_values(request):
             return JsonResponse(required_values, status=201, safe=False)
         else:
             break
-=======
->>>>>>> 20746ba74cdcf2420e92d528a7fe97b48f823a78
