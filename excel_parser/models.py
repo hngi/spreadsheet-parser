@@ -1,17 +1,11 @@
 from django.db import models
-import os
-from django.dispatch import receiver
-
-
-# Create your models here.
-
 
 def upload_file_handler(instance, filename):
     return f'daily/{filename}'
 
 class ExcelSaverModel(models.Model):
     daily_report_file = models.FileField(upload_to=upload_file_handler, null=True)
-    monthly_file = models.FileField(upload_to=monthly_file_handler, null=True)
+
 
 
 class Budget(models.Model):
