@@ -21,9 +21,9 @@ urlpatterns = [
     path('economic_revenue/data', views.stored_economic_revenue),
     path('economic_revenue/', views.economic_revenue),
     path('economic_expenditure/', views.get_economic_expenditure),
-    path('economic_expenditure/data/', views.get_expenditure_values),
+    path('economic_expenditure/data/', views.get_expenditure_data),
     path('government_functions/', views.government_functions),
     path('government_functions/data/', views.get_government_function),
     path('mda_budget/', views.get_mda_budget_values),
-    path('mda_budget/data/', views.mda_budget_view),
+    path('mda_budget/data/', views.get_mda_budget_view),
 ]

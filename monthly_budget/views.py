@@ -1,3 +1,5 @@
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from .models import ExcelSaverModelMonthlyEconomic, ExcelSaverModelMonthlyAdministrative, ExcelSaverModelMonthly, \
     EconomicRevenue, GovernmentFunctions
 from django.http import JsonResponse
@@ -6,9 +8,6 @@ import os
 from django.conf import settings
 from rest_framework import mixins, status
 from rest_framework import generics
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
 from .models import MDABudget, AdministrativeBudget, EconomicExpenditure
 from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer, EconomicExpenditureSerializer, \
     EconomicRevenueSerializer, GovernmentFunctionsSerializer
@@ -49,20 +48,6 @@ assumed a serializer of name MDABudgetSerializer has already been made.
 '''
 
 
-class MDABudgetView(mixins.ListModelMixin, generics.GenericAPIView):
-    queryset = MDABudget.objects.all()
-    serializer_class = MDABudgetSerializer
-
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
-
-'''
-added a C.B view for returning a list of all MDA transactions available in the database
-assumed a serializer of name MDABudgetSerializer has already been made.
-'''
-
-
 @api_view(['GET'])
 def get_mda_budget_view(request):
     if request.method == 'GET':
@@ -73,20 +58,6 @@ def get_mda_budget_view(request):
         'status': 'failure',
         'data': {'message': 'Something went wrong'}
     })
-
-
-'''
-Added a view to export stored revenue data from DB, serializes and returns JSON output,
-Serializer has been created, awaiting url. nifemi 
-'''
-
-
-@api_view(['GET'])
-def stored_economic_revenue(request):
-    if request.method == 'GET':
-        qs = EconomicRevenue.objects.all()
-        serializer = EconomicRevenueSerializer(qs, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 '''
@@ -110,21 +81,6 @@ def get_economic_expenditure(request):
 '''
 Query to extract government function from the database
 '''
-
-
-@api_view(["GET", ])
-def get_government_function(request):
-    if request.method == "GET":
-        # call on all objects in the database
-        query_set = GovernmentFunctions.objects.all()
-        # serializing each item with a serializer class
-        serializer = GovernmentFunctionsSerializer(query_set, many=True)
-        # returning serialize data as a list.
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    return Response({
-        'status': 'failure',
-        'output': {'message': 'Something went wrong'}
-    })
 
 
 """
@@ -388,9 +344,11 @@ def get_expenditure_values(request):
                             required_values.append(row_data)
             economic_expenditure_data(required_values)
             return JsonResponse(required_values, status=201, safe=False)
+        elif excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
+            ExcelSaverModelMonthly.objects.get_or_create(monthly_file=current_excel_file)
 
 
-def economic_expenditure_data(current_excel_file):
+def get_economic_expenditure_data(current_excel_file):
     arr = []
     for i in range(len(current_excel_file)):
         data = current_excel_file[i]
@@ -411,6 +369,28 @@ def economic_expenditure_data(current_excel_file):
                 )
             )
     EconomicExpenditure.objects.bulk_create(arr)
+
+
+
+'''
+Query to extract government funtion from the database
+'''
+
+@api_view(["GET", ])
+def get_government_function(request):
+    if request.method = "GET":
+        # call on all objects in the database
+        query_set = GovernmentFunctions.objects.all()
+        # serializing each item with a serializer class
+        serializer = GovernmentFunctionsSerializer(query_set, many = True)
+        #returning serialize data as a list.
+        return Response(serializer.data, status = status.HTTP_200_OK)
+    return Response({
+        'status': 'failure',
+        'output': {'message': 'Something went wrong'}
+    })
+        
+
 
 
 @api_view(['POST', ])
