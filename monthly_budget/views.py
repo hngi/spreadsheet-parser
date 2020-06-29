@@ -17,7 +17,6 @@ import xlrd
 
 media_url = settings.MEDIA_URL
 
-
 # Create your views here.
 
 
@@ -33,7 +32,7 @@ class AdministrativeView(viewsets.ModelViewSet):
 
 
 '''
-added a C.B view for returning a list of all MDA transactions available in the database
+added a F.B view for returning a list of all MDA transactions available in the database
 assumed a serializer of name MDABudgetSerializer has already been made.
 '''
 
@@ -50,41 +49,6 @@ def mda_budget_view(request):
     })
 
 
-'''
-Added a view to export stored revenue data from DB, serializes and returns JSON output,
-Serializer has been created, awaiting url. nifemi 
-'''
-
-
-@api_view(['GET', ])
-def get_economic_expenditure(request):
-    if request.method == 'GET':
-        qs = EconomicExpenditure.objects.all()
-        serializer = EconomicExpenditureSerializer(qs, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    return Response({
-        'status': 'failure',
-        'data': {'message': 'Something went wrong'}
-    })
-
-
-"""
-This connects to the serializer of GovernmentFunctions, which converts the stored data in the DB to JSON when queried.
-"""
-
-
-@api_view(['GET', ])
-def get_government_function(request):
-    if request.method == 'GET':
-        qs = GovernmentFunctions.objects.all()
-        serializer = GovernmentFunctionsSerializer(qs, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    return Response({
-        'status': 'failure',
-        'data': {'message': 'Something went wrong'}
-    })
-
-
 """
 A Views Function that extracts data from the administrative excel and store as a list of dictionaries, to make it easy to be
 stored into the database. If you are to assigned to store in database please be aware that the file is stored in
@@ -93,7 +57,7 @@ stored into the database. If you are to assigned to store in database please be 
 
 
 @api_view(['POST', ])
-def administrative_budget(request):
+def store_administrative_budget_values(request):
     excel_files = request.FILES.getlist("excel_file")
 
     # a loop to get the files from the media folder
@@ -162,7 +126,7 @@ NB: it returns the data saved to the database in Json Format, for testing purpos
 
 
 @api_view(['POST'])
-def get_mda_budget_values(request):
+def store_mda_budget_values(request):
     excel_files = request.FILES.getlist("excel_file")
 
     # a loop to get the files from the media folder
@@ -200,7 +164,6 @@ def get_mda_budget_values(request):
             return JsonResponse(required_values, status=201, safe=False)
 
 
-
 '''
 This is not a view function
 It takes data extracted from MDA Budget excel sheet in the format below and saves them all to the database at once.
@@ -220,8 +183,8 @@ def save_mda(excel_output):
                 budget=data['budget'],
                 allocation=data['allocation'],
                 total_allocation=data['total_allocation'],
-                balance=data['balance']
-            ).exists():
+                balance=data['balance']).exists():
+
             arr.append(
                 MDABudget(
                     mda=data['mda'],
@@ -245,7 +208,7 @@ total_revenue = YEAR TO DATE
 
 
 @api_view(['POST', ])
-def economic_revenue(request):
+def store_economic_revenue_values(request):
     excel_files = request.FILES.getlist("excel_file")
 
     for current_excel_file in excel_files:
@@ -260,7 +223,7 @@ def economic_revenue(request):
 
                 # remove file after being read
                 os.remove(current_file_path)
-                print('done')
+
                 # Dropping the unnecessary columns
                 data = df.dropna(axis=0, how="any")
                 data.columns = data.iloc[0]
@@ -302,7 +265,7 @@ def economic_revenue(request):
 
 
 @api_view(['POST', ])
-def government_functions(request):
+def store_government_functions_values(request):
     excel_files = request.FILES.getlist("excel_file")
 
     for current_excel_file in excel_files:
@@ -325,7 +288,6 @@ def government_functions(request):
                 month = data2.columns[2].split()[0]
                 data2.columns = ["name", "budget", "expenses", "total_expenses", "balance", "percentage"]
                 data2.columns = data2.columns.map(lambda x: x.replace('\n', ''))
-                print(data2.columns[2])
 
 
                 # dropping the columns that are not needed
@@ -400,7 +362,7 @@ NB: I added json response on lines 155 and 175 for testing purposes.
 
 
 @api_view(['POST'])
-def get_expenditure_values(request):
+def store_economic_expenditure_values(request):
     excel_files = request.FILES.getlist("excel_file")
 
     # a loop to get the files from the media folder
