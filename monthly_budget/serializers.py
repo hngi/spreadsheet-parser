@@ -2,7 +2,7 @@
 # and serve them unto our web pages
 
 from rest_framework import serializers
-from .models import AdministrativeBudget, MDABudget, EconomicExpenditure, EconomicRevenue
+from .models import AdministrativeBudget, MDABudget, EconomicExpenditure, EconomicRevenue, GovernmentFunctions
 
 
 class AdministrativeExpensesSerializer(serializers.ModelSerializer):
@@ -20,6 +20,11 @@ class MDABudgetSerializer(serializers.ModelSerializer):
 class EconomicExpenditureSerializer(serializers.ModelSerializer):
     class Meta:
         model = EconomicExpenditure
+        fields = "__all__"
+
+class GovernmentFunctionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GovernmentFunctions
         fields = "__all__"
 
 
