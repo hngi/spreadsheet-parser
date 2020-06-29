@@ -322,11 +322,11 @@ def government_functions(request):
                 data.columns = data.iloc[0]
                 data2 = data.iloc[1:, ].reindex()
 
-
+                month = data2.columns[2].split()[0]
                 data2.columns = ["name", "budget", "expenses", "total_expenses", "balance", "percentage"]
                 data2.columns = data2.columns.map(lambda x: x.replace('\n', ''))
-                print(data2.columns[3])
-                month = data2.columns[3].split()[0]
+                print(data2.columns[2])
+
 
                 # dropping the columns that are not needed
                 data2.drop(["percentage"], axis=1, inplace=True)
@@ -340,14 +340,14 @@ def government_functions(request):
 
                 # The code to store into the db goes here using the final_data list
                 for transaction in final_data:
-                    if not GovernmentFunctions.objects.filter(code=transaction['code'],
-                                                              name=transaction['name'],
+                    if not GovernmentFunctions.objects.filter(name=transaction['name'],
+                                                              budget=transaction['budget'],
                                                               expenses=transaction['expenses'],
                                                               total_expenses=transaction['total_expenses'],
-                                                            balance=transaction['balance'],
+                                                              balance=transaction['balance'],
                                                               month=month).exists():
                         GovernmentFunctions.objects.create(name=transaction['name'],
-                                                           code=transaction['code'],
+                                                           budget=transaction['budget'],
                                                            expenses=transaction['expenses'],
                                                            balance=transaction['balance'],
                                                            total_expenses=transaction['total_expenses'],
