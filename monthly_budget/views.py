@@ -86,17 +86,6 @@ This connects to the serializer of GovernmentFunctions, which converts the store
 """
 
 
-@api_view(['GET', ])
-def get_government_function(request):
-    if request.method == 'GET':
-        qs = GovernmentFunctions.objects.all()
-        serializer = GovernmentFunctionsSerializer(qs, many=True)
-    return Response({
-        'status': 'failure',
-        'data': {'message': 'Something went wrong'}
-    })
-
-
 """
 A Views Function that extracts data from the administrative excel and store as a list of dictionaries, to make it easy 
 to be stored into the database. If you are to assigned to store in database please be aware that the file is stored in
@@ -368,12 +357,23 @@ def economic_expenditure_data(current_excel_file):
 '''
 Query to extract government funtion from the database
 '''
-class GovtFunc(mixins.ListModelMixin, generics.GenericAPIView):
-    query = GovernmentFunctions.objects.all
-    serialize_set = GovernmentFunctionsSerializer
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+@api_view(["GET", ])
+def getGovtFunc(request):
+    if request.method = "GET":
+        # call on all objects in the database
+        query_set = GovernmentFunctions.objects.all()
+        # serializing each item with a serializer class
+        serializer = GovernmentFunctionsSerializer(query_set, many = True)
+        #returning serialize data as a list.
+        return Response(serializer.data, status = status.HTTP_200_OK)
+    return Response({
+        'status': 'failure',
+        'output': {'message': 'Something went wrong'}
+    })
+        
+
+
 
 @api_view(['POST', ])
 def government_functions(request):
