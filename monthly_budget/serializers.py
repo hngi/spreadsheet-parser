@@ -1,17 +1,13 @@
 # serializers convert the data in our db to and from js 
 # and serve them unto our web pages
-
 from rest_framework import serializers
-
+from .models import AdministrativeBudget, MDABudget, EconomicExpenditure, EconomicRevenue, GovernmentFunctions
 from .models import (
     AdministrativeBudget,
     MDABudget,
     EconomicExpenditure,
     EconomicRevenue,
 )
-
-from .models import AdministrativeBudget, MDABudget, EconomicExpenditure, EconomicRevenue, GovernmentFunctions
-
 
 
 class AdministrativeExpensesSerializer(serializers.ModelSerializer):
@@ -25,16 +21,13 @@ class AdministrativeExpensesSerializer(serializers.ModelSerializer):
             "allocation",
             "total_allocation",
             "balance",
+            "month",
         ]
-
-        fields = ['id', 'sector', 'budget', 'allocation', 'total_allocation', 'balance', 'month']
-
 
 
 class MDABudgetSerializer(serializers.ModelSerializer):
     class Meta:
         model = MDABudget
-
         fields = [
             "id",
             "mda",
@@ -42,34 +35,45 @@ class MDABudgetSerializer(serializers.ModelSerializer):
             "allocation",
             "total_allocation",
             "balance",
+            "month",
         ]
-
-        fields = ['id', 'mda', 'budget', 'allocation', 'total_allocation', 'balance', 'month']
-
-
-
-class EconomicExpenditureSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EconomicExpenditure
-
-        fields = "__all__"
 
 
 class EconomicRevenueSerializer(serializers.ModelSerializer):
     class Meta:
         model = EconomicRevenue
-        fields = (
+        fields = [
             "id",
             "name",
             "revenue",
-            "total_renue",
+            "total_revenue",
             "month",
-        )
+        ]
 
-        fields = ['id', 'name', 'budget', 'allocation', 'total_allocation', 'balance', 'month']
-        
+
+class EconomicExpenditureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EconomicExpenditure
+        fields = [
+            "id",
+            "name",
+            "budget",
+            "allocation",
+            "total_allocation",
+            "balance",
+            "month",
+        ]
+
 
 class GovernmentFunctionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = GovernmentFunctions
-        fields = ['id', 'name', 'budget', 'expenses', 'total_expenses', 'balance', 'month']
+        fields = [
+            'id',
+            'name',
+            'budget',
+            'expenses',
+            'total_expenses',
+            'balance',
+            'month',
+        ]
