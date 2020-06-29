@@ -1,3 +1,5 @@
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from .models import ExcelSaverModelMonthlyEconomic, ExcelSaverModelMonthlyAdministrative, ExcelSaverModelMonthly, \
     EconomicRevenue, GovernmentFunctions
 from django.http import JsonResponse
@@ -6,9 +8,6 @@ import os
 from django.conf import settings
 from rest_framework import mixins, status
 from rest_framework import generics
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
 from .models import MDABudget, AdministrativeBudget, EconomicExpenditure
 from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer, EconomicExpenditureSerializer, \
     EconomicRevenueSerializer, GovernmentFunctionsSerializer
@@ -17,7 +16,19 @@ import xlrd
 
 media_url = settings.MEDIA_URL
 
-# Create your views here.
+'''
+added a C.B view for returning a list of all MDA transactions available in the database
+assumed a serializer of name MDABudgetSerializer has already been made.
+'''
+class MDABudgetView(mixins.ListModelMixin,generics.GenericAPIView):
+    queryset = MDABudget.objects.all()
+    serializer_class = MDABudgetSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+
+	
 
 
 '''
@@ -32,13 +43,14 @@ class AdministrativeView(viewsets.ModelViewSet):
 
 
 '''
+
 added a F.B view for returning a list of all MDA transactions available in the database
 assumed a serializer of name MDABudgetSerializer has already been made.
 '''
 
 
 @api_view(['GET'])
-def mda_budget_view(request):
+def get_mda_budget_view(request):
     if request.method == 'GET':
         qs = MDABudget.objects.all()
         serializer = MDABudgetSerializer(qs, many=True)
@@ -49,6 +61,28 @@ def mda_budget_view(request):
     })
 
 
+
+'''
+Added a view to export stored revenue data from DB, serializes and returns JSON output,
+Serializer has been created, awaiting url. nifemi 
+'''
+
+
+@api_view(['GET', ])
+def get_economic_expenditure(request):
+    if request.method == 'GET':
+        qs = EconomicExpenditure.objects.all()
+        serializer = EconomicExpenditureSerializer(qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response({
+        'status': 'failure',
+        'data': {'message': 'Something went wrong'}
+    })
+
+
+'''
+Query to extract government function from the database
+'''
 
 """
 A Views Function that extracts data from the administrative excel and store as a list of dictionaries, to make it easy to be
@@ -328,7 +362,7 @@ Serializer has been created, awaiting url. nifemi
 
 
 @api_view(['GET'])
-def stored_economic_revenue(request):
+def get_economic_revenue(request):
     if request.method == 'GET':
         qs = EconomicRevenue.objects.all()
         serializer = EconomicRevenueSerializer(qs, many=True)
@@ -399,9 +433,11 @@ def store_economic_expenditure_values(request):
                             required_values.append(row_data)
             economic_expenditure_data(required_values)
             return JsonResponse(required_values, status=201, safe=False)
+        elif excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
+            ExcelSaverModelMonthly.objects.get_or_create(monthly_file=current_excel_file)
 
 
-def economic_expenditure_data(current_excel_file):
+def get_economic_expenditure_data(current_excel_file):
     arr = []
     for i in range(len(current_excel_file)):
         data = current_excel_file[i]
@@ -429,8 +465,8 @@ Query to extract government funtion from the database
 '''
 
 @api_view(["GET", ])
-def getGovtFunc(request):
-    if request.method == "GET":
+def get_government_function(request):
+    if request.method = "GET":
         # call on all objects in the database
         query_set = GovernmentFunctions.objects.all()
         # serializing each item with a serializer class
@@ -442,4 +478,43 @@ def getGovtFunc(request):
         'output': {'message': 'Something went wrong'}
     })
         
+
+
+
+@api_view(['POST', ])
+def government_functions(request):
+    excel_files = request.FILES.getlist("excel_file")
+
+    for current_excel_file in excel_files:
+        excel_file_name = current_excel_file.name
+        current_file_path = f'media/monthly/Economic/{excel_file_name}'
+        if excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
+            ExcelSaverModelMonthlyEconomic.objects.get_or_create(monthly_file=current_excel_file)
+            try:
+                # reading the excel file
+                df = pd.read_excel(current_file_path, usecols="B:G", encoding='utf-8')
+
+                # remove file after being read
+                os.remove(current_file_path)
+
+                # Dropping the unnecessary columns
+                data = df.dropna(axis=0, how="any")
+                data.columns = data.iloc[0]
+                data2 = data.iloc[1:, ].reindex()
+
+                month = data2.columns[2].split()[0]
+                data2.columns = ["name", "budget", "expenses", "total_expenses", "balance", "percentage"]
+                data2.columns = data2.columns.map(lambda x: x.replace('\n', ''))
+                print(data2.columns[2])
+
+                # dropping the columns that are not needed
+                data2.drop(["percentage"], axis=1, inplace=True)
+
+                # formatting the floats to make sure they all have uniform decimal points
+                data2["expenses"] = data2["expenses"].apply(lambda x: "{:.2f}".format(x))
+                data2["total_expenses"] = data2["total_expenses"].apply(lambda x: "{:.2f}".format(x))
+
+                # here is final_data, the list of dictionaries that can be easily stored in the database
+                final_data = data2.to_dict(orient="records")
+
 
