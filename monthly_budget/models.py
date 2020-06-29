@@ -10,7 +10,6 @@ def real_time():
     current_month = months[day.month]
     return current_month
 
-
 def administrative_monthly_file_handler(instance, file):
     return f'monthly/Administrative/{file}'
 
@@ -18,10 +17,8 @@ def administrative_monthly_file_handler(instance, file):
 def economic_monthly_file_handler(instance, file):
     return f'monthly/Economic/{file}'
 
-
 def monthly_file_handler(instance, file):
     return f'monthly/{file}'
-
 
 class ExcelSaverModelMonthly(models.Model):
     monthly_file = models.FileField(upload_to=monthly_file_handler, null=True)
