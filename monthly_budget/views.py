@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import ExcelSaverModelMonthlyEconomic, ExcelSaverModelMonthlyAdministrative, ExcelSaverModelMonthly, \
-    EconomicRevenue
+    EconomicRevenue, GovernmentFunctions
 from django.http import JsonResponse
 import pandas as pd
 import os
@@ -10,7 +10,7 @@ from rest_framework import mixins, status
 from rest_framework import generics
 from .models import MDABudget, AdministrativeBudget, EconomicExpenditure
 from .serializers import MDABudgetSerializer, AdministrativeExpensesSerializer, EconomicExpenditureSerializer, \
-    EconomicRevenueSerializer
+    EconomicRevenueSerializer, GovernmentFunctionsSerializer
 from rest_framework import viewsets
 import xlrd
 
@@ -51,26 +51,28 @@ Serializer has been created, awaiting url. nifemi
 '''
 
 
-@api_view(['GET'])
-def stored_economic_revenue(request):
-    if request.method == 'GET':
-        qs = EconomicRevenue.objects.all()
-        serializer = EconomicRevenueSerializer(qs, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-'''
-added a view for returning a list of all  Economic expenditures available in the database for each month
-assumed a serializer of name EconomicExpenditureSerializer has already been made.
-'''
-
-
 @api_view(['GET', ])
 def get_economic_expenditure(request):
     if request.method == 'GET':
         qs = EconomicExpenditure.objects.all()
         serializer = EconomicExpenditureSerializer(qs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response({
+        'status': 'failure',
+        'data': {'message': 'Something went wrong'}
+    })
+
+
+"""
+This connects to the serializer of GovernmentFunctions, which converts the stored data in the DB to JSON when queried.
+"""
+
+
+@api_view(['GET', ])
+def get_government_function(request):
+    if request.method == 'GET':
+        qs = GovernmentFunctions.objects.all()
+        serializer = GovernmentFunctionsSerializer(qs, many=True)
     return Response({
         'status': 'failure',
         'data': {'message': 'Something went wrong'}
