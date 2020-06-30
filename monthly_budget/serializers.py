@@ -88,26 +88,16 @@ class GovernmentFunctionsSerializer(serializers.ModelSerializer):
 =======
         fields = ['id', 'mda', 'budget', 'allocation', 'total_allocation', 'balance', 'month']
 
-class EconomicRevenueSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EconomicRevenue
-        fields = [
-            "id",
-            "name",
-            "revenue",
-            "total_revenue",
-            "month",
-        ]
-
-class EconomicExpenditureSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EconomicExpenditure
-        fields = "__all__"
-
 
 class GovernmentFunctionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = GovernmentFunctions
+        fields = ['id', 'mda', 'budget', 'allocation', 'total_allocation', 'balance', 'month']
+
+
+class EconomicExpenditureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EconomicExpenditure
         fields = "__all__"
 
 
