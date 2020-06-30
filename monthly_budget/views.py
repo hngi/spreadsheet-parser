@@ -108,8 +108,10 @@ def get_government_function(request):
     if request.method == "GET":
         # call on all objects in the database
         query_set = GovernmentFunctions.objects.all()
+
         # serializing each item with a serializer class
         serializer = GovernmentFunctionsSerializer(query_set, many=True)
+
         # returning serialize data as a list.
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response({
@@ -139,19 +141,23 @@ def store_administrative_budget_values(request):
             try:
                 # reading the excel file
                 df = pd.read_excel(current_file_path, usecols="B:G", encoding='utf-8')
+
                 # removing excel file after its been read
                 os.remove(current_file_path)
+
                 # Dropping the unnecessary columns
                 data = df.dropna(axis=0, how="any")
                 data.columns = data.iloc[0]
                 data2 = data.iloc[1:, ].reindex()
+
                 # here is month, the variable in which the month is stored in
                 month = data2.columns[2].split()[0]
-
                 data2.columns = data2.columns.map(lambda x: x.replace('\n', ''))
                 data2.columns = ["sector", "budget", "allocation", "total_allocation", "balance", "percentage"]
+
                 # we don't need percentage... dropping it
                 data2.drop(["percentage"], axis=1, inplace=True)
+
                 # formatting the floats to make sure they all have uniform decimal points
                 # initially they are returning floats in the form of exponential.
                 data2["budget"] = data2["budget"].apply(lambda x: "{:.2f}".format(x))
@@ -162,7 +168,6 @@ def store_administrative_budget_values(request):
                 final_data = data2.to_dict(orient="records")
 
                 # code to store into the DB goes here, data is in variable final_data
-
                 for transaction in final_data:
                     if not AdministrativeBudget.objects.filter(name=transaction['name'],
                                                                budget=transaction['budget'],
@@ -208,9 +213,7 @@ def store_mda_budget_values(request):
             required_values = []
             wb = xlrd.open_workbook(loc)
             sheet = wb.sheet_by_index(0)
-
             os.remove(current_file_path)
-
             num_rows = sheet.nrows
             num_cols = sheet.ncols
             for i in range(num_rows):
@@ -283,7 +286,6 @@ def store_economic_revenue_values(request):
     for current_excel_file in excel_files:
         excel_file_name = current_excel_file.name
         current_file_path = f'media/monthly/Economic/{excel_file_name}'
-
         if excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
             ExcelSaverModelMonthlyEconomic.objects.get_or_create(monthly_file=current_excel_file)
             try:
@@ -297,6 +299,7 @@ def store_economic_revenue_values(request):
                 data = df.dropna(axis=0, how="any")
                 data.columns = data.iloc[0]
                 data2 = data.iloc[1:, ].reindex()
+
                 # economic month, the variable in which the month is stored in, splitting to get the neccessary data
                 economic_month = data2.columns[2]
                 economic_month = economic_month.split()
@@ -305,6 +308,7 @@ def store_economic_revenue_values(request):
                 # replacing the break lines for easy parsing
                 data2.columns = data2.columns.map(lambda x: x.replace('\n', ''))
                 data2.columns = ["name", "budget", "revenue", "total_revenue", "balance", "percentage"]
+
                 # dropping the columns that are not needed
                 data2.drop(["percentage", "budget", "balance"], axis=1, inplace=True)
 
@@ -327,61 +331,6 @@ def store_economic_revenue_values(request):
                                                        revenue=revenues['revenue'],
                                                        total_revenue=revenues['total_revenue'],
                                                        month=economic_month)
-
-            except KeyError:
-                continue
-    return Response(status=status.HTTP_200_OK)
-
-
-@api_view(['POST', ])
-def store_government_functions_values(request):
-    excel_files = request.FILES.getlist("excel_file")
-
-    for current_excel_file in excel_files:
-        excel_file_name = current_excel_file.name
-        current_file_path = f'media/monthly/Economic/{excel_file_name}'
-        if excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
-            ExcelSaverModelMonthlyEconomic.objects.get_or_create(monthly_file=current_excel_file)
-            try:
-                # reading the excel file
-                df = pd.read_excel(current_file_path, usecols="B:G", encoding='utf-8')
-
-                # remove file after being read
-                os.remove(current_file_path)
-
-                # Dropping the unnecessary columns
-                data = df.dropna(axis=0, how="any")
-                data.columns = data.iloc[0]
-                data2 = data.iloc[1:, ].reindex()
-
-                month = data2.columns[2].split()[0]
-                data2.columns = ["name", "budget", "expenses", "total_expenses", "balance", "percentage"]
-                data2.columns = data2.columns.map(lambda x: x.replace('\n', ''))
-
-                # dropping the columns that are not needed
-                data2.drop(["percentage"], axis=1, inplace=True)
-
-                # formatting the floats to make sure they all have uniform decimal points
-                data2["expenses"] = data2["expenses"].apply(lambda x: "{:.2f}".format(x))
-                data2["total_expenses"] = data2["total_expenses"].apply(lambda x: "{:.2f}".format(x))
-
-                # here is final_data, the list of dictionaries that can be easily stored in the database
-                final_data = data2.to_dict(orient="records")
-
-                # The code to store into the db goes here using the final_data list
-                for transaction in final_data:
-                    if not GovernmentFunctions.objects.filter(name=transaction['name'],
-                                                              budget=transaction['budget'],
-                                                              expenses=transaction['expenses'],
-                                                              total_expenses=transaction['total_expenses'],
-                                                              balance=transaction['balance'],
-                                                              month=month).exists():
-                        GovernmentFunctions.objects.create(name=transaction['name'],
-                                                           budget=transaction['budget'],
-                                                           expenses=transaction['expenses'],
-                                                           balance=transaction['balance'],
-                                                           total_expenses=transaction['total_expenses'],
-                                                           month=month)
 
             except KeyError:
                 continue
@@ -413,7 +362,6 @@ def store_economic_expenditure_values(request):
 
             # delete file after it has been loaded
             os.remove(current_file_path)
-
             sheet = wb.sheet_by_index(0)
             num_rows = sheet.nrows
             num_cols = sheet.ncols
@@ -422,6 +370,7 @@ def store_economic_expenditure_values(request):
                 if type(first_row_value) == str:
                     type_of_data = "string"
                     # print(str(first_row_value) + ' is of type ' + type_of_data)
+
                     if first_row_value.replace('.', '', 1).isdigit():
                         new_first_row_value = int(first_row_value)
                         if new_first_row_value < 20000000:
@@ -467,7 +416,7 @@ This function extracts the data from the excel sheets and stores in the governme
 
 
 @api_view(['POST', ])
-def government_functions(request):
+def store_government_functions_values(request):
     excel_files = request.FILES.getlist("excel_file")
 
     for current_excel_file in excel_files:
@@ -486,11 +435,9 @@ def government_functions(request):
                 data = df.dropna(axis=0, how="any")
                 data.columns = data.iloc[0]
                 data2 = data.iloc[1:, ].reindex()
-
                 month = data2.columns[2].split()[0]
                 data2.columns = ["name", "budget", "expenses", "total_expenses", "balance", "percentage"]
                 data2.columns = data2.columns.map(lambda x: x.replace('\n', ''))
-                print(data2.columns[2])
 
                 # dropping the columns that are not needed
                 data2.drop(["percentage"], axis=1, inplace=True)
