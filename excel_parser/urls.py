@@ -5,7 +5,7 @@ from . import views
 
 
 router = routers.DefaultRouter()
-router.register("home", views.BudgetView)
+router.register("budgt", views.BudgetView)
 # router.register("daily-payment-report", views.daily_payment_report_view),
 # router.register("daily_reports_view", views.get_daily_reports_view),
 
