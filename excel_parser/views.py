@@ -129,12 +129,10 @@ def get_daily_reports_view(request):
         serializer = BudgetSerializer(qs, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
-<<<<<<< HEAD
-'''
-        return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-'''
-=======
 
->>>>>>> edaa4c83b0757138858468780e952407e012945d
+
+'''
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+'''
