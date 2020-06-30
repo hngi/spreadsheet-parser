@@ -130,3 +130,9 @@ def get_daily_reports_view(request):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+'''
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+'''
