@@ -1,11 +1,12 @@
 from django.db import models
 
+
 def upload_file_handler(instance, filename):
     return f'daily/{filename}'
 
+
 class ExcelSaverModel(models.Model):
     daily_report_file = models.FileField(upload_to=upload_file_handler, null=True)
-
 
 
 class Budget(models.Model):

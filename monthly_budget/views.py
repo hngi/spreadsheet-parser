@@ -53,9 +53,9 @@ assumed a serializer of name MDABudgetSerializer has already been made.
 @api_view(['GET'])
 def get_mda_budget(request):
     if request.method == 'GET':
-        qs = MDABudget.objects.all()
-        serializer = MDABudgetSerializer(qs, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        queryset = MDABudget.objects.all()
+        serializer_class = MDABudgetSerializer(queryset, many=True)
+        return Response(serializer_class.data, status=status.HTTP_200_OK)
     return Response({
         'status': 'failure',
         'data': {'message': 'Something went wrong'}
@@ -71,9 +71,9 @@ Serializer has been created, awaiting url. nifemi
 @api_view(['GET'])
 def get_economic_revenue(request):
     if request.method == 'GET':
-        qs = EconomicRevenue.objects.all()
-        serializer = EconomicRevenueSerializer(qs, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        queryset = EconomicRevenue.objects.all()
+        serializer_class = EconomicRevenueSerializer(queryset, many=True)
+        return Response(serializer_class.data, status=status.HTTP_200_OK)
     return Response({
         'status': 'failure',
         'data': {'message': 'Something went wrong'}
@@ -89,9 +89,9 @@ assumed a serializer of name EconomicExpenditureSerializer has already been made
 @api_view(['GET', ])
 def get_economic_expenditure(request):
     if request.method == 'GET':
-        qs = EconomicExpenditure.objects.all()
-        serializer = EconomicExpenditureSerializer(qs, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        queryset = EconomicExpenditure.objects.all()
+        serializer_class = EconomicExpenditureSerializer(queryset, many=True)
+        return Response(serializer_class.data, status=status.HTTP_200_OK)
     return Response({
         'status': 'failure',
         'data': {'message': 'Something went wrong'}
@@ -107,13 +107,13 @@ Query to extract government function from the database
 def get_government_function(request):
     if request.method == "GET":
         # call on all objects in the database
-        query_set = GovernmentFunctions.objects.all()
+        queryset = GovernmentFunctions.objects.all()
 
         # serializing each item with a serializer class
-        serializer = GovernmentFunctionsSerializer(query_set, many=True)
+        serializer_class = GovernmentFunctionsSerializer(queryset, many=True)
 
         # returning serialize data as a list.
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer_class.data, status=status.HTTP_200_OK)
     return Response({
         'status': 'failure',
         'output': {'message': 'Something went wrong'}

@@ -26,7 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('excel_parser.urls')),
     path('api/v2/', include('monthly_budget.urls')),
-    path('', include('monthly_budget.urls')),
+    # path('', include('monthly_budget.urls')),
     path('schema/', schema_view),
     path('', include_docs_urls(title="MicroService")),
 ]
