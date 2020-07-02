@@ -206,6 +206,7 @@ def store_mda_budget_values(request):
     # a loop to get the files from the media folder
     for current_excel_file in excel_files:
         excel_file_name = current_excel_file.name
+
         current_file_path = f'media/monthly/{excel_file_name}'
         if excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
             ExcelSaverModelMonthly.objects.get_or_create(monthly_file=current_excel_file)
@@ -213,26 +214,35 @@ def store_mda_budget_values(request):
             required_values = []
             wb = xlrd.open_workbook(loc)
             sheet = wb.sheet_by_index(0)
-            os.remove(current_file_path)
             num_rows = sheet.nrows
             num_cols = sheet.ncols
             for i in range(num_rows):
                 first_row_value = sheet.cell(i, 0).value
+                firstrow_value1 = str(sheet.cell(i,3).value)
+
+                if not firstrow_value1.replace('.','',1).isdigit():
+                    firstrow_value1 = firstrow_value1.replace('.','',1)
+                    if not firstrow_value1.replace('-','',1).isdigit():
+                        if firstrow_value1 != '':
+                            firstrow_value1 = firstrow_value1[:3]
+                            month = firstrow_value1
+
                 if type(first_row_value) == str:
                     type_of_data = "string"
                     # print(str(first_row_value) + ' is of type ' + type_of_data)
                     if first_row_value.replace('.', '', 1).isdigit():
                         new_first_row_value = int(first_row_value)
-                        if new_first_row_value < 100000000:
+                        if new_first_row_value > 100000000:
                             row_check_value = new_first_row_value
                             row_data = {'mda': sheet.cell(i, 1).value, 'budget': sheet.cell(i, 2).value,
                                         'allocation': sheet.cell(i, 3).value,
                                         'total_allocation': sheet.cell(i, 4).value,
-                                        'balance': sheet.cell(i, 5).value}
+                                        'balance': sheet.cell(i, 5).value, 'month' : month}
                             # print(row_data)
                             required_values.append(row_data)
             # print(required_values)
             save_mda(required_values)
+            os.remove(current_file_path)
             return JsonResponse(required_values, status=201, safe=False)
 
 
@@ -250,12 +260,13 @@ def save_mda(excel_output):
     arr = []
     for i in range(len(excel_output)):
         data = excel_output[i]
-        if not MDABudget(
+        if not MDABudget.objects.filter(
                 mda=data['mda'],
                 budget=data['budget'],
                 allocation=data['allocation'],
                 total_allocation=data['total_allocation'],
-                balance=data['balance']).exists():
+                balance=data['balance'],
+                month=data['month']).exists():
 
             arr.append(
                 MDABudget(
@@ -263,10 +274,12 @@ def save_mda(excel_output):
                     budget=data['budget'],
                     allocation=data['allocation'],
                     total_allocation=data['total_allocation'],
-                    balance=data['balance']
+                    balance=data['balance'],
+                    month=data['month']
                 )
             )
-    MDABudget.objects.bulk_create(arr)
+    if arr != []:
+        MDABudget.objects.bulk_create(arr)
 
 
 '''
@@ -359,44 +372,51 @@ def store_economic_expenditure_values(request):
             loc = current_file_path
             required_values = []
             wb = xlrd.open_workbook(loc)
-
-            # delete file after it has been loaded
-            os.remove(current_file_path)
             sheet = wb.sheet_by_index(0)
             num_rows = sheet.nrows
             num_cols = sheet.ncols
             for i in range(num_rows):
                 first_row_value = sheet.cell(i, 0).value
+
+                firstrow_value1 = str(sheet.cell(i,3).value)
+
+                if not firstrow_value1.replace('.','',1).isdigit():
+                    firstrow_value1 = firstrow_value1.replace('.','',1)
+                    if not firstrow_value1.replace('-','',1).isdigit():
+                        if firstrow_value1 != '':
+                            firstrow_value1 = firstrow_value1[:3]
+                            month = firstrow_value1
+
                 if type(first_row_value) == str:
                     type_of_data = "string"
                     # print(str(first_row_value) + ' is of type ' + type_of_data)
-
                     if first_row_value.replace('.', '', 1).isdigit():
                         new_first_row_value = int(first_row_value)
-                        if new_first_row_value < 20000000:
+                        if new_first_row_value > 20000000:
                             row_check_value = new_first_row_value
                             row_data = {'name': sheet.cell(i, 1).value, 'budget': sheet.cell(i, 2).value,
                                         'allocation': sheet.cell(i, 3).value,
                                         'total_allocation': sheet.cell(i, 4).value,
-                                        'balance': sheet.cell(i, 5).value}
-
+                                        'balance': sheet.cell(i, 5).value, 'month' : month}
+                            # print(row_data)
                             required_values.append(row_data)
+            # print(required_values)
             economic_expenditure_data(required_values)
+            os.remove(current_file_path)
             return JsonResponse(required_values, status=201, safe=False)
-        elif excel_file_name[-3:] == 'xls' or excel_file_name[-4:] == 'xlsx':
-            ExcelSaverModelMonthly.objects.get_or_create(monthly_file=current_excel_file)
 
 
 def economic_expenditure_data(current_excel_file):
     arr = []
     for i in range(len(current_excel_file)):
         data = current_excel_file[i]
-        if not EconomicExpenditure(
+        if not EconomicExpenditure.objects.filter(
                 name=data['name'],
                 budget=data['budget'],
                 allocation=data['allocation'],
                 total_allocation=data['total_allocation'],
-                balance=data['balance']
+                balance=data['balance'],
+                month=data['month']
         ).exists():
             arr.append(
                 EconomicExpenditure(
@@ -404,10 +424,12 @@ def economic_expenditure_data(current_excel_file):
                     budget=data['budget'],
                     allocation=data['allocation'],
                     total_allocation=data['total_allocation'],
-                    balance=data['balance']
+                    balance=data['balance'],
+                    month=data['month']
                 )
             )
-    EconomicExpenditure.objects.bulk_create(arr)
+    if arr != []:
+        EconomicExpenditure.objects.bulk_create(arr)
 
 
 """
