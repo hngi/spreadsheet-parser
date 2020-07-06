@@ -1,5 +1,6 @@
 from django.urls import path, include
 from . import views
+from excel_parser import views 
 from rest_framework import routers
 
 '''
@@ -9,8 +10,9 @@ routers and all routers are inclusive in the url path by including routers.urls
 '''
 
 router = routers.DefaultRouter()
-# router.register('Monthlyadminsitrativebudget', views.AdministrativeView)
-# router.register('administrative_budget/', views.store_administrative_budget_values)
+router.register("daily_buget", views.BudgetView)
+router.register('monthly_adminsitrative_budget', views.AdministrativeView)
+#router.register('administrative_budget/', views.store_administrative_budget_values)
 # router.register('administrative_budget/data/', views.AdministrativeView.as_view({'get': 'list'}))
 # router.register('mda_budget/', views.store_mda_budget_values)
 # router.register('mda_budget/data/', views.get_mda_budget)
@@ -35,4 +37,5 @@ urlpatterns = [
     path('economic_expenditure/data/', views.get_economic_expenditure),
     path('government_functions/', views.store_government_functions_values),
     path('government_functions/data/', views.get_government_function),
+    path('', include(Routers.urls)),
 ]
