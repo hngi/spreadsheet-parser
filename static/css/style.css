@@ -106,6 +106,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #hero .hero-container {
+
   background: rgba(0, 0, 0, 0.8);
   display: table-cell;
   margin: 0;
@@ -191,7 +192,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /*--------------------------------------------------------------
-# Header
+# Header 
 --------------------------------------------------------------*/
 #header {
   background: #0d0d0d;
