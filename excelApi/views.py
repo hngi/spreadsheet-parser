@@ -21,9 +21,15 @@ def budget(request):
         data2.columns = data2.columns.map(lambda x: x.replace('\n', ''))
         data2.columns = ["sector", "budget", "allocation", "total_allocation", "balance", "percentage"]
 
+<<<<<<< HEAD
         # we don't need percentage, dropping it
         data2.drop(["percentage"], axis=1, inplace=True)
         final_data = data2.to_dict(orient = "records")
+=======
+        # we don't need percentage... dropping it
+        data2.drop(["percentage"], axis=1, inplace=True)
+        final_data = data2.to_dict(orient="records")
+>>>>>>> c35c04aa26cc8d6570dd2a9e8936dcd98f419868
         return render(request, 'budget.html', {'final_data': final_data})
 
     except KeyError:
