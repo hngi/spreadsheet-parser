@@ -46,4 +46,7 @@ def budget(request):
     except KeyError:
         print("failed")
 
+def index(request):
+    name = " index"
+    return render(request, 'index.html', {'name':name})
     
