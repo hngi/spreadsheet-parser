@@ -23,6 +23,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+<<<<<<< HEAD
+=======
+
+>>>>>>> 091c9edcfed0f001d8a395b0faf565380d0540ac
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -42,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'excelApi',
+    'parse',
 ]
 
 MIDDLEWARE = [
@@ -125,6 +130,7 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
+<<<<<<< HEAD
 STATICFILES_DIRS = (
         os.path.join(BASE_DIR, 'static'),
 )
@@ -132,3 +138,10 @@ STATICFILES_DIRS = (
 django_heroku.settings(locals())
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+=======
+STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static'), 
+
+]
+
+>>>>>>> 091c9edcfed0f001d8a395b0faf565380d0540ac

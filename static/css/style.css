@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
 * Template Name: Imperial - v3.0.0
 * Template URL: https://bootstrapmade.com/imperial-free-onepage-bootstrap-theme/
@@ -7,6 +8,17 @@
 
 /*--------------------------------------------------------------
 # General
+=======
+/**
+* Template Name: Imperial - v3.0.0
+* Template URL: https://bootstrapmade.com/imperial-free-onepage-bootstrap-theme/
+* Author: BootstrapMade.com
+* License: https://bootstrapmade.com/license/
+*/
+
+/*--------------------------------------------------------------
+# General
+>>>>>>> 091c9edcfed0f001d8a395b0faf565380d0540ac
 --------------------------------------------------------------*/
 body {
   background: #fff;
@@ -80,8 +92,13 @@ h1, h2, h3, h4, h5, h6 {
   color: #fff;
 }
 
+<<<<<<< HEAD
 /*--------------------------------------------------------------
 # Welcome
+=======
+/*--------------------------------------------------------------
+# Welcome
+>>>>>>> 091c9edcfed0f001d8a395b0faf565380d0540ac
 --------------------------------------------------------------*/
 #hero {
   display: table;
@@ -106,7 +123,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #hero .hero-container {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 091c9edcfed0f001d8a395b0faf565380d0540ac
   background: rgba(0, 0, 0, 0.8);
   display: table-cell;
   margin: 0;
@@ -191,8 +211,13 @@ h1, h2, h3, h4, h5, h6 {
   border: 2px solid #03C4EB;
 }
 
+<<<<<<< HEAD
 /*--------------------------------------------------------------
 # Header 
+=======
+/*--------------------------------------------------------------
+# Header
+>>>>>>> 091c9edcfed0f001d8a395b0faf565380d0540ac
 --------------------------------------------------------------*/
 #header {
   background: #0d0d0d;
@@ -229,8 +254,13 @@ h1, h2, h3, h4, h5, h6 {
   background: rgba(0, 0, 0, 0.85);
 }
 
+<<<<<<< HEAD
 /*--------------------------------------------------------------
 # Navigation Menu
+=======
+/*--------------------------------------------------------------
+# Navigation Menu
+>>>>>>> 091c9edcfed0f001d8a395b0faf565380d0540ac
 --------------------------------------------------------------*/
 /* Desktop Navigation */
 .nav-menu ul {
@@ -446,10 +476,17 @@ h1, h2, h3, h4, h5, h6 {
   color: #fff;
 }
 
+<<<<<<< HEAD
 /*--------------------------------------------------------------
 # Sections
 --------------------------------------------------------------*/
 /* Sections Common
+=======
+/*--------------------------------------------------------------
+# Sections
+--------------------------------------------------------------*/
+/* Sections Common
+>>>>>>> 091c9edcfed0f001d8a395b0faf565380d0540ac
 --------------------------------*/
 .section-title {
   font-size: 32px;
@@ -472,7 +509,11 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 20px;
 }
 
+<<<<<<< HEAD
 /* Get Started Section
+=======
+/* Get Started Section
+>>>>>>> 091c9edcfed0f001d8a395b0faf565380d0540ac
 --------------------------------*/
 #about {
   background: #fff;
@@ -516,7 +557,11 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0;
 }
 
+<<<<<<< HEAD
 /* Services Section
+=======
+/* Services Section
+>>>>>>> 091c9edcfed0f001d8a395b0faf565380d0540ac
 --------------------------------*/
 #services {
   background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url("../img/services-bg.jpg") fixed center center;
@@ -566,7 +611,11 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 24px;
 }
 
+<<<<<<< HEAD
 /* Subscribe Section
+=======
+/* Subscribe Section
+>>>>>>> 091c9edcfed0f001d8a395b0faf565380d0540ac
 --------------------------------*/
 #subscribe {
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/subscribe-bg.jpg) fixed center center;
@@ -609,7 +658,11 @@ h1, h2, h3, h4, h5, h6 {
   border: 2px solid #03C4EB;
 }
 
+<<<<<<< HEAD
 /* Portfolio Section
+=======
+/* Portfolio Section
+>>>>>>> 091c9edcfed0f001d8a395b0faf565380d0540ac
 --------------------------------*/
 #portfolio {
   background: #fff;
@@ -715,7 +768,11 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 1;
 }
 
+<<<<<<< HEAD
 /* Testimonials Section
+=======
+/* Testimonials Section
+>>>>>>> 091c9edcfed0f001d8a395b0faf565380d0540ac
 --------------------------------*/
 #testimonials {
   background: #f6f6f6;
@@ -774,7 +831,11 @@ h1, h2, h3, h4, h5, h6 {
   top: 4px;
 }
 
+<<<<<<< HEAD
 /* Team Section
+=======
+/* Team Section
+>>>>>>> 091c9edcfed0f001d8a395b0faf565380d0540ac
 --------------------------------*/
 #team {
   background: #fff;
@@ -824,7 +885,11 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 2px;
 }
 
+<<<<<<< HEAD
 /* Contact Section
+=======
+/* Contact Section
+>>>>>>> 091c9edcfed0f001d8a395b0faf565380d0540ac
 --------------------------------*/
 #contact {
   background: #f7f7f7;
@@ -935,8 +1000,13 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+<<<<<<< HEAD
 /*--------------------------------------------------------------
 # Breadcrumbs
+=======
+/*--------------------------------------------------------------
+# Breadcrumbs
+>>>>>>> 091c9edcfed0f001d8a395b0faf565380d0540ac
 --------------------------------------------------------------*/
 .breadcrumbs {
   padding: 30px 0;
@@ -979,8 +1049,13 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+<<<<<<< HEAD
 /*--------------------------------------------------------------
 # Portfolio Details
+=======
+/*--------------------------------------------------------------
+# Portfolio Details
+>>>>>>> 091c9edcfed0f001d8a395b0faf565380d0540ac
 --------------------------------------------------------------*/
 .portfolio-details {
   padding-top: 0;
@@ -1066,8 +1141,13 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+<<<<<<< HEAD
 /*--------------------------------------------------------------
 # Footer
+=======
+/*--------------------------------------------------------------
+# Footer
+>>>>>>> 091c9edcfed0f001d8a395b0faf565380d0540ac
 --------------------------------------------------------------*/
 #footer {
   background: #111;
