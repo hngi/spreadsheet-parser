@@ -15,7 +15,7 @@ def budget(request):
         data2 = data.iloc[1:, ].reindex()
         # data3 = df.book.nrows
         nrows = 10
-     
+
         # here is month, the variable in which the month is stored in
         # month = data2.columns[2]
         data2.columns = data2.columns.map(lambda x: x.replace('\n', ''))
