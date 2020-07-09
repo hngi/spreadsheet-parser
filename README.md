@@ -9,13 +9,19 @@ spreadsheet-parser/
 - └─── excel_parser/   # The main Django Project that contains the settings file.
 - └─── excelApi/   # The Django App that contains the view for parsing excel files.
 - └─── media/   # This folder is a test folder that contains the excel file.
+- └─── parse/   # The Django App that will allow a user to input their excel file and returns JSON.
+- └─── static/    # This contains the static files needed for this project
+- └─── staticfiles/   # Django Collect static.
+- | .gitignore   # Ignores set parameters when pushing to GItHub.
 - | manage.py   # Django project file that runs the server.
+- | Procfile   # Contains the necessary settings to deploy on Heroku.
 - | README.md   # Please read me.
-- | requirement.txt   # The utilities folder containing helper functions and modules
+- | requirements.txt   # The utilities folder containing helper functions and modules
+- | runtime.txt   # This contains the necessary Python build for Heroku deployment.
 
 # PACKAGES/DEPENDENCIES
 
-Do not install any package unless it has been discussed with the team and approved by a team lead or mentor. Your 
+Do not install or uninstall any package unless it has been discussed with the team and approved by a team lead or mentor. Your 
 work would be invalidated if you do this. 
 
 - asgiref==3.2.10
@@ -25,10 +31,13 @@ work would be invalidated if you do this.
 - dataclasses==0.6
 - defusedxml==0.6.0
 - diff-match-patch==20181111
+- dj-database-url==0.5.0
 - Django==3.0.8
+- django-heroku==0.3.1
 - djangorestframework==3.11.0
 - dnspython==1.16.0
 - et-xmlfile==1.0.1
+- gunicorn==20.0.4
 - idna==2.10
 - jdcal==1.4.1
 - MarkupPy==1.14
@@ -36,6 +45,7 @@ work would be invalidated if you do this.
 - odfpy==1.4.1
 - openpyxl==3.0.4
 - pandas==1.0.0
+- psycopg2==2.8.5
 - python-dateutil==2.8.1
 - python-dotenv==0.14.0
 - pytz==2020.1
@@ -45,6 +55,7 @@ work would be invalidated if you do this.
 - sqlparse==0.3.1
 - tablib==2.0.0
 - urllib3==1.25.9
+- whitenoise==5.1.0
 - winkerberos==0.7.0
 - xlrd==1.2.0
 
