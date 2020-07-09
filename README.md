@@ -25,7 +25,6 @@ Do not install or uninstall any package unless it has been discussed with the te
 work would be invalidated if you do this. 
 
 - asgiref==3.2.10
-- bson==0.5.8
 - certifi==2020.6.20
 - chardet==3.0.4
 - dataclasses==0.6
@@ -34,8 +33,6 @@ work would be invalidated if you do this.
 - dj-database-url==0.5.0
 - Django==3.0.8
 - django-heroku==0.3.1
-- djangorestframework==3.11.0
-- dnspython==1.16.0
 - et-xmlfile==1.0.1
 - gunicorn==20.0.4
 - idna==2.10
@@ -56,7 +53,6 @@ work would be invalidated if you do this.
 - tablib==2.0.0
 - urllib3==1.25.9
 - whitenoise==5.1.0
-- winkerberos==0.7.0
 - xlrd==1.2.0
 
 # CONTRIBUTION GUIDE
