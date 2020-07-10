@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>MicroAPI</title>
+
+   
+
+  <!-- Favicons -->
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/icofont/icofont.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/owl.carousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/venobox/venobox.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+
+
+    <nav class="navbar navbar-fixed-top navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#"><svg id="logo" width="136" height="31" viewBox="0 0 136 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M40.7402 10.3203L40.7871 12.3828C41.2559 11.6172 41.8418 11.043 42.5449 10.6602C43.248 10.2773 44.0293 10.0859 44.8887 10.0859C46.8887 10.0859 48.1582 10.9062 48.6973 12.5469C49.1504 11.7578 49.7559 11.1523 50.5137 10.7305C51.2715 10.3008 52.1074 10.0859 53.0215 10.0859C55.7402 10.0859 57.127 11.5703 57.1816 14.5391V23H55.7754V14.6445C55.7676 13.5117 55.5215 12.6719 55.0371 12.125C54.5605 11.5781 53.7793 11.3047 52.6934 11.3047C51.6855 11.3203 50.834 11.6484 50.1387 12.2891C49.4434 12.9219 49.0566 13.6953 48.9785 14.6094V23H47.5723V14.5391C47.5645 13.4531 47.3066 12.6445 46.7988 12.1133C46.2988 11.5742 45.5254 11.3047 44.4785 11.3047C43.5957 11.3047 42.8379 11.5586 42.2051 12.0664C41.5723 12.5664 41.1035 13.3125 40.7988 14.3047V23H39.3926V10.3203H40.7402ZM62.3145 23H60.9082V10.3203H62.3145V23ZM60.6621 6.65234C60.6621 6.38672 60.748 6.16406 60.9199 5.98438C61.0918 5.79688 61.3262 5.70312 61.623 5.70312C61.9199 5.70312 62.1543 5.79688 62.3262 5.98438C62.5059 6.16406 62.5957 6.38672 62.5957 6.65234C62.5957 6.91797 62.5059 7.14063 62.3262 7.32031C62.1543 7.5 61.9199 7.58984 61.623 7.58984C61.3262 7.58984 61.0918 7.5 60.9199 7.32031C60.748 7.14063 60.6621 6.91797 60.6621 6.65234ZM70.8223 22.0508C71.7988 22.0508 72.6152 21.7773 73.2715 21.2305C73.9355 20.6758 74.2949 19.9609 74.3496 19.0859H75.6973C75.6582 19.8594 75.416 20.5664 74.9707 21.207C74.5254 21.8398 73.9316 22.3359 73.1895 22.6953C72.4551 23.0547 71.666 23.2344 70.8223 23.2344C69.1582 23.2344 67.8379 22.6562 66.8613 21.5C65.8926 20.3438 65.4082 18.7891 65.4082 16.8359V16.4141C65.4082 15.1641 65.627 14.0586 66.0645 13.0977C66.502 12.1367 67.127 11.3945 67.9395 10.8711C68.7598 10.3477 69.7168 10.0859 70.8105 10.0859C72.2012 10.0859 73.3457 10.5 74.2441 11.3281C75.1504 12.1562 75.6348 13.2461 75.6973 14.5977H74.3496C74.2871 13.6055 73.9277 12.8047 73.2715 12.1953C72.623 11.5859 71.8027 11.2812 70.8105 11.2812C69.5449 11.2812 68.5605 11.7383 67.8574 12.6523C67.1621 13.5664 66.8145 14.8477 66.8145 16.4961V16.9062C66.8145 18.5234 67.1621 19.7852 67.8574 20.6914C68.5605 21.5977 69.5488 22.0508 70.8223 22.0508ZM84.3691 11.5156C84.0723 11.4609 83.7559 11.4336 83.4199 11.4336C82.5449 11.4336 81.8027 11.6797 81.1934 12.1719C80.5918 12.6562 80.1621 13.3633 79.9043 14.293V23H78.5098V10.3203H79.8809L79.9043 12.3359C80.6465 10.8359 81.8379 10.0859 83.4785 10.0859C83.8691 10.0859 84.1777 10.1367 84.4043 10.2383L84.3691 11.5156ZM85.5879 16.4727C85.5879 15.2539 85.8223 14.1562 86.291 13.1797C86.7676 12.2031 87.4355 11.4453 88.2949 10.9062C89.1621 10.3594 90.1426 10.0859 91.2363 10.0859C92.9238 10.0859 94.291 10.6797 95.3379 11.8672C96.3848 13.0469 96.9082 14.6133 96.9082 16.5664V16.8594C96.9082 18.0859 96.6699 19.1914 96.1934 20.1758C95.7246 21.1523 95.0605 21.9062 94.2012 22.4375C93.3418 22.9688 92.3613 23.2344 91.2598 23.2344C89.5801 23.2344 88.2129 22.6445 87.1582 21.4648C86.1113 20.2773 85.5879 18.707 85.5879 16.7539V16.4727ZM86.9941 16.8594C86.9941 18.375 87.3848 19.6211 88.166 20.5977C88.9551 21.5664 89.9863 22.0508 91.2598 22.0508C92.5254 22.0508 93.5488 21.5664 94.3301 20.5977C95.1191 19.6211 95.5137 18.3359 95.5137 16.7422V16.4727C95.5137 15.5039 95.334 14.6172 94.9746 13.8125C94.6152 13.0078 94.1113 12.3867 93.4629 11.9492C92.8145 11.5039 92.0723 11.2812 91.2363 11.2812C89.9863 11.2812 88.9668 11.7734 88.1777 12.7578C87.3887 13.7344 86.9941 15.0156 86.9941 16.6016V16.8594ZM109.271 19.0273H102.662L101.279 23H98.1973L104.643 5.9375H107.303L113.76 23H110.666L109.271 19.0273ZM103.494 16.6367H108.439L105.967 9.55859L103.494 16.6367ZM118.67 16.6602V23H115.705V5.9375H122.232C124.139 5.9375 125.65 6.43359 126.768 7.42578C127.893 8.41797 128.455 9.73047 128.455 11.3633C128.455 13.0352 127.904 14.3359 126.803 15.2656C125.709 16.1953 124.174 16.6602 122.197 16.6602H118.67ZM118.67 14.2812H122.232C123.287 14.2812 124.092 14.0352 124.646 13.543C125.201 13.043 125.479 12.3242 125.479 11.3867C125.479 10.4648 125.197 9.73047 124.635 9.18359C124.072 8.62891 123.299 8.34375 122.314 8.32812H118.67V14.2812ZM133.811 23H130.963V10.3203H133.811V23ZM130.787 7.02734C130.787 6.58984 130.924 6.22656 131.197 5.9375C131.479 5.64844 131.877 5.50391 132.393 5.50391C132.908 5.50391 133.307 5.64844 133.588 5.9375C133.869 6.22656 134.01 6.58984 134.01 7.02734C134.01 7.45703 133.869 7.81641 133.588 8.10547C133.307 8.38672 132.908 8.52734 132.393 8.52734C131.877 8.52734 131.479 8.38672 131.197 8.10547C130.924 7.81641 130.787 7.45703 130.787 7.02734Z" fill="white"/>
+                    <path d="M15.5002 2.58334L2.5835 9.04168L15.5002 15.5L28.4168 9.04168L15.5002 2.58334Z" stroke="white" stroke-width="1.71069" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2.5835 21.9583L15.5002 28.4167L28.4168 21.9583" stroke="white" stroke-width="1.71069" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2.5835 15.5L15.5002 21.9583L28.4168 15.5" stroke="white" stroke-width="1.71069" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    </a>
+                
+            </div>
+            
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="">Home</a></li>
+                    <li><a href="">About Us</a></li>
+                    <li><a href="">Contact Us</a></li>
+                    <li><a href="">Documentation</a></li>
+                    </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="">Sign In</a></li>
+                    <li><a href=""><button class="btn btn-default">Sign Up</button></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="api">
+                <a class= href="">YourApis</a> > <a class= href="">MicroAPI</a></div>
+               <div id="contain"></div> <div id= "ellipse"> <svg class="icon" width="31" height="27" viewBox="0 0 31 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M29.1305 0.248291C29.4712 0.248291 29.762 0.373343 30.003 0.623448C30.2523 0.865215 30.3769 1.157 30.3769 1.49881V25.2587C30.3769 25.6005 30.2523 25.8923 30.003 26.1341C29.762 26.3842 29.4712 26.5093 29.1305 26.5093H9.1885C8.84783 26.5093 8.55701 26.3842 8.31604 26.1341C8.06677 25.8923 7.94213 25.6005 7.94213 25.2587V20.8819H1.71024C1.36957 20.8819 1.07875 20.7569 0.83778 20.5067C0.588505 20.265 0.463867 19.9732 0.463867 19.6314V7.12616C0.463867 6.78435 0.588505 6.49256 0.83778 6.2508C1.07044 6.00069 1.36126 5.87564 1.71024 5.87564H7.94213V1.49881C7.94213 1.157 8.06677 0.865215 8.31604 0.623448C8.55701 0.373343 8.84783 0.248291 9.1885 0.248291H29.1305ZM7.94213 14.9794L9.71198 18.3058H12.3792L9.41285 13.4663L12.3294 8.71432H9.76184L8.14155 11.7156L8.07923 11.8156L8.02937 11.9282L7.23169 10.3275L6.40908 8.71432H3.69198L6.52126 13.4913L3.43024 18.3058H6.12242L7.94213 14.9794ZM18.2247 24.6335V20.8819H9.81169V24.6335H18.2247ZM18.2247 19.0061V14.3167H15.4204V19.0061H18.2247ZM18.2247 12.4409V7.75142H15.4204V12.4409H18.2247ZM18.2247 5.87564V2.12407H9.81169V5.87564H18.2247ZM28.5073 24.6335V20.8819H20.0943V24.6335H28.5073ZM28.5073 19.0061V14.3167H20.0943V19.0061H28.5073ZM28.5073 12.4409V7.75142H20.0943V12.4409H28.5073ZM28.5073 5.87564V2.12407H20.0943V5.87564H28.5073Z" fill="white"/>
+                </svg></div> <h4 id="excel">Excel API</h4>
+                <p id="interns">By <a href="">HNGi7 Interns </a> | Updated 1 day ago | <a href="">Email</a>  </p>
+                <h4 id="result">cdn Upload</h4>
+                <p id="runtime">Runtime</p>
+                <p id="time">5400ms</p>
+                <p id="rate">Success rate <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <rect width="20" height="20" fill="url(#pattern0)"/>
+                    <defs>
+                    <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+                    <use xlink:href="#image0" transform="scale(0.015625)"/>
+                    </pattern>
+                    <image id="image0" width="64" height="64" xlink:href="data:image/png;base64,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"/>
+                    </defs>
+                    </svg>
+                    </p>
+                <p id="per">100%</p>
+                <div id="rectan"></div>
+                <div classs= "row" id="rectangle"></div>
+                <div id="rectangup"></div>
+                 
+                    <input id= "input"type="text">
+                    <button id = "button">Parse</button>
+
+            </div>
+           
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->  <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    
+    <footer id="footer">
+        &copy  2020 MicroAPI
+    </footer>
+    </body>
+  
+        
+    
+
