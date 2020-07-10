@@ -59,7 +59,7 @@
             
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="">Home</a></li>
+                    <li><a href="{% url 'excelApi:index' %}">Home</a></li>
                     <li><a href="">About Us</a></li>
                     <li><a href="">Contact Us</a></li>
                     <li><a href="">Documentation</a></li>
@@ -78,16 +78,17 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="api">
-                <a class= href="">YourApis</a> > <a class= href="">MicroAPI</a></div>
+                <a class= href="">Parser</a> > <a class= href="">MicroAPI</a></div>
                <div id="contain"></div> <div id= "ellipse"> <svg class="icon" width="31" height="27" viewBox="0 0 31 27" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M29.1305 0.248291C29.4712 0.248291 29.762 0.373343 30.003 0.623448C30.2523 0.865215 30.3769 1.157 30.3769 1.49881V25.2587C30.3769 25.6005 30.2523 25.8923 30.003 26.1341C29.762 26.3842 29.4712 26.5093 29.1305 26.5093H9.1885C8.84783 26.5093 8.55701 26.3842 8.31604 26.1341C8.06677 25.8923 7.94213 25.6005 7.94213 25.2587V20.8819H1.71024C1.36957 20.8819 1.07875 20.7569 0.83778 20.5067C0.588505 20.265 0.463867 19.9732 0.463867 19.6314V7.12616C0.463867 6.78435 0.588505 6.49256 0.83778 6.2508C1.07044 6.00069 1.36126 5.87564 1.71024 5.87564H7.94213V1.49881C7.94213 1.157 8.06677 0.865215 8.31604 0.623448C8.55701 0.373343 8.84783 0.248291 9.1885 0.248291H29.1305ZM7.94213 14.9794L9.71198 18.3058H12.3792L9.41285 13.4663L12.3294 8.71432H9.76184L8.14155 11.7156L8.07923 11.8156L8.02937 11.9282L7.23169 10.3275L6.40908 8.71432H3.69198L6.52126 13.4913L3.43024 18.3058H6.12242L7.94213 14.9794ZM18.2247 24.6335V20.8819H9.81169V24.6335H18.2247ZM18.2247 19.0061V14.3167H15.4204V19.0061H18.2247ZM18.2247 12.4409V7.75142H15.4204V12.4409H18.2247ZM18.2247 5.87564V2.12407H9.81169V5.87564H18.2247ZM28.5073 24.6335V20.8819H20.0943V24.6335H28.5073ZM28.5073 19.0061V14.3167H20.0943V19.0061H28.5073ZM28.5073 12.4409V7.75142H20.0943V12.4409H28.5073ZM28.5073 5.87564V2.12407H20.0943V5.87564H28.5073Z" fill="white"/>
                 </svg></div> <h4 id="excel">Excel API</h4>
-                <p id="interns">By <a href="">HNGi7 Interns </a>
-<!--                <h4 id="result">cdn Upload</h4>-->
+<!--                <p id="interns">By <a href="">HNGi7 Interns </a>-->
+                <p id="interns">By HNGi7 Interns</p>
+                <h4 id="result">CDN Upload</h4>
 <!--                <p id="runtime">Runtime</p>-->
 <!--                <p id="time">5400ms</p>-->
-<!--                <p id="rate">Success rate <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">-->
-<!--                    <rect width="20" height="20" fill="url(#pattern0)"/>-->
+                <p id="rate">Success rate <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <rect width="20" height="20" fill="url(#pattern0)"/>
                     <defs>
                     <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
                     <use xlink:href="#image0" transform="scale(0.015625)"/>
@@ -99,15 +100,20 @@
 <!--                <p id="per">100%</p>-->
                 <div id="rectan"></div>
                 <div classs= "row" id="rectangle"></div>
-                <div id="rectangup"></div>
-                 
-                    <input id= "input"type="text">
-<!--                    <button id = "button">Parse</button>-->
+<!--                <div id="rectangup"></div>-->
 
+                    <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
                     <a href="{% url 'excelApi:parse' %}" id = "button" class="btn btn-primary">Parse</a>
-<!--                    <a href="{% url 'excelApi:parse' %}" class="btn btn-primary ">Parse</a>-->
+<!--                    <button type="submit">Upload</button>-->
+                    </form>
 
+<!--                    <input id= "input"type="text">-->
+<!--                    <button id = "button">Parse</button>-->
+<!--                    <a href="{% url 'excelApi:parse' %}" class="btn btn-primary ">Parse</a>-->
             </div>
+<!--            </p>-->
            
         </div>
     </div>
@@ -117,8 +123,5 @@
     <footer id="footer">
         &copy  2020 MicroAPI
     </footer>
-    </body>
+</body>
   
-        
-    
-
