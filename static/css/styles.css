@@ -335,6 +335,7 @@ box-sizing: border-box;
 }
 
 @media (max-width: 720px) {
+    
     .navbar-collapse {
         background: #010216;
     }
