@@ -5,4 +5,3 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('budget.html', views.budget, name='budget'),
 ]
-
