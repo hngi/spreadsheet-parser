@@ -26,10 +26,10 @@ def link_upload(request):
 
     else:
         form = LinkUploadForm()
-    return render(request, 'model_form_upload.html', {'form': form})
+    return render(request, 'upload.html', {'form': form})
 
 
-def budget(request):
+def excel_parse(request):
     try:
         # reading the excel file
         df = pd.read_excel(f'{file_name}', usecols="B:G", encoding='utf-8')
@@ -49,7 +49,7 @@ def budget(request):
         # we don't need percentage, dropping it
         data2.drop(["percentage"], axis=1, inplace=True)
         final_data = data2.to_dict(orient="records")
-        return render(request, 'budget.html', {'final_data': final_data})
+        return render(request, 'result.html', {'final_data': final_data})
 
     except KeyError:
         print("failed")

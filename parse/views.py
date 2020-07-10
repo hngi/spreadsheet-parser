@@ -45,6 +45,5 @@ def parse_excel_file(request):
             except KeyError:
                 print("failed")
                 messages.error(request, 'Error! Operation Failed.')
-
         else:
             messages.error(request, 'Error! No excel file found.')
