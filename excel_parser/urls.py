@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # path('', include("excelApi.urls")),
     path('', include("parse.urls")),
+    path('', include("excelApi.urls")),
 ]
