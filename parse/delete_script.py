@@ -24,5 +24,3 @@ def clear_directory():
         sleep_time = (now - min(time_list)) if time_list else 15
         time.sleep(sleep_time + 5)
 
-
-print(clear_directory())

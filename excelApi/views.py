@@ -19,7 +19,7 @@ def link_upload(request):
         if form.is_valid():
             text = form.cleaned_data['link']
             for file in os.listdir(text):
-                filename = os.fsencode(file)
+                filename = os.fsdecode(file)
                 if filename.endswith('.xlsx'):
                     file_name = os.path.join(text, filename)
             # form.save()
