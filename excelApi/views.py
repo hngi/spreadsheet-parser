@@ -1,13 +1,37 @@
 from django.shortcuts import render
 import pandas as pd
+from .forms import LinkUploadForm
+from .models import LinkUpload
 
 # Create your views here.
+
+
+def index(request):
+    linkupload = LinkUpload.objects.all()
+    return render(request, 'index.html', {'linkupload': linkupload})
+
+
+def link_upload(request):
+    global file_name
+    if request.method == 'POST':
+        form = LinkUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            text = form.cleaned_data['link']
+            for file in os.listdir(text):
+                filename = os.fsencode(file)
+                if filename.endswith('.xlsx'):
+                    file_name = os.path.join(text, filename)
+            # form.save()
+
+    else:
+        form = LinkUploadForm()
+    return render(request, 'model_form_upload.html', {'form': form})
 
 
 def budget(request):
     try:
         # reading the excel file
-        df = pd.read_excel('./media/APRIL.xlsx', usecols="B:G", encoding='utf-8')
+        df = pd.read_excel(f'{file_name}', usecols="B:G", encoding='utf-8')
 
         # Dropping the unnecessary columns
         data = df.dropna(axis=0, how="any")
@@ -28,8 +52,3 @@ def budget(request):
 
     except KeyError:
         print("failed")
-
-
-def index(request):
-    name = " index"
-    return render(request, 'index.html', {'name': name})
