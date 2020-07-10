@@ -1,6 +1,7 @@
 import os
-from django.shortcuts import render
 import pandas as pd
+from django.shortcuts import render
+from django.contrib import messages
 from .forms import LinkUploadForm
 from .models import LinkUpload
 
@@ -19,7 +20,7 @@ def link_upload(request):
         if form.is_valid():
             text = form.cleaned_data['link']
             for file in os.listdir(text):
-                filename = os.fsencode(file)
+                filename = os.fsdecode(file)
                 if filename.endswith('.xlsx'):
                     file_name = os.path.join(text, filename)
             # form.save()
@@ -52,4 +53,4 @@ def excel_parse(request):
         return render(request, 'result.html', {'final_data': final_data})
 
     except KeyError:
-        print("failed")
+        messages.error(request, 'Error! Operation Failed.')

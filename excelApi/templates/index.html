@@ -1,5 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
+
 <html lang='en'>
 
     <head>
@@ -11,7 +12,8 @@
         <title> Excel API </title>
 
         <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css' />
-        <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -46,10 +48,10 @@
                         </div> 
                         </div>
                     </div>
-                    <div class='col-lg-4 col-md-4' id='h-btns'>
-                        <a href="#" class="btn btn-primary" id='sign-in-btn'>Sign in</a>
-                        <a href="#" class="btn btn-primary" id='sign-up-btn'>Sign up</a>
-                    </div>
+<!--                    <div class='col-lg-4 col-md-4' id='h-btns'>-->
+<!--                        <a href="#" class="btn btn-primary" id='sign-in-btn'>Sign in</a>-->
+<!--                        <a href="#" class="btn btn-primary" id='sign-up-btn'>Sign up</a>-->
+<!--                    </div>-->
                 </div>
             </div>
         </div>
@@ -60,11 +62,12 @@
                     <h2> Welcome to the </h2> <h2>Excel API resource </h2>
                         <div class='row btn_div' id='btn_div'>
                             <a href="#" class="btn btn-primary ">FILE UPLOAD</a>
-                            <a href="#" class="btn btn-primary ">CDN UPLOAD</a>
+                            <a href="{% url 'excelApi:upload' %}" class="btn btn-primary ">CDN UPLOAD</a>
                         </div>
                 </div>
                 <div class='col-lg-6 col-md-6 col-sm-12'>
-                    <img src='https://res.cloudinary.com/payne/image/upload/v1594341795/header_illustratn_1.png' class='main_img' alt='...' />
+                    <img src='https://res.cloudinary.com/payne/image/upload/v1594341795/header_illustratn_1.png'
+                         class='main_img' alt='...' />
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
-from datetime import datetime
 import time
 import os
+from datetime import datetime
 from excel_parser.settings import BASE_DIR
 
 
@@ -23,6 +23,3 @@ def clear_directory():
         # if time_list is empty, set sleep time as 300 seconds, else calculate it based on the oldest file creation time
         sleep_time = (now - min(time_list)) if time_list else 15
         time.sleep(sleep_time + 5)
-
-
-print(clear_directory())
