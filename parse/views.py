@@ -44,9 +44,6 @@ def parse_excel_file(request):
                 return render(request, 'index.html', {'final_data': final_data})
 
             except KeyError:
-                print("failed")
                 messages.error(request, 'Error! Operation Failed.')
         else:
             messages.error(request, 'Error! No excel file found.')
-
-

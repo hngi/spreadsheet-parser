@@ -1,6 +1,7 @@
 import os
-from django.shortcuts import render
 import pandas as pd
+from django.shortcuts import render
+from django.contrib import messages
 from .forms import LinkUploadForm
 from .models import LinkUpload
 
@@ -52,4 +53,4 @@ def excel_parse(request):
         return render(request, 'result.html', {'final_data': final_data})
 
     except KeyError:
-        print("failed")
+        messages.error(request, 'Error! Operation Failed.')
