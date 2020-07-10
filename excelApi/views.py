@@ -54,3 +54,4 @@ def excel_parse(request):
 
     except KeyError:
         messages.error(request, 'Error! Operation Failed.')
+
