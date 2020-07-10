@@ -1,8 +1,9 @@
+import os
 from django.shortcuts import render
 import pandas as pd
 from .forms import LinkUploadForm
 from .models import LinkUpload
-import os
+
 # Create your views here.
 
 

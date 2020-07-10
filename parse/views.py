@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
+import os
 import pandas as pd
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from .forms import ExcelUploadForm
 from excel_parser.settings import BASE_DIR
 from .models import ExcelUpload
-import os
-
+from .delete_script import clear_directory
 # Create your views here.
 
 
@@ -39,11 +40,10 @@ def parse_excel_file(request):
                 data2.columns = ["sector", "budget", "allocation", "total_allocation", "balance", "percentage"]
                 data2.drop(["percentage"], axis=1, inplace=True)
                 final_data = data2.to_dict(orient="records")
-                print(final_data)
                 return render(request, 'budget.html', {'final_data': final_data})
 
             except KeyError:
                 print("failed")
-
+                messages.error(request, 'Error! Operation Failed.')
         else:
-            print('No excel file')
+            messages.error(request, 'Error! No excel file found.')
