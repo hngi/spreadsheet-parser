@@ -1,9 +1,13 @@
 from django.shortcuts import render
 import pandas as pd
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 # Create your views here.
 
-
+@api_view(['POST'])
 def budget(request):
     try:
         # reading the excel file
@@ -24,7 +28,7 @@ def budget(request):
         # we don't need percentage, dropping it
         data2.drop(["percentage"], axis=1, inplace=True)
         final_data = data2.to_dict(orient="records")
-        return render(request, 'budget.html', {'final_data': final_data})
+        return Response(final_data, status=status.HTTP_200_OK) #, 'budget.html', {'final_data': final_data})
 
     except KeyError:
         print("failed")
