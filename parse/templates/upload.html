@@ -59,7 +59,7 @@
             
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="{% url 'excelApi:index' %}">Home</a></li>
+                    <li><a href="{% url 'parse:index' %}">Home</a></li>
                     <li><a href="">About Us</a></li>
                     <li><a href="">Contact Us</a></li>
                     <li><a href="">Documentation</a></li>
@@ -104,8 +104,8 @@
 
                     <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {{ form.as_p }}
-                    <a href="{% url 'excelApi:parse' %}" id = "button" class="btn btn-primary">Parse</a>
+                    {{ form }}
+                    <a href="{% url 'parse:result' %}" id = "button" class="btn btn-primary">Parse</a>
 <!--                    <button type="submit">Upload</button>-->
                     </form>
 
