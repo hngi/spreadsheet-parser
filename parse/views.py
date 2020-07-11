@@ -6,6 +6,7 @@ from .forms import ExcelUploadForm
 from excel_parser.settings import BASE_DIR
 from .models import ExcelUpload
 from .delete_script import clear_directory
+
 # Create your views here.
 
 

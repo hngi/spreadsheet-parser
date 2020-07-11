@@ -22,6 +22,7 @@ def link_upload(request):
             print(text)
             for file in os.listdir(text):
                 filename = os.fsdecode(file)
+                print(filename)
                 if filename.endswith('.xlsx'):
                     file_name = os.path.join(text, filename)
             # form.save()
@@ -34,7 +35,7 @@ def link_upload(request):
 def excel_parse(request):
     try:
         # reading the excel file
-        df = pd.read_excel(f'{file_name}', usecols="B:G", encoding='utf-8')
+        df = pd.read_excel(file_name, usecols="B:G", encoding='utf-8')
 
         # Dropping the unnecessary columns
         data = df.dropna(axis=0, how="any")
