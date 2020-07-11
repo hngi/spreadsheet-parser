@@ -2,40 +2,32 @@ import os
 import pandas as pd
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import ExcelUploadForm
-from excel_parser.settings import BASE_DIR
-from .models import ExcelUpload
-from .delete_script import clear_directory
-from django.contrib import messages
-from .forms import LinkUploadForm
-from .models import LinkUpload
+from .cdn_forms import CDNUploadForm
+from .models import CDNUpload
 
 
 def index(request):
-    linkupload = LinkUpload.objects.all()
-    return render(request, 'index.html', {'linkupload': linkupload})
+    cdn_upload = CDNUpload.objects.all()
+    return render(request, 'index.html', {'cdn_upload': cdn_upload})
 
 
-def linkUpload(request):
+def cdn_upload(request):
     global file_name
     if request.method == 'POST':
-        form = LinkUploadForm(request.POST, request.FILES)
-        text = form.cleaned_data['link']
-        print(text)
+        form = CDNUploadForm(request.POST, request.FILES)
         if form.is_valid():
             text = form.cleaned_data['link']
-            print(text)
             for file in os.listdir(text):
                 filename = os.fsdecode(file)
-                print(filename)
                 if filename.endswith('.xlsx'):
                     file_name = os.path.join(text, filename)
             # form.save()
     else:
-        form = LinkUploadForm()
+        form = CDNUploadForm()
     return render(request, 'upload.html', {'form': form})
 
-def excel_parse(request):
+
+def cdn_parse(request):
     try:
         # reading the excel file
         df = pd.read_excel(file_name, usecols="B:G", encoding='utf-8')
@@ -53,5 +45,6 @@ def excel_parse(request):
         data2.drop(["percentage"], axis=1, inplace=True)
         final_data = data2.to_dict(orient="records")
         return render(request, 'result.html', {'final_data': final_data})
+
     except KeyError:
         messages.error(request, 'Error! Operation Failed.')

@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-from django.shortcuts import render
 from rest_framework.response import Response
 from django.contrib import messages
 from rest_framework.decorators import api_view
@@ -16,10 +15,8 @@ def link_upload(request):
         form = LinkUploadForm(request.POST, request.FILES)
         if form.is_valid():
             text = form.cleaned_data['link']
-            print(text)
             for file in os.listdir(text):
                 filename = os.fsdecode(file)
-                print(filename)
                 if filename.endswith('.xlsx'):
                     file_name = os.path.join(text, filename)
             # form.save()
@@ -29,7 +26,7 @@ def link_upload(request):
     return Response(form, status=status.HTTP_200_OK)
 
 
-@api_view(['POST','GET'])
+@api_view(['POST', 'GET'])
 def excel_parse(request):
     try:
         # reading the excel file
