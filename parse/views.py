@@ -6,6 +6,12 @@ from .forms import ExcelUploadForm
 from excel_parser.settings import BASE_DIR
 from .models import ExcelUpload
 from .delete_script import clear_directory
+<<<<<<< HEAD
+=======
+from django.contrib import messages
+from .forms import LinkUploadForm
+from .models import LinkUpload
+>>>>>>> eadc8e88330172f1d2bdebee612f7d0942e81aaa
 
 # Create your views here.
 
@@ -48,3 +54,10 @@ def parse_excel_file(request):
                 messages.error(request, 'Error! Operation Failed.')
         else:
             messages.error(request, 'Error! No excel file found.')
+
+
+
+            # Views for the design  templates
+
+
+

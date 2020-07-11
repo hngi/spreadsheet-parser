@@ -341,7 +341,7 @@ box-sizing: border-box;
     }
 }
 
-#input{
+.input{
     position: absolute;
 width: 755px;
 height: 68px;
