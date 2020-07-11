@@ -1,18 +1,21 @@
 import os
 import pandas as pd
 from django.shortcuts import render
+from rest_framework.response import Response
 from django.contrib import messages
+from rest_framework.decorators import api_view
+from rest_framework import status
 from .forms import LinkUploadForm
 from .models import LinkUpload
 
 # Create your views here.
 
 
-def index(request):
-    linkupload = LinkUpload.objects.all()
-    return render(request, 'index.html', {'linkupload': linkupload})
+#def index(request):
+ #   linkupload = LinkUpload.objects.all()
+  #  return render(request, 'index.html', {'linkupload': linkupload})
 
-
+@api_view(['POST'])
 def link_upload(request):
     global file_name
     if request.method == 'POST':
@@ -29,9 +32,10 @@ def link_upload(request):
 
     else:
         form = LinkUploadForm()
-    return render(request, 'upload.html', {'form': form})
+    return Response(form, status=status.HTTP_200_OK)
 
 
+@api_view(['POST','GET'])
 def excel_parse(request):
     try:
         # reading the excel file
@@ -52,7 +56,7 @@ def excel_parse(request):
         # we don't need percentage, dropping it
         data2.drop(["percentage"], axis=1, inplace=True)
         final_data = data2.to_dict(orient="records")
-        return render(request, 'result.html', {'final_data': final_data})
+        return Response(final_data, status= status.HTTP_200_OK)
 
     except KeyError:
         messages.error(request, 'Error! Operation Failed.')
