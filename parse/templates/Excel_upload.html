@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en" dir="ltr">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <title></title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-dark">
+    <div class="ml-sm-4">
+
+
+        <img src="{% static 'MYIMAGEFOLDER/layers.png' %}" alt="">
+        <a class="navbar-brand" href="#" style="color:#ffffff;">microAPI</a>
+    </div>
+    <button class="navbar-toggler bg-light" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+
+                <a class="nav-link ml-sm-4" href="#" style="color:#ffffff;">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" style="color:#ffffff;">About us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" style="color:#ffffff;">Contact us</a>
+            </li>
+            <li class="nav-item mr-sm-5">
+                <a class="nav-link" href="#" style="color:#ffffff;">Documentation</a>
+            </li>
+            <div class="">
+                <li class="nav-item mr-sm-3">
+                    <a class="nav-link" href="#" style="color:#ffffff;">sign in</a>
+                </li>
+            </div>
+            <div class="">
+                <li class="nav-item">
+                    <a class="nav-link rounded pl-3 pr-3" href="#" style="color:#000000; background-color:#ffffff;">Signup</a>
+                </li>
+            </div>
+        </ul>
+    </div>
+</nav>
+
+
+
+
+<div class="container-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-lg-12 pt-4">
+                <h4>Your APIs > Excel API</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pt-2">
+    <div class="row">
+        <div class="col-md-4 col-sm-12">
+            <div class="card" style="width: 16rem;">
+                <ul class="list-group list-group-flush">
+                    <div class="d-flex">
+                        <li class="list-group-item"><img src="{% static 'MYIMAGEFOLDER/Component 1.png' %}" alt=""></li>
+                        <h4 class="pt-4">Excel API</h4>
+                    </div>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12 pt-5 pb-2 d-flex justify-content-start">
+            <a href="#">By HNGi7 Interns | </a>Updated 1 day ago | <a href="#">Email</a>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="d-flex justify-content-center">
+                <div class="">
+                    <p>Average Runtime <img src="{% static 'MYIMAGEFOLDER\icons8-time-24 1.png' %}" alt=""></p>
+                    <h2>5400ms</h2>
+                </div>
+                <div class="pl-2">
+                    <img src="{% static 'MYIMAGEFOLDER\Rectangle 471.png' %}" alt="">
+                </div>
+                <div class="pl-2">
+                    <p>Success Rate <img src="{% static 'MYIMAGEFOLDER\icons8-completed-task-64 1.png' %}" alt=""></p>
+                    <h2>100%</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 pt-4">
+            <img src="{% static 'MYIMAGEFOLDER\Rectangle 469.png' %}" width="100%" alt="">
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 pt-3 col-sm-12">
+            <div class="d-flex">
+                <h2>Excel API</h2>
+                <h2 class="pl-3">File Upload</h2>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12 pt-3">
+            <div class="pl-2 d-flex justify-content-end">
+                <div class="rounded" style="background-color:#261C9E;">
+                    <p class="pt-3 pl-5 pr-5 pb-3" style="font-size:20px; color:#ffffff;"><img src="{% static 'MYIMAGEFOLDER\icons8-centralized-network-50 1.png' %}" alt=""> Test Endpoints</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-center pt-5 pb-5">
+                <img src="{% static 'MYIMAGEFOLDER\Rectangle 469.png' %}" width="125%" alt="">
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid pt-4 pb-5">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <p style="font-size:24px;">Upload Excel File</p>
+            </div>
+            <div class="col-md-12 col-sm-12">
+                <form>
+                    <div class="form-group">
+                        <div class="d-flex justify-content-start">
+                            <input type="text" class="form-control w-75 rounded-0" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Attach Excelfile">
+                            <button type="submit" class="pl-3 pr-3" name="button">Attach File <img src="{% static 'MYIMAGEFOLDER\icons8-attach-24 (2) 1.png' %}" alt=""></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-12 col-sm-12 pt-4 d-flex justify-content-start">
+                <button type="submit" class="pl-4 pr-4" class="pl-5 pr-5 pt-2 pb-2  rounded-0" style="background-color: #261C9E; color:#ffffff;" name="button">PARSE<img src="MYIMAGEFOLDER\icons8-attach-24 (2) 1.png" alt=""></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container pt-5 pb-5">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <form>
+                    <div class="form-group">
+                        <div class="d-flex justify-content-start">
+                            <input type="text" class="form-control w-75 rounded-0" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Attach Excelfile">
+                            <button type="submit" class="pl-3 pr-3" name="button">Attach File <img src="{% static 'MYIMAGEFOLDER\icons8-attach-24 (2) 1.png' %}" alt=""></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-12 col-sm-12 pt-4 d-flex justify-content-start">
+                <button type="submit" class="pl-4 pr-4" class="pl-5 pr-5 pt-2 pb-2  rounded-0" style="background-color: #261C9E; color:#ffffff;" name="button">SUBMIT<img src="MYIMAGEFOLDER\icons8-attach-24 (2) 1.png" alt=""></button>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="d-flex justify-content-center mt-5 pt-4 pb-2">
+            <p>&copy 2020 microAPI</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    </body>
+</html>
