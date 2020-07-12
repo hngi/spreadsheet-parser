@@ -30,6 +30,7 @@ def link_upload(request):
 def excel_parse(request):
     file_path = request.data.get('file_path')
     # print(file_path, request.data)
+
     try:
         # reading the excel file
         df = pd.read_excel(file_path, encoding='utf-8')
