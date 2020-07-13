@@ -26,27 +26,30 @@ def link_upload(request):
     return Response(form, status=status.HTTP_200_OK)
 
 
-@api_view(['POST', 'GET'])
+@api_view(['POST', ])
 def excel_parse(request):
+    file_path = request.data.get('file_path')
+    # print(file_path, request.data)
+
     try:
         # reading the excel file
-        df = pd.read_excel(file_name, usecols="B:G", encoding='utf-8')
+        df = pd.read_excel(file_path, encoding='utf-8')
 
         # Dropping the unnecessary columns
         data = df.dropna(axis=0, how="any")
-        data.columns = data.iloc[0]
-        data2 = data.iloc[1:, ].reindex()
+        # data.columns = data.iloc[0]
+        # data2 = data.iloc[1:, ].reindex()
         # data3 = df.book.nrows
         nrows = 10
 
         # here is month, the variable in which the month is stored in
         # month = data2.columns[2]
-        data2.columns = data2.columns.map(lambda x: x.replace('\n', ''))
-        data2.columns = ["sector", "budget", "allocation", "total_allocation", "balance", "percentage"]
+        data.columns = data.columns.map(lambda x: str(x))
+        data.columns = data.columns.map(lambda x: x.replace('\n', ''))
 
         # we don't need percentage, dropping it
-        data2.drop(["percentage"], axis=1, inplace=True)
-        final_data = data2.to_dict(orient="records")
+        # data2.drop(["percentage"], axis=1, inplace=True)
+        final_data = data.to_dict(orient="records")
         return Response(final_data, status= status.HTTP_200_OK)
 
     except KeyError:
