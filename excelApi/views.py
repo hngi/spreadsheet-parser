@@ -26,9 +26,11 @@ def link_upload(request):
     return Response(form, status=status.HTTP_200_OK)
 
 
-@api_view(['POST', 'GET'])
+@api_view(['POST', ])
 def excel_parse(request):
-    file_path = request.POST.get('file_path')
+    file_path = request.data.get('file_path')
+    # print(file_path, request.data)
+
     try:
         # reading the excel file
         df = pd.read_excel(file_path, encoding='utf-8')
