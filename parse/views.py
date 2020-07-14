@@ -8,6 +8,9 @@ from excel_parser.settings import BASE_DIR
 from .models import ExcelUpload
 from .delete_script import clear_directory
 from django.contrib import messages
+from win32com import client
+import win32api
+
 
 # Create your views here.
 
@@ -67,7 +70,7 @@ def excel_parse_to_csv(request):
         file_path = f'media/user/{filename}'
         # reading the excel file
         df = pd.read_excel(file_path, encoding='utf-8')
-
+        os.remove(file_path)
         # Dropping the unnecessary columns
         data = df.dropna(axis=0, how="any")
 
@@ -83,3 +86,25 @@ def excel_parse_to_csv(request):
 
     except KeyError:
         messages.error(request, 'Error! Operation Failed.')
+
+@api_view(['POST', ])
+def excel_to_pdf(request):
+    file = request.FILES.get('file')
+    filename = file.name
+    pdf_file_name = filename[-4:]
+    ExcelUpload.objects.create(document=file)
+
+    try:
+        file_path = f'media/user/{filename}'
+        pdfpath = f'media/user/{pdf_file_name}.pdf'
+        app = client.DispatchEx("Excel.Application")
+        app.Interactive = False
+        app.visible = False
+        Workbook = app.Workbooks.Open(file_path)
+        converted_file = Workbook.ActiveSheet.ExportAsFixedFormat(0,pdfpath)
+        Workbook.Close()
+
+        return Response(request)
+
+    except KeyError:
+        messages.error(request, "Operation Failed")

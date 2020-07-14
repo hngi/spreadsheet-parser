@@ -8,6 +8,7 @@ urlpatterns = [
     # path('', views.home, name='home'),
     path('index/', cdn_views.index, name='index'),
     path('excel_to_csv/', views.excel_parse_to_csv),
+    path('exceltopdf/', views.excel_to_pdf),
 
     # path('model_form_upload/', views.model_form_upload, name='models_form_upload'),
     # path('linkupload/', cdn_views.linkUpload, name= "linkupload"),
