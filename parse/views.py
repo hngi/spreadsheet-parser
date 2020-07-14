@@ -55,6 +55,7 @@ def parse_excel_file(request):
         else:
             messages.error(request, 'Error! No excel file found.')
 
+
 @api_view(['POST', ])
 def excel_parse_to_csv(request):
     file = request.FILES.get('file')
