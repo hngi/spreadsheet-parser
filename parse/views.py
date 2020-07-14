@@ -1,5 +1,7 @@
 import os
 import pandas as pd
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from django.shortcuts import render, redirect
 from .forms import ExcelUploadForm
 from excel_parser.settings import BASE_DIR
@@ -26,6 +28,10 @@ def form_upload(request):
 
 
 def parse_excel_file(request):
+    excel_file = request.FILES.get("file")
+    excel_file_name = excel_file.name
+    ExcelUpload.objects.save(document=excel_file)
+
     directory = os.path.join(BASE_DIR, 'media/user')
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
@@ -48,3 +54,32 @@ def parse_excel_file(request):
                 messages.error(request, 'Error! Operation Failed.')
         else:
             messages.error(request, 'Error! No excel file found.')
+
+@api_view(['POST', ])
+def excel_parse_to_csv(request):
+    file = request.FILES.get('file')
+    filename = file.name
+    ExcelUpload.objects.create(document=file)
+    # file_path = request.data.get('file_path')
+    # print(file_path, request.data)
+
+    try:
+        file_path = f'media/user/{filename}'
+        # reading the excel file
+        df = pd.read_excel(file_path, encoding='utf-8')
+
+        # Dropping the unnecessary columns
+        data = df.dropna(axis=0, how="any")
+
+        # here is month, the variable in which the month is stored in
+        # month = data2.columns[2]
+        data.columns = data.columns.map(lambda x: str(x))
+        # data.columns = data.columns.map(lambda x: x.replace('\n', ''))
+
+        # we don't need percentage, dropping it
+        # data2.drop(["percentage"], axis=1, inplace=True)
+        result = data.to_csv(index=False)
+        return Response(result)
+
+    except KeyError:
+        messages.error(request, 'Error! Operation Failed.')
