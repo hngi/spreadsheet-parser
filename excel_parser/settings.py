@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'excelApi',
     'drf_yasg',
     'parse',
-    'rest_framework',
+    'rest_framework'
+    'pdf',
 ]
 
 MIDDLEWARE = [
