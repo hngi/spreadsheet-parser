@@ -25,12 +25,13 @@ def form_upload(request):
         form = ExcelUploadForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            return redirect('excel_upload.html')
     else:
         form = ExcelUploadForm()
-    return render(request, 'excel_upload.html', {'form': form})
+    return render(request, 'excel_upload.html', {'form': form}, messages.error(request, 'Error! Operation Failed.'))
 
 
-def parse_excel_file(request):
+def excel_parse_to_json(request):
     excel_file = request.FILES.get("file")
     excel_file_name = excel_file.name
     ExcelUpload.objects.save(document=excel_file)
@@ -41,25 +42,20 @@ def parse_excel_file(request):
         if filename.endswith('.xlsx'):
             file_name = os.path.join(directory, filename)
             try:
-                df = pd.read_excel(f'{file_name}', usecols="B:G", encoding='utf-8')
-                data = df.dropna(axis=0, how="any")
-                data.columns = data.iloc[0]
-                data2 = data.iloc[1:, ].reindex()
-                nrows = 10
-                data2.columns = data2.columns.map(lambda x: x.replace('\n', ''))
-                data2.columns = ["sector", "budget", "allocation", "total_allocation", "balance", "percentage"]
-                data2.drop(["percentage"], axis=1, inplace=True)
-                final_data = data2.to_dict(orient="records")
+                df = pd.read_excel(file_name, encoding='utf-8')
+                data = df.dropna(axis=0, how='any')
+                data.columns = data.columns.map(lambda x: str(x))
+                data.columns = data.columns.map(lambda x: x.replace('\n', ''))
+                final_data = data.to_dict(orient='records')
                 clear_directory()
                 return render(request, 'result.html', {'final_data': final_data})
 
             except KeyError:
-                messages.error(request, 'Error! Operation Failed.')
+                return render(request, 'result.html', messages.error(request, 'Error! Operation Failed.'))
         else:
-            messages.error(request, 'Error! No excel file found.')
+            return render(request, 'result.html', messages.error(request, 'Error! No excel file found.'))
 
 
-@api_view(['POST', ])
 def excel_parse_to_csv(request):
     file = request.FILES.get('file')
     filename = file.name
@@ -88,8 +84,8 @@ def excel_parse_to_csv(request):
     except KeyError:
         messages.error(request, 'Error! Operation Failed.')
 
-@api_view(['POST', ])
-def excel_to_pdf(request):
+
+def excel_parse_to_pdf(request):
     file = request.FILES.get('file')
     filename = file.name
     pdf_file_name = filename[-4:]
@@ -102,7 +98,7 @@ def excel_to_pdf(request):
         app.Interactive = False
         app.visible = False
         Workbook = app.Workbooks.Open(file_path)
-        converted_file = Workbook.ActiveSheet.ExportAsFixedFormat(0,pdfpath)
+        converted_file = Workbook.ActiveSheet.ExportAsFixedFormat(0, pdfpath)
         Workbook.Close()
 
         return Response(request)
