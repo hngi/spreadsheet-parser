@@ -24,7 +24,7 @@ def cdn_upload(request):
             # form.save()
     else:
         form = CDNUploadForm()
-    return render(request, 'upload.html', {'form': form})
+    return render(request, 'cdn_upload.html', {'form': form})
 
 
 def cdn_parse(request):
