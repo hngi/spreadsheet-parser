@@ -10,6 +10,8 @@ from .delete_script import clear_directory
 from django.contrib import messages
 from win32com import client
 import win32api
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 
 
 # Create your views here.
@@ -17,17 +19,19 @@ import win32api
 
 def index(request):
     excel_upload = ExcelUpload.objects.all()
-    return render(request, 'index.html', {'excel_upload': excel_upload})
-
+    return render(request, 'landing_page.html', {'excel_upload': excel_upload})
 
 def form_upload(request):
     if request.method == 'POST':
-        form = ExcelUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-    else:
-        form = ExcelUploadForm()
-    return render(request, 'excel_upload.html', {'form': form})
+        myfile = request.FILES['myfile']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+        print(uploaded_file_url)
+
+        # return render(request, 'file_upload.html',{'uploaded_file_url':uploaded_file_url})
+    
+    return render(request, 'file_upload.html')
 
 
 def parse_excel_file(request):
