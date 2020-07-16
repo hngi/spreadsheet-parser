@@ -48,6 +48,7 @@
             <div class="container">
                 <div class="row mb-lg-5 pb-lg-5">
                     <div class="col-lg-8 mx-3 mx-lg-auto pt-lg-4 mb-lg-5">
+                        
                         <form method = "post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <label for="userFile" class="display-5 custom-label mb-md-3">Upload Excel file</label>
@@ -62,8 +63,15 @@
                                         class="img-fluid mt-2 mt-xl-1 ml-md-1 ml-lg-0 mx-xl-2" />
                                 </button>
                             </div>
-                            <button class="btn btn-dark py-2 custom-button mt-4 mb-5" type = "submit">
-                                PARSE
+                           <a href="{{path}}">
+                            <button  class="btn btn-dark py-2 custom-button mt-4 mb-5" type = "submit">
+                                PARSE TO JSON
+                            </button></a>
+                            <button  class="btn btn-dark py-2 custom-button mt-4 mb-5 " type = "submit">
+                                PARSE TO CSV
+                            </button>
+                            <button  class="btn btn-dark py-2 custom-button mt-4 mb-5" type = "submit">
+                                PARSE TO PDF
                             </button>
                             
 
