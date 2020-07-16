@@ -14,13 +14,9 @@ urlpatterns = [
     path('linkupload/', cdn_views.cdn_upload, name= "linkupload"),
    # path('resultshow/', cdn_views.excel_parse, name='result')
     path('', views.index, name='index'),
-  #  path('file_upload/', views.form_upload, name='file-upload'),
-   # path('json_parser/', views.excel_parse_to_csv, name='json-parser'),
-    # path('exceltopdf/', views.excel_to_pdf),
+    path('json_parser/', views.excel_parse_to_json, name='json-parser'),
     path('', views.index, name='home'),
     path('index/', cdn_views.cdn_parse, name='index'),
- #   path('excel_to_csv/', views.excel_parse_to_csv),
- #   path('exceltopdf/', views.excel_to_pdf),
     path('upload/', views.form_upload, name='models_form_upload'),
     path('linkupload/', cdn_views.cdn_upload, name= "linkupload"),
     # path('resultshow/', cdn_views.excel_parse, name='result')

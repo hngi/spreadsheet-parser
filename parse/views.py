@@ -27,38 +27,40 @@ def form_upload(request):
         fs = FileSystemStorage(location = 'media/upload')
         filename = fs.save(myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
-        return redirect("parse:excel")
+        if 'csv' in request.POST:
+            return redirect("parse:excel")
+            
+        elif 'json' in request.POST:
+            return redirect("parse:json-parser")
+
         # return render(request, 'file_upload.html',{'uploaded_file_url':uploaded_file_url})
     elif request.method == "GET":
         return render(request, "file_upload.html")
 
 
 def excel_parse_to_json(request):
-    if request.POST.get('json'):
-        directory = os.path.join(BASE_DIR, r'media\upload')
+    # if request.POST.get('json'):
+    directory = os.path.join(BASE_DIR, r'media\upload')
 
-        for file in os.listdir(directory):
-            filename = os.fsdecode(file)
-
-            
-            
-        try:
-            if filename.endswith('.xlsx'):
-                file_name = os.path.join(directory, filename)
-                df = pd.read_excel(file_name, encoding='utf-8')
-                data = df.dropna(axis=0, how='any')
-                data.columns = data.columns.map(lambda x: str(x))
-                data.columns = data.columns.map(lambda x: x.replace('\n', ''))
-                final_data = data.to_dict(orient='records')
-                path2 = f"media/user/test.json"
-                with open(path2, 'w') as fp:
-                    json.dump(final_data,fp)
-                return render(request, 'result.html', {'final_data': final_data})
-
-            else:
-                return render(request, 'result.html', messages.error(request, 'Error! No excel file found.'))
-        except KeyError:
+    for file in os.listdir(directory):
+        filename = os.fsdecode(file)
+    try:
+        if filename.endswith('.xlsx'):
+            file_name = os.path.join(directory, filename)
+            df = pd.read_excel(file_name, encoding='utf-8')
+            os.remove(file_name)
+            data = df.dropna(axis=0, how='any')
+            data.columns = data.columns.map(lambda x: str(x))
+            data.columns = data.columns.map(lambda x: x.replace('\n', ''))
+            final_data = data.to_dict(orient='records')
+            path2 = f"media/user/test.json"
+            with open(path2, 'w') as fp:
+                json.dump(final_data,fp)
+            return render(request, 'download.html', {'final_data': final_data})
+        else:
             return render(request, 'result.html', messages.error(request, 'Error! No excel file found.'))
+    except KeyError:
+        return render(request, 'result.html', messages.error(request, 'Error! No excel file found.'))
 
 
 def excel_parse_to_csv(request):
