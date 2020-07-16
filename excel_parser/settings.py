@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'drf_yasg',
     'parse',
     'rest_framework',
-    'pdf',
 ]
 
 MIDDLEWARE = [
