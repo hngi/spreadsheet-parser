@@ -1,59 +1,41 @@
 import os
+import json
 import pandas as pd
+from dotenv import load_dotenv
+from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.contrib import messages
-from rest_framework.decorators import api_view
 from rest_framework import status
-from .forms import LinkUploadForm
-
+from .permissions import IsOwnerOrReadOnly
+from rest_framework_jwt.settings import api_settings
 
 # Create your views here.
-@api_view(['POST'])
-def link_upload(request):
-    global file_name
-    if request.method == 'POST':
-        form = LinkUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            text = form.cleaned_data['link']
-            for file in os.listdir(text):
-                filename = os.fsdecode(file)
-                if filename.endswith('.xlsx'):
-                    file_name = os.path.join(text, filename)
-            # form.save()
-
-    else:
-        form = LinkUploadForm()
-    return Response(form, status=status.HTTP_200_OK)
 
 
-@api_view(['POST', ])
-def excel_parse(request):
-    file_path = request.data.get('file_path')
-    # print(file_path, request.data)
+payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+encode_handler = api_settings.JWT_ENCODE_HANDLER
 
-    try:
-        # reading the excel file
-        df = pd.read_excel(file_path, encoding='utf-8')
-
-        # Dropping the unnecessary columns
-        data = df.dropna(axis=0, how="any")
-        # data.columns = data.iloc[0]
-        # data2 = data.iloc[1:, ].reindex()
-        # data3 = df.book.nrows
-        nrows = 10
-
-        # here is month, the variable in which the month is stored in
-        # month = data2.columns[2]
-        data.columns = data.columns.map(lambda x: str(x))
-        data.columns = data.columns.map(lambda x: x.replace('\n', ''))
-
-        # we don't need percentage, dropping it
-        # data2.drop(["percentage"], axis=1, inplace=True)
-        final_data = data.to_dict(orient="records")
-        return Response(final_data, status= status.HTTP_200_OK)
-
-    except KeyError:
-        messages.error(request, 'Error! Operation Failed.')
+load_dotenv()
 
 
+class ExcelAPIView(APIView):
+    permission_classes = [IsOwnerOrReadOnly]
 
+    def post(self, request):
+        # print('.>>>>>', request.GET.get('q', None))
+        api_key = os.getenv('API_KEY')
+        user_api_key = request.data.get('API_KEY')
+        if api_key == user_api_key:
+            file_path = request.data.get('file_path')
+            if file_path:
+                df = pd.read_excel(file_path, encoding='utf-8')
+                data = df.dropna(axis=0, how='any')
+                data.columns = data.columns.map(lambda x: str(x))
+                data.columns = data.columns.map(lambda x: x.replace('\n', ''))
+                final_data = data.to_dict(orient='records')
+
+                return Response(json.loads(json.dumps(final_data)), status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'file path can not be empty'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({'error': 'you are not authorized to perform this action.'},
+                            status=status.HTTP_401_UNAUTHORIZED)
