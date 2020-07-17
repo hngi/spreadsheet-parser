@@ -67,7 +67,7 @@ def excel_parse_to_csv(request):
         file_path = f'media/user/{filename}'
         # reading the excel file
         df = pd.read_excel(file_path, encoding='utf-8')
-
+        os.remove(file_path)
         # Dropping the unnecessary columns
         data = df.dropna(axis=0, how="any")
 
