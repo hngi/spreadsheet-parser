@@ -15,10 +15,13 @@
                         <img src="/static/img/landingPage-image.svg" class="img-fluid d-block mx-auto" alt="img">
                     </div>
                     <div class="col-lg-12 px-0 text-center my-5">
-                        <a href="{% url 'parse:models_form_upload' %}" class="btn btn-dark py-2 custom-button mb-5 mx-3">
-                                EXCEL CONVERSION
+                        <a href="{% url 'parse:linkupload' %}" class="btn btn-dark py-2 custom-button mb-5 mx-3">
+                                EXCEL CONVERSION WITH LINK
                         </a>
-                        <a href="#" class="btn btn-dark py-2 custom-button mb-5 mx-3">
+                        <a href="{% url 'parse:models_form_upload' %}" class="btn btn-dark py-2 custom-button mb-5 mx-3">
+                            EXCEL CONVERSION WITH FILE
+                    </a>
+                        <a href="{% url 'parse:models_form_upload' %}" class="btn btn-dark py-2 custom-button mb-5 mx-3">
                                 API
                         </a>
                     </div>
