@@ -144,6 +144,13 @@ main {
 .border-radius-0 {
   border-radius: 0;
 }
+p.landing-text {
+  font-family: "Poppins", sans-serif;
+  color: #5a5656;
+  font-size: min(10vw, 52px);;
+  font-weight: bold;
+  /* line-height: 85px; */
+}
 @media (max-width: 576px) {
   .card-head {
     font-size: 18px;
@@ -176,6 +183,9 @@ main {
   .input-file-container .file-input {
     font-size: 22px;
   }
+#ooh{
+    font-size: 32px;
+ }
 }
 @media (min-width: 768px) {
   .endpoint-btn {

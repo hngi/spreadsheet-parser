@@ -3,83 +3,108 @@ import pandas as pd
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import render, redirect
-from .forms import ExcelUploadForm
 from excel_parser.settings import BASE_DIR
-from .models import ExcelUpload
-from .delete_script import clear_directory
 from django.contrib import messages
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+import json
+import time
+from django.http import HttpResponse
 
 # Create your views here.
 
-
+#landing page view
+def about(request):
+    return render(request, "about_us.html")
 def index(request):
-    excel_upload = ExcelUpload.objects.all()
-    return render(request, 'index.html', {'excel_upload': excel_upload})
+  #  excel_upload = ExcelUpload.objects.all()
+    return render(request, 'landing_page.html')
 
-
+#view for form upload, it collects the file from the form and save temporarily to media/upload
 def form_upload(request):
+
     if request.method == 'POST':
-        form = ExcelUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-    else:
-        form = ExcelUploadForm()
-    return render(request, 'excel_upload.html', {'form': form})
+        myfile = request.FILES['myfile']
+        fs = FileSystemStorage(location = 'media/upload')
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+        if 'csv' in request.POST:
+            return redirect("parse:excel")  
+        elif 'json' in request.POST:
+            return redirect("parse:json-parser")
 
+        # return render(request, 'file_upload.html',{'uploaded_file_url':uploaded_file_url})
+    elif request.method == "GET":
+        return render(request, "file_upload.html")
 
-def parse_excel_file(request):
-    excel_file = request.FILES.get("file")
-    excel_file_name = excel_file.name
-    ExcelUpload.objects.save(document=excel_file)
-
-    directory = os.path.join(BASE_DIR, 'media/user')
+# view for parsing the excel file into json and returning the file for download
+def excel_parse_to_json(request):
+    # if request.POST.get('json'):
+    start = time.perf_counter()
+    directory = os.path.join(BASE_DIR, r'media\upload')
+    print('bobobobo')
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
+    try:
         if filename.endswith('.xlsx'):
             file_name = os.path.join(directory, filename)
-            try:
-                df = pd.read_excel(f'{file_name}', usecols="B:G", encoding='utf-8')
-                data = df.dropna(axis=0, how="any")
-                data.columns = data.iloc[0]
-                data2 = data.iloc[1:, ].reindex()
-                nrows = 10
-                data2.columns = data2.columns.map(lambda x: x.replace('\n', ''))
-                data2.columns = ["sector", "budget", "allocation", "total_allocation", "balance", "percentage"]
-                data2.drop(["percentage"], axis=1, inplace=True)
-                final_data = data2.to_dict(orient="records")
-                clear_directory()
-                return render(request, 'result.html', {'final_data': final_data})
-
-            except KeyError:
-                messages.error(request, 'Error! Operation Failed.')
+            df = pd.read_excel(file_name, encoding='utf-8')
+            os.remove(file_name)
+            data = df.dropna(axis=0, how='any')
+            data.columns = data.columns.map(lambda x: str(x))
+            data.columns = data.columns.map(lambda x: x.replace('\n', ''))
+            final_data = data.to_dict(orient='records')
+            path2 = f"media/user/test.json"
+            path3 =f"user/test.json" 
+            with open(path2, 'w') as fp:
+                json.dump(final_data,fp)
+            #return render(request, 'download.html', {'final_data': final_data})
+            filep = os.path.join(settings.MEDIA_ROOT, path3)
+            if os.path.exists(filep):
+                with open(filep,'rb') as fh:
+                    response = HttpResponse(fh.read(), content_type='application/force-download')
+                    response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filep)
+                    stop = time.perf_counter()
+                    total_time = stop - start
+                    print('helo', total_time)
+                    response['time'] = total_time
+                    return render(response, 'file_upload.html', {'time':'ff'})
         else:
-            messages.error(request, 'Error! No excel file found.')
+            return render(request, 'results.html', messages.error(request, 'Error! No excel file found.'))      
+    except KeyError:
+        return render(request, 'results.html', messages.error(request, 'Holloa! Something went wrong'))
 
-@api_view(['POST', ])
+# view for parsing the excel file into csv and returning the file for download
 def excel_parse_to_csv(request):
-    file = request.FILES.get('file')
-    filename = file.name
-    ExcelUpload.objects.create(document=file)
-    # file_path = request.data.get('file_path')
-    # print(file_path, request.data)
+    # if request.POST.get('csv'):
+    directory = os.path.join(BASE_DIR, r'media\upload')
+    for file in os.listdir(directory):
+        filename = os.fsdecode(file)
 
     try:
-        file_path = f'media/user/{filename}'
-        # reading the excel file
-        df = pd.read_excel(file_path, encoding='utf-8')
-        os.remove(file_path)
-        # Dropping the unnecessary columns
-        data = df.dropna(axis=0, how="any")
-
-        # here is month, the variable in which the month is stored in
-        # month = data2.columns[2]
-        data.columns = data.columns.map(lambda x: str(x))
-        # data.columns = data.columns.map(lambda x: x.replace('\n', ''))
-
-        # we don't need percentage, dropping it
-        # data2.drop(["percentage"], axis=1, inplace=True)
-        result = data.to_csv(index=False)
-        return Response(result)
-
+        if filename.endswith('.xlsx'):
+            file_name = os.path.join(directory, filename)
+            file_path = f'media/upload/{filename}'
+            df = pd.read_excel(file_path, encoding='utf-8')
+            os.remove(file_path)
+            data = df.dropna(axis=0, how="any")
+            data.columns = data.columns.map(lambda x: str(x))
+            path = f"media/user/test.csv"
+            data.to_csv(path, index=False)
+            path3 =f"user/test.csv"
+            filep = os.path.join(settings.MEDIA_ROOT, path3)
+            if os.path.exists(filep):
+                with open(filep,'rb') as fh:
+                    response = HttpResponse(fh.read(), content_type='application/force-download')
+                    response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filep)
+                    return response
+        else:
+            return render(request, 'file_upload.html', messages.error(request, 'Error! No excel file found.'))
+        
     except KeyError:
-        messages.error(request, 'Error! Operation Failed.')
+        messages.error(request, "Operation Failed")
+
+
+    # except KeyError:
+    #     messages.error(request, "Operation Failed")
+
