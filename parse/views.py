@@ -14,7 +14,7 @@ from django.http import HttpResponse
 
 #landing page view
 def about(request):
-    return render(request, "abous_us.html")
+    return render(request, "about_us.html")
 def index(request):
   #  excel_upload = ExcelUpload.objects.all()
     return render(request, 'landing_page.html')
