@@ -69,8 +69,6 @@ def excel_parse_to_json(request):
                 with open(filep,'rb') as fh:
                     response = HttpResponse(fh.read(), content_type='application/force-download')
                     response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filep)
-                    response.write(filep.read())
-                    os.remove(filep)
                 return response
                             
         else:
