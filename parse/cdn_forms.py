@@ -11,7 +11,7 @@ from .models import CDNUpload
 class CDNUploadForm(forms.Form):
     class Meta:
         model = CDNUpload
-        widget = forms.TextInput(
+        link = forms.TextInput(
             attrs={
                     "position": "absolute;",
                     "width": "755px;",
