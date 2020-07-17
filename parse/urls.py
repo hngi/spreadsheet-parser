@@ -6,13 +6,11 @@ app_name = 'parse'
 
 urlpatterns = [
     path('', views.index, name='home'),
-     path('about/', views.about, name='about'),
+    path('about/', views.about, name='about'),
     path('excel_to_csv/', views.excel_parse_to_csv, name = "excel"),
     path('upload/', views.form_upload, name='models_form_upload'),
     path('linkupload/', cdn_views.cdn_upload, name= "linkupload"),
-    # path('', views.index, name='index'),
     path('json_parser/', views.excel_parse_to_json, name='json-parser'),
-   # path('index/', cdn_views.cdn_json_parse, name='index'),
-# path('resultshow/', cdn_views.excel_parse, name='result')
+
   
 ]
