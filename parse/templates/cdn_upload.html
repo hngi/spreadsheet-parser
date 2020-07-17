@@ -37,12 +37,15 @@
         <div class="content-split mb-5 mt-2">
 
         </div>
+         <!--  -->
         <div class="container">
             <div class="row mb-lg-5 pb-lg-5">
                 <div class="col-lg-8 mx-3 mx-lg-auto pt-lg-5 mb-lg-5">
-                    <form>
-                        <input class="form-control custom-input mb-lg-4">
-                        <button class="btn btn-dark px-4 py-2 custom-button mt-4" type="submit">PARSE</button>
+                    <form  method = "post" enctype="multipart/form-data"> 
+                        {% csrf_token %}
+                        <input class="form-control custom-input mb-lg-4" id="ohh" name = "link">
+                    <button class="btn btn-dark px-4 py-2 custom-button mt-4" type="submit" name="jsonlink">PARSE FOR JSON</button>
+                    <button class="btn btn-dark px-4 py-2 custom-button mt-4" type="submit" name="csvlink">PARSE FOR CSV</button>
                     </form>
                 </div>
             </div>

@@ -183,6 +183,9 @@ p.landing-text {
   .input-file-container .file-input {
     font-size: 22px;
   }
+#ooh{
+    font-size: 32px;
+ }
 }
 @media (min-width: 768px) {
   .endpoint-btn {

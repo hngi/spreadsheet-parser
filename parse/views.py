@@ -9,95 +9,136 @@ from win32com import client
 import win32api
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-
+import json
+# import pythoncom
+# import pdfkit
+# from pdfrw import PdfWriter
+#from weasyprint import HTML,CSS
+from django.http import HttpResponse
 
 # Create your views here.
 
+#landing page view
 
 def index(request):
-    pass
-    return render(request, 'index.html')
+  #  excel_upload = ExcelUpload.objects.all()
+    return render(request, 'landing_page.html')
 
-
-# def home(request):
-#     excel_upload = ExcelUpload.objects.all()
-#     return render(request, 'excel.html', {'excel_upload': excel_upload})
-
-
+#view for form upload, it collects the file from the form and save temporarily to media/upload
 def form_upload(request):
 
     if request.method == 'POST':
         myfile = request.FILES['myfile']
-        fs = FileSystemStorage()
+        fs = FileSystemStorage(location = 'media/upload')
         filename = fs.save(myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
-        print(uploaded_file_url)
+        if 'csv' in request.POST:
+            return redirect("parse:excel")  
+        elif 'json' in request.POST:
+            return redirect("parse:json-parser")
+        elif 'pdf' in request.POST:
+            return redirect("parse:pdf")
 
         # return render(request, 'file_upload.html',{'uploaded_file_url':uploaded_file_url})
-    return render(request, 'file_upload.html')
+    elif request.method == "GET":
+        return render(request, "file_upload.html")
 
-
+# view for parsing the excel file into json and returning the file for download
 def excel_parse_to_json(request):
+    # if request.POST.get('json'):
     directory = os.path.join(BASE_DIR, r'media\upload')
 
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
-
+    try:
         if filename.endswith('.xlsx'):
             file_name = os.path.join(directory, filename)
             df = pd.read_excel(file_name, encoding='utf-8')
+            os.remove(file_name)
             data = df.dropna(axis=0, how='any')
             data.columns = data.columns.map(lambda x: str(x))
             data.columns = data.columns.map(lambda x: x.replace('\n', ''))
             final_data = data.to_dict(orient='records')
-            return render(request, 'result.html', {'final_data': final_data})
+            path2 = f"media/user/test.json"
+            path3 =f"user/test.json" 
+            with open(path2, 'w') as fp:
+                json.dump(final_data,fp)
+            #return render(request, 'download.html', {'final_data': final_data})
+            filep = os.path.join(settings.MEDIA_ROOT, path3)
+            if os.path.exists(filep):
+                with open(filep,'rb') as fh:
+                    response = HttpResponse(fh.read(), content_type='application/force-download')
+                    response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filep)
+                    return response
+        else:
+            return render(request, 'results.html', messages.error(request, 'Error! No excel file found.'))      
+    except KeyError:
+        return render(request, 'results.html', messages.error(request, 'Holloa! Something went wrong'))
+
+# view for parsing the excel file into csv and returning the file for download
+def excel_parse_to_csv(request):
+    # if request.POST.get('csv'):
+    directory = os.path.join(BASE_DIR, r'media\upload')
+
+    for file in os.listdir(directory):
+        filename = os.fsdecode(file)
+
+    try:
+        if filename.endswith('.xlsx'):
+            file_name = os.path.join(directory, filename)
+            file_path = f'media/upload/{filename}'
+            df = pd.read_excel(file_path, encoding='utf-8')
+            os.remove(file_path)
+            data = df.dropna(axis=0, how="any")
+            data.columns = data.columns.map(lambda x: str(x))
+            path = f"media/user/test.csv"
+            data.to_csv(path, index=False)
+            path3 =f"user/test.csv"
+            filep = os.path.join(settings.MEDIA_ROOT, path3)
+            if os.path.exists(filep):
+                with open(filep,'rb') as fh:
+                    response = HttpResponse(fh.read(), content_type='application/force-download')
+                    response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filep)
+                    return response
+        else:
+            return render(request, 'file_upload.html', messages.error(request, 'Error! No excel file found.'))
+        
+    except KeyError:
+        return render(request, 'file_upload.html', messages.error(request, 'Holloa! Something went wrong'))
+
+# view for parsing the excel file into pdf and returning the file for download
+def excel_to_pdf(request):
+    directory = os.path.join(BASE_DIR, r'media\upload')
+    for file in os.listdir(directory):
+        filename = os.fsdecode(file)
+
+    try:
+        if filename.endswith('.xlsx'):
+            file_name = os.path.join(directory, filename)
+        
+            # pdfpath = 'media/user/test.pdf'
+            # df = pd.read_excel(file_name)
+            # path = f"media/user/test.html"
+            # poo = df.to_dict()
+            # print(poo)
+            # y = PdfWriter()
+            # y.addpage(poo())
+            # y.write(pdfpath)
+            # template = get_template(poo)
+            # pdf_file = HTML(string=template).write_pdf()
+            # response = HTTPResponse(pdf_file,content_type = 'application/pdf')
+            # response['Content-Disposition'] = 'filename=test.pdf'
+            # return response
+            # pdfkit.from_file(path,pdfpath)
+            #os.remove(file_name)
+            # converted_file = Workbook.ActiveSheet.ExportAsFixedFormat(0,pdfpath)
+            # Workbook.Close()
+            # pythoncom.CoUnitialize()
+            # app.Exit()
+
+            return render(request, "download.html", {'pdfpath':pdfpath})
 
         else:
             return render(request, 'result.html', messages.error(request, 'Error! No excel file found.'))
-
-
-def excel_parse_to_csv(request):
-    directory = os.path.join(BASE_DIR, r'media\upload')
-
-    for file in os.listdir(directory):
-        filename = os.fsdecode(file)
-
-        if filename.endswith('.xlsx'):
-            file_name = os.path.join(directory, filename)
-
-    try:
-        file_path = f'media/upload/{filename}'
-        df = pd.read_excel(file_path, encoding='utf-8')
-        os.remove(file_path)
-        data = df.dropna(axis=0, how="any")
-        data.columns = data.columns.map(lambda x: str(x))
-        result = data.to_csv(index=False)
-        return Response(result)
-
     except KeyError:
-        return render(request, 'result.html', messages.error(request, 'Error! No excel file found.'))
-
-
-def excel_parse_to_pdf(request):
-    directory = os.path.join(BASE_DIR, r'media\upload')
-
-    for file in os.listdir(directory):
-        filename = os.fsdecode(file)
-
-        if filename.endswith('.xlsx'):
-            file_name = os.path.join(directory, filename)
-
-    try:
-        file_path = f'media/upload/{file_name}'
-        pdf_path = f'media/upload/{file_name}.pdf'
-        app = client.DispatchEx("Excel.Application")
-        app.Interactive = False
-        app.visible = False
-        Workbook = app.Workbooks.Open(file_path)
-        converted_file = Workbook.ActiveSheet.ExportAsFixedFormat(0, pdf_path)
-        Workbook.Close()
-
-        return Response(request)
-
-    except KeyError:
-        return render(request, 'result.html', messages.error(request, 'Error! No excel file found.'))
+        messages.error(request, "Operation Failed")
