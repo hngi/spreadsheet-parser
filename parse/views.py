@@ -10,19 +10,15 @@ from django.core.files.storage import FileSystemStorage
 import json
 from django.http import HttpResponse
 from pathlib import Path
-
 # Create your views here.
-
 #landing page view
 def about(request):
     return render(request, "about_us.html")
 def index(request):
   #  excel_upload = ExcelUpload.objects.all()
     return render(request, 'landing_page.html')
-
 #view for form upload, it collects the file from the form and save temporarily to media/upload
 def form_upload(request):
-
     if request.method == 'POST':
         myfile = request.FILES['myfile']
         fs = FileSystemStorage(location = 'media/upload')
@@ -32,16 +28,13 @@ def form_upload(request):
             return redirect("parse:excel")  
         elif 'json' in request.POST:
             return redirect("parse:json-parser")
-
         # return render(request, 'file_upload.html',{'uploaded_file_url':uploaded_file_url})
     elif request.method == "GET":
         return render(request, "file_upload.html")
-
 # view for parsing the excel file into json and returning the file for download
 def excel_parse_to_json(request):
     # if request.POST.get('json'):
     directory = os.path.join(BASE_DIR, r'media\upload')
-
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
     try:
@@ -67,18 +60,17 @@ def excel_parse_to_json(request):
                     response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filep)
                     return response
         else:
-            return render(request, 'results.html', messages.error(request, 'Error! No excel file found.'))      
+            error = 'Ooops!! An error occurred. Please input an excel file(.xlsx).'
+            return render(request, 'file_upload.html', {'error':error})      
     except KeyError:
-        return render(request, 'results.html', messages.error(request, 'Holloa! Something went wrong'))
-
+            error = 'Ooops!! Something went wrong in reading the contents of this excel file...'
+            return render(request, 'file_upload.html', {'error':error})  
 # view for parsing the excel file into csv and returning the file for download
 def excel_parse_to_csv(request):
     # if request.POST.get('csv'):
     directory = os.path.join(BASE_DIR, r'media\upload')
-
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
-
     try:
         if filename.endswith('.xlsx'):
             file_name = os.path.join(directory, filename)
@@ -99,11 +91,16 @@ def excel_parse_to_csv(request):
                     response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filep)
                     return response
         else:
-            return render(request, 'file_upload.html', messages.error(request, 'Error! No excel file found.'))
-        
+            error = 'Ooops!! An error occurred. Please input an excel file(.xlsx).'
+            return render(request, 'file_upload.html', {'error':error})      
     except KeyError:
-        messages.error(request, "Operation Failed")
-
-
+            error = 'Ooops!! Something went wrong in reading the contents of this excel file...'
+            return render(request, 'file_upload.html', {'error':error})  
     # except KeyError:
     #     messages.error(request, "Operation Failed")
+
+
+
+
+
+
