@@ -2,7 +2,7 @@ from django.urls import path
 from .views import ExcelAPIView
 
 
-app_name = 'parse_api'
+app_name = 'excelApi'
 
 
 urlpatterns = [

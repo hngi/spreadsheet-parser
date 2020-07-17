@@ -42,10 +42,11 @@ def excel_parse_to_json(request):
     # if request.POST.get('json'):
     start = time.perf_counter()
     directory = os.path.join(BASE_DIR, r'media\upload')
-    print('bobobobo')
+
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
     try:
+        print(filename)
         if filename.endswith('.xlsx'):
             file_name = os.path.join(directory, filename)
             df = pd.read_excel(file_name, encoding='utf-8')
@@ -64,15 +65,13 @@ def excel_parse_to_json(request):
                 with open(filep,'rb') as fh:
                     response = HttpResponse(fh.read(), content_type='application/force-download')
                     response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filep)
-                    stop = time.perf_counter()
-                    total_time = stop - start
-                    print('helo', total_time)
-                    response['time'] = total_time
-                    return render(response, 'file_upload.html', {'time':'ff'})
+                    return response
         else:
-            return render(request, 'results.html', messages.error(request, 'Error! No excel file found.'))      
+            error = 'Ooops!! An error occurred. Please input an excel file(.xlsx).'
+            return render(request, 'file_upload.html', {'error':error})      
     except KeyError:
-        return render(request, 'results.html', messages.error(request, 'Holloa! Something went wrong'))
+            error = 'Ooops!! Something went wrong in reading the contents of this excel file...'
+            return render(request, 'file_upload.html', {'error':error})   
 
 # view for parsing the excel file into csv and returning the file for download
 def excel_parse_to_csv(request):
@@ -99,12 +98,11 @@ def excel_parse_to_csv(request):
                     response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filep)
                     return response
         else:
-            return render(request, 'file_upload.html', messages.error(request, 'Error! No excel file found.'))
-        
+            error = 'Ooops!! An error occurred. Please input an excel file(.xlsx).'
+            return render(request, 'file_upload.html', {'error':error})      
     except KeyError:
-        messages.error(request, "Operation Failed")
+            error = 'Ooops!! An error occurred. Please input an excel file(.xlsx).'
+            return render(request, 'file_upload.html', {'error':error})
 
 
-    # except KeyError:
-    #     messages.error(request, "Operation Failed")
 
