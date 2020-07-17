@@ -10,19 +10,21 @@ import win32api
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import json
-import pythoncom
-import pdfkit
+# import pythoncom
+# import pdfkit
+# from pdfrw import PdfWriter
 #from weasyprint import HTML,CSS
 from django.http import HttpResponse
 
 # Create your views here.
 
+#landing page view
 
 def index(request):
   #  excel_upload = ExcelUpload.objects.all()
     return render(request, 'landing_page.html')
 
-
+#view for form upload, it collects the file from the form and save temporarily to media/upload
 def form_upload(request):
 
     if request.method == 'POST':
@@ -41,7 +43,7 @@ def form_upload(request):
     elif request.method == "GET":
         return render(request, "file_upload.html")
 
-
+# view for parsing the excel file into json and returning the file for download
 def excel_parse_to_json(request):
     # if request.POST.get('json'):
     directory = os.path.join(BASE_DIR, r'media\upload')
@@ -73,7 +75,7 @@ def excel_parse_to_json(request):
     except KeyError:
         return render(request, 'results.html', messages.error(request, 'Holloa! Something went wrong'))
 
-
+# view for parsing the excel file into csv and returning the file for download
 def excel_parse_to_csv(request):
     # if request.POST.get('csv'):
     directory = os.path.join(BASE_DIR, r'media\upload')
@@ -104,7 +106,7 @@ def excel_parse_to_csv(request):
     except KeyError:
         return render(request, 'file_upload.html', messages.error(request, 'Holloa! Something went wrong'))
 
-
+# view for parsing the excel file into pdf and returning the file for download
 def excel_to_pdf(request):
     directory = os.path.join(BASE_DIR, r'media\upload')
     for file in os.listdir(directory):
@@ -114,10 +116,14 @@ def excel_to_pdf(request):
         if filename.endswith('.xlsx'):
             file_name = os.path.join(directory, filename)
         
-            pdfpath = 'media/user/test.pdf'
-            df = pd.read_excel(file_name)
-            path = f"media/user/test.html"
-            # poo = df.to_html(path)
+            # pdfpath = 'media/user/test.pdf'
+            # df = pd.read_excel(file_name)
+            # path = f"media/user/test.html"
+            # poo = df.to_dict()
+            # print(poo)
+            # y = PdfWriter()
+            # y.addpage(poo())
+            # y.write(pdfpath)
             # template = get_template(poo)
             # pdf_file = HTML(string=template).write_pdf()
             # response = HTTPResponse(pdf_file,content_type = 'application/pdf')

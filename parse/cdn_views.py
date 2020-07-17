@@ -2,7 +2,7 @@ import os
 import pandas as pd
 from django.shortcuts import render, redirect
 from django.contrib import messages
-#from .cdn_forms import CDNUploadForm
+from .cdn_forms import CDNUploadForm
 #from .models import CDNUpload
 
 

@@ -4,10 +4,10 @@ from django.db import models
 #
 # # Create your models here.
 #
-#
-# class CDNUpload(models.Model):
-#     link = models.CharField(max_length=2083)
-#     upload_at = models.DateTimeField(auto_now_add=True)
+
+class CDNUpload(models.Model):
+    link = models.CharField(max_length=2083)
+    upload_at = models.DateTimeField(auto_now_add=True)
 
 
 # class ExcelUpload(models.Model):
