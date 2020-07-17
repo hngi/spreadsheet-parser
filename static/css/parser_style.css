@@ -183,8 +183,9 @@ p.landing-text {
   .input-file-container .file-input {
     font-size: 22px;
   }
-#ooh{
-    font-size: 32px;
+  #ohh{
+    font-family: 'Poppins', sans-serif;
+    font-size: 32px !important;
  }
 }
 @media (min-width: 768px) {

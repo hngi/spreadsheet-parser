@@ -10,6 +10,7 @@ from django.core.files.storage import FileSystemStorage
 import json
 from django.http import HttpResponse
 from pathlib import Path
+from .delete_script import clear_download
 
 # Create your views here.
 
@@ -44,6 +45,7 @@ def excel_parse_to_json(request):
 
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
+       # print(file)
     try:
         if filename.endswith('.xlsx'):
             file_name = os.path.join(directory, filename)
@@ -62,9 +64,11 @@ def excel_parse_to_json(request):
             #return render(request, 'download.html', {'final_data': final_data})
             filep = os.path.join(settings.MEDIA_ROOT, path3)
             if os.path.exists(filep):
+                clear_download()
                 with open(filep,'rb') as fh:
                     response = HttpResponse(fh.read(), content_type='application/force-download')
                     response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filep)
+                    
                     return response
         else:
             return render(request, 'results.html', messages.error(request, 'Error! No excel file found.'))      
