@@ -5,21 +5,16 @@ from rest_framework.decorators import api_view
 from django.shortcuts import render, redirect
 from excel_parser.settings import BASE_DIR
 from django.contrib import messages
-from win32com import client
-import win32api
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import json
-# import pythoncom
-# import pdfkit
-# from pdfrw import PdfWriter
-#from weasyprint import HTML,CSS
 from django.http import HttpResponse
 
 # Create your views here.
 
 #landing page view
-
+def about(request):
+    return render(request, "about_us.html")
 def index(request):
   #  excel_upload = ExcelUpload.objects.all()
     return render(request, 'landing_page.html')
@@ -36,8 +31,6 @@ def form_upload(request):
             return redirect("parse:excel")  
         elif 'json' in request.POST:
             return redirect("parse:json-parser")
-        elif 'pdf' in request.POST:
-            return redirect("parse:pdf")
 
         # return render(request, 'file_upload.html',{'uploaded_file_url':uploaded_file_url})
     elif request.method == "GET":
@@ -104,41 +97,8 @@ def excel_parse_to_csv(request):
             return render(request, 'file_upload.html', messages.error(request, 'Error! No excel file found.'))
         
     except KeyError:
-        return render(request, 'file_upload.html', messages.error(request, 'Holloa! Something went wrong'))
-
-# view for parsing the excel file into pdf and returning the file for download
-def excel_to_pdf(request):
-    directory = os.path.join(BASE_DIR, r'media\upload')
-    for file in os.listdir(directory):
-        filename = os.fsdecode(file)
-
-    try:
-        if filename.endswith('.xlsx'):
-            file_name = os.path.join(directory, filename)
-        
-            # pdfpath = 'media/user/test.pdf'
-            # df = pd.read_excel(file_name)
-            # path = f"media/user/test.html"
-            # poo = df.to_dict()
-            # print(poo)
-            # y = PdfWriter()
-            # y.addpage(poo())
-            # y.write(pdfpath)
-            # template = get_template(poo)
-            # pdf_file = HTML(string=template).write_pdf()
-            # response = HTTPResponse(pdf_file,content_type = 'application/pdf')
-            # response['Content-Disposition'] = 'filename=test.pdf'
-            # return response
-            # pdfkit.from_file(path,pdfpath)
-            #os.remove(file_name)
-            # converted_file = Workbook.ActiveSheet.ExportAsFixedFormat(0,pdfpath)
-            # Workbook.Close()
-            # pythoncom.CoUnitialize()
-            # app.Exit()
-
-            return render(request, "download.html", {'pdfpath':pdfpath})
-
-        else:
-            return render(request, 'result.html', messages.error(request, 'Error! No excel file found.'))
-    except KeyError:
         messages.error(request, "Operation Failed")
+
+
+    # except KeyError:
+    #     messages.error(request, "Operation Failed")
