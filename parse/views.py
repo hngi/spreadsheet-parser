@@ -9,6 +9,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import json
 from django.http import HttpResponse
+from pathlib import Path
 
 # Create your views here.
 
@@ -47,15 +48,17 @@ def excel_parse_to_json(request):
         if filename.endswith('.xlsx'):
             file_name = os.path.join(directory, filename)
             df = pd.read_excel(file_name, encoding='utf-8')
+            p= Path(file_name)
+            realname = p.stem
             os.remove(file_name)
             data = df.dropna(axis=0, how='any')
             data.columns = data.columns.map(lambda x: str(x))
             data.columns = data.columns.map(lambda x: x.replace('\n', ''))
             final_data = data.to_dict(orient='records')
-            path2 = f"media/user/test.json"
-            path3 =f"user/test.json" 
+            path2 = f"media/user/{realname}.json"
+            path3 =f"user/{realname}.json" 
             with open(path2, 'w') as fp:
-                json.dump(final_data,fp)
+                json.dump(final_data, fp)
             #return render(request, 'download.html', {'final_data': final_data})
             filep = os.path.join(settings.MEDIA_ROOT, path3)
             if os.path.exists(filep):
@@ -81,12 +84,14 @@ def excel_parse_to_csv(request):
             file_name = os.path.join(directory, filename)
             file_path = f'media/upload/{filename}'
             df = pd.read_excel(file_path, encoding='utf-8')
+            p= Path(file_path)
+            realname = p.stem
             os.remove(file_path)
             data = df.dropna(axis=0, how="any")
             data.columns = data.columns.map(lambda x: str(x))
-            path = f"media/user/test.csv"
+            path = f"media/user/{realname}.csv"
             data.to_csv(path, index=False)
-            path3 =f"user/test.csv"
+            path3 =f"user/{realname}.csv"
             filep = os.path.join(settings.MEDIA_ROOT, path3)
             if os.path.exists(filep):
                 with open(filep,'rb') as fh:

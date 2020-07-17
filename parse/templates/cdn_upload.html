@@ -41,12 +41,19 @@
         <div class="container">
             <div class="row mb-lg-5 pb-lg-5">
                 <div class="col-lg-8 mx-3 mx-lg-auto pt-lg-5 mb-lg-5">
-                    <form  method = "post" enctype="multipart/form-data"> 
+                    <form  method = "post" enctype="multipart/form-data" id = "myform"> 
                         {% csrf_token %}
+                        <label for="ohh" class="display-5 custom-label mb-md-3">Paste Excel Link</label>
                         <input class="form-control custom-input mb-lg-4" id="ohh" name = "link">
-                    <button class="btn btn-dark px-4 py-2 custom-button mt-4" type="submit" name="jsonlink">PARSE FOR JSON</button>
+                    <button class="btn btn-dark px-4 py-2 custom-button mt-4" type="submit" name="jsonlink" id = "json">PARSE FOR JSON</button>
                     <button class="btn btn-dark px-4 py-2 custom-button mt-4" type="submit" name="csvlink">PARSE FOR CSV</button>
+                    
                     </form>
+                    <script>
+      $(window).load(function() {
+          $('form').children('input:not(#submit)').val('')
+      })
+                </script>
                 </div>
             </div>
         </div>
