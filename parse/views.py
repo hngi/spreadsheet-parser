@@ -62,9 +62,9 @@ def excel_parse_to_json(request):
                     response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filep)
                     os.remove(filep)
                     return response
-        else:
-            error = 'Ooops!! An error occurred. Please input an excel file(.xlsx).'
-            return render(request, 'file_upload.html', {'error':error})      
+            else:
+                error = 'Ooops!! An error occurred. Please input an excel file(.xlsx).'
+                return render(request, 'file_upload.html', {'error':error})      
     except KeyError:
             error = 'Ooops!! Something went wrong in reading the contents of this excel file...'
             return render(request, 'file_upload.html', {'error':error})  
