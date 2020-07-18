@@ -40,7 +40,9 @@ def form_upload(request):
 
 # view for parsing the excel file into json and returning the file for download
 def excel_parse_to_json(request):
+
     directory = os.path.join(BASE_DIR, f'media/upload')
+
     filename = ""
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
@@ -82,6 +84,7 @@ def excel_parse_to_json(request):
         # view for parsing the excel file into csv and returning the file for download
 def excel_parse_to_csv(request):
     directory = os.path.join(BASE_DIR, f'media/upload')
+
     filename = ""
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
