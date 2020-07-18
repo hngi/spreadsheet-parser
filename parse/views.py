@@ -39,7 +39,6 @@ def excel_parse_to_json(request):
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
        # print(file)
-<<<<<<< HEAD
     try:
         if filename.endswith('.xlsx'):
             file_name = os.path.join(directory, filename)
@@ -66,34 +65,7 @@ def excel_parse_to_json(request):
         else:
             error = 'Ooops!! An error occurred. Please input an excel file(.xlsx).'
             return render(request, 'file_upload.html', {'error':error})      
-=======
-        try:
-            if filename.endswith('.xlsx'):
-                file_name = os.path.join(directory, filename)
-                df = pd.read_excel(file_name, encoding='utf-8')
-                p= Path(file_name)
-                realname = p.stem
-                os.remove(file_name)
-                data = df.dropna(axis=0, how='any')
-                data.columns = data.columns.map(lambda x: str(x))
-                data.columns = data.columns.map(lambda x: x.replace('\n', ''))
-                final_data = data.to_dict(orient='records')
-                path2 = f"media/user/{realname}.json"
-                path3 =f"user/{realname}.json" 
-                with open(path2, 'w') as fp:
-                    json.dump(final_data, fp)
-                filep = os.path.join(settings.MEDIA_ROOT, path3)
-                if os.path.exists(filep):
-                    
-                    with open(filep,'rb') as fh:
-                        response = HttpResponse(fh.read(), content_type='application/force-download')
-                    response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filep)
-                    os.remove(filep)
-                    return response
-            else:
-                error = 'Ooops!! An error occurred. Please input an excel file(.xlsx).'
-                return render(request, 'file_upload.html', {'error':error})      
->>>>>>> 669003bb08c66f8e1d3408dd63a5e60dfced5358
+
     except KeyError:
             error = 'Ooops!! Something went wrong in reading the contents of this excel file...'
             return render(request, 'file_upload.html', {'error':error})  
