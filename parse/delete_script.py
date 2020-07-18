@@ -29,7 +29,7 @@ def clear_download():
     while True:
         time_list = []
         now = time.mktime(datetime.now().timetuple())
-        directory = os.path.join(BASE_DIR, 'media/download')
+        directory = os.path.join(BASE_DIR, 'media/user')
         for file in os.listdir(directory):
             file = os.path.join(directory, file)
             # get file creation/modification time
