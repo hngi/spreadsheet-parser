@@ -11,5 +11,7 @@ urlpatterns = [
     path('upload/', views.form_upload, name='models_form_upload'),
     path('linkupload/', cdn_views.cdn_upload, name= "linkupload"),
     path('json_parser/', views.excel_parse_to_json, name='json-parser'),
-  
+   # path('index/', cdn_views.cdn_json_parse, name='index'),
+# path('resultshow/', cdn_views.excel_parse, name='result')
+
 ]
