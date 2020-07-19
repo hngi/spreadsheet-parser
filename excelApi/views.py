@@ -76,9 +76,8 @@ class dailyAPIView(APIView):
                     daily_expenses = data2.to_dict(orient='records')
                     
                     ohh = json.dumps(daily_expenses)
-                    print(ohh)
                     real_data = json.loads(ohh)
-                    print(ahh)
+
                     return Response(real_data, status= status.HTTP_200_OK)
                 else:
                     return Response({'error': 'file path can not be empty'}, status=status.HTTP_404_NOT_FOUND)
