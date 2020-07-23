@@ -72,10 +72,30 @@ class ExcelAPIView(APIView):
                 col_to = request.data.get('col_to')
                 sheet = request.data.get("sheet")
                 try:
-                    if sheet == None:
-                        sheet = 0
                     if file_path and row_from and row_to:
                         data = pd.read_excel(file_path, sheet_name=sheet)
+                        if type(data) is dict:
+                            ano = pd.concat(((data[frame]) for frame in data.keys()),ignore_index=True)
+                            data1 = ano.dropna(axis=0, how='all', thresh=3)
+                            data2 = data1.dropna(axis=1, how='all')
+                            new = data2.loc[data2.isnull().mean(axis=1).lt(0.5)]
+                            new2 = new[new.columns[new.isnull().mean()<0.5]]
+
+                            if 'Unnamed: 2' in new2.columns:
+                                new_header = new2.iloc[0]
+                                new2.columns = new_header
+                                if "-" in new2.columns:
+                                    new_header = new2.iloc[1]
+                                    new2.columns = new_header
+                                new2 = new2[1:]
+                            new2 = new2.fillna('').reset_index(drop = True)
+                            new3 = new2.loc[row_from:row_to]
+                            new3 = new3.iloc[:,col_from:col_to]
+                            
+                            daily_expenses = new3.to_dict(orient='records')
+                            ohh = json.dumps(daily_expenses)
+                            real_data = json.loads(ohh)
+                            return Response(real_data, status= status.HTTP_200_OK)
                         data1 = data.dropna(axis=0, how='all', thresh=3)
                         data2 = data1.dropna(axis=1, how='all')
                         new = data2.loc[data.isnull().mean(axis=1).lt(0.5)]
@@ -91,7 +111,7 @@ class ExcelAPIView(APIView):
                         new2 = new2.fillna('').reset_index(drop = True)
                         new3 = new2.loc[row_from:row_to]
                         new3 = new3.iloc[:,col_from:col_to]
-                        print(new3)
+                        
                         daily_expenses = new3.to_dict(orient='records')
                         ohh = json.dumps(daily_expenses)
                         real_data = json.loads(ohh)
@@ -99,6 +119,29 @@ class ExcelAPIView(APIView):
 
                     elif file_path and row_from:
                         data = pd.read_excel(file_path, sheet_name=sheet)
+                        if type(data) is dict:
+                            ano = pd.concat(((data[frame]) for frame in data.keys()),ignore_index=True)
+                            data1 = ano.dropna(axis=0, how='all', thresh=3)
+                            data2 = data1.dropna(axis=1, how='all')
+                            new = data2.loc[data2.isnull().mean(axis=1).lt(0.5)]
+                            new2 = new[new.columns[new.isnull().mean()<0.5]]
+
+                            if 'Unnamed: 2' in new2.columns:
+                                new_header = new2.iloc[0]
+                                new2.columns = new_header
+                                if "-" in new2.columns:
+                                    new_header = new2.iloc[1]
+                                    new2.columns = new_header
+                                new2 = new2[1:]
+                            new2 = new2.fillna('').reset_index(drop = True)
+                            new3 = new2.loc[row_from:row_to]
+                            new3 = new3.iloc[:,col_from:col_to]
+                            
+                            daily_expenses = new3.to_dict(orient='records')
+                            print(daily_expenses)
+                            ohh = json.dumps(daily_expenses)
+                            real_data = json.loads(ohh)
+                            return Response(real_data, status= status.HTTP_200_OK)
                     
                         data1 = data.dropna(axis=0, how='all', thresh=3)
                         
@@ -123,6 +166,28 @@ class ExcelAPIView(APIView):
                         return Response(real_data2, status= status.HTTP_200_OK)
                     elif file_path:
                         data = pd.read_excel(file_path,sheet_name=sheet)
+                        if type(data) is dict:
+                            ano = pd.concat(((data[frame]) for frame in data.keys()),ignore_index=True)
+                            data1 = ano.dropna(axis=0, how='all', thresh=3)
+                            data2 = data1.dropna(axis=1, how='all')
+                            new = data2.loc[data2.isnull().mean(axis=1).lt(0.5)]
+                            new2 = new[new.columns[new.isnull().mean()<0.5]]
+
+                            if 'Unnamed: 2' in new2.columns:
+                                new_header = new2.iloc[0]
+                                new2.columns = new_header
+                                if "-" in new2.columns:
+                                    new_header = new2.iloc[1]
+                                    new2.columns = new_header
+                                new2 = new2[1:]
+                            new2 = new2.fillna('').reset_index(drop = True)
+                            new3 = new2.loc[row_from:row_to]
+                            new3 = new3.iloc[:,col_from:col_to]
+                            
+                            daily_expenses = new3.to_dict(orient='records')
+                            ohh = json.dumps(daily_expenses)
+                            real_data = json.loads(ohh)
+                            return Response(real_data, status= status.HTTP_200_OK)
                     
                         data1 = data.dropna(axis=0, how='all', thresh=3)
                         data2 = data1.dropna(axis=1, how='all')
@@ -130,7 +195,6 @@ class ExcelAPIView(APIView):
                         new = data2.loc[data.isnull().mean(axis=1).lt(0.5)]
                         new2 = new[new.columns[new.isnull().mean()<0.5]]
                         if 'Unnamed: 2' in new2.columns:
-
                             new_header = new2.iloc[0]
                             new2.columns = new_header
                             if "-" in new2.columns:
@@ -162,3 +226,5 @@ class ExcelAPIView(APIView):
 # {"file_path":"https://fgn-web-crawler.herokuapp.com/static/expense/2020/01_02_2020.xlsx","row_from":20,"row_to":22,"col_from":2,"col_to":4,"API_KEY":"whatiftheworldendstodayum"}
 #{"file_path":"https://drive.google.com/u/0/uc?id=1NSXTR1jaP_YUkpqeatMdyjHWwixoq2YP&export=download","API_KEY":"whatiftheworldendstodayum"}
 # {"file_path":"https://drive.google.com/u/0/uc?id=1NSXTR1jaP_YUkpqeatMdyjHWwixoq2YP&export=download","row_from":3,"row_to":6,"col_from":4,"col_to":5,"sheet":1,"API_KEY":"whatiftheworldendstodayum"}
+# {"file_path":"https://drive.google.com/u/0/uc?id=1NSXTR1jaP_YUkpqeatMdyjHWwixoq2YP&export=download","row_from":3,"row_to":6,"col_from":4,"col_to":5,"API_KEY":"whatiftheworldendstodayum"}
+# {"file_path":"https://drive.google.com/u/0/uc?id=1NSXTR1jaP_YUkpqeatMdyjHWwixoq2YP&export=download","sheet":[0,1],"API_KEY":"whatiftheworldendstodayum"}
