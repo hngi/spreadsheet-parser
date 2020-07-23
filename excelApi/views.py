@@ -7,9 +7,14 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from .pagination import PostLimitOffsetPagination, PostPageNumberPagination
+from rest_framework.generics import ListAPIView
 from .permissions import IsOwnerOrReadOnly
 from rest_framework_jwt.settings import api_settings
 import datetime
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
 # Create your views here.
 
 
@@ -20,11 +25,13 @@ load_dotenv()
 class ProductPagination(PageNumberPagination):
     page_size = 20
 
-class ExcelintroAPIView(APIView):
+class ExcelintroAPIView(ListAPIView):
     permission_classes = [IsOwnerOrReadOnly]
+    pagination_class = PostLimitOffsetPagination
     
 
     def post(self, request):
+        pagination_class = PostLimitOffsetPagination
         # print('.>>>>>', request.GET.get('q', None))
         api_key = os.getenv('API_KEY')
         user_api_key = request.data.get('API_KEY')
@@ -58,8 +65,7 @@ class ExcelintroAPIView(APIView):
 
 class ExcelAPIView(APIView):
     permission_classes = [IsOwnerOrReadOnly]
-    pagination_class = ProductPagination
-    
+    pagination_class = PostLimitOffsetPagination
     def post(self, request):
         if request.method == 'POST':
             api_key = os.getenv('API_KEY')
@@ -217,11 +223,11 @@ class ExcelAPIView(APIView):
             else:
                 return Response({'error': 'you are not authorized to perform this action.'},
                                 status=status.HTTP_401_UNAUTHORIZED)
-
+#{"file_path":"https://fgn-web-crawler.herokuapp.com/static/expense/2020/01_02_2020.xlsx","row_from":20,"row_to":50,"col_from":0,"col_to":3,"API_KEY":"random25stringsisneeded"}
 
 #{"file_path":"https://fgn-web-crawler.herokuapp.com/static/expense/2020/01_02_2020.xlsx","API_KEY":"whatiftheworldendstodayum"}
 #{"file_path":"https://opentreasury.gov.ng/images/2020/DAILYPAYMENT/JULY/04-07-20.xlsx","API_KEY":"whatiftheworldendstodayum"}
-# {"file_path":"https://opentreasury.gov.ng/images/2020/DAILYPAYMENT/MARCH/11-03-20.xlsx","API_KEY":"whatiftheworldendstodayum"}
+# {"file_path":"https://opentreasury.gov.ng/images/2020/DAILYPAYMENT/MARCH/11-03-20.xlsx","API_KEY":"random25stringsisneeded"}
 # {"file_path":"https://opentreasury.gov.ng/images/2020/MONTHLYBUDPERF/FGN/ADMIN/FEB.xlsx","API_KEY":"whatiftheworldendstodayum"}
 # {"file_path":"https://fgn-web-crawler.herokuapp.com/static/expense/2020/01_02_2020.xlsx","row_from":20,"row_to":22,"col_from":2,"col_to":4,"API_KEY":"whatiftheworldendstodayum"}
 #{"file_path":"https://drive.google.com/u/0/uc?id=1NSXTR1jaP_YUkpqeatMdyjHWwixoq2YP&export=download","API_KEY":"whatiftheworldendstodayum"}
