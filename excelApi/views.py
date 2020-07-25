@@ -100,7 +100,12 @@ class ExcelAPIView(APIView):
                             new3 = new3.iloc[:,col_from:col_to]
                             
                             daily_expenses = new3.to_dict(orient='records')
-                            ohh = json.dumps(daily_expenses)
+                            class DateTimeEncoder(JSONEncoder):
+                                def default(self, obj):
+                                    if isinstance(obj, (datetime.date, datetime.datetime)):
+                                        return obj.isoformat()
+                            ohh = json.dumps(daily_expenses,cls=DateTimeEncoder)
+                            
                             real_data = json.loads(ohh)
                             return Response(real_data, status= status.HTTP_200_OK)
                         data1 = data.dropna(axis=0, how='all', thresh=3)
@@ -120,59 +125,17 @@ class ExcelAPIView(APIView):
                         new3 = new3.iloc[:,col_from:col_to]
                         
                         daily_expenses = new3.to_dict(orient='records')
-                        ohh = json.dumps(daily_expenses)
+                        class DateTimeEncoder(JSONEncoder):
+                                def default(self, obj):
+                                    if isinstance(obj, (datetime.date, datetime.datetime)):
+                                        return obj.isoformat()
+                        ohh = json.dumps(daily_expenses,cls=DateTimeEncoder)
+                       
                         real_data = json.loads(ohh)
                         return Response(real_data, status= status.HTTP_200_OK)
 
                     elif file_path and row_from:
                         data = pd.read_excel(file_path, sheet_name=sheet)
-                        if type(data) is dict:
-                            ano = pd.concat(((data[frame]) for frame in data.keys()),ignore_index=True)
-                            data1 = ano.dropna(axis=0, how='all', thresh=3)
-                            data2 = data1.dropna(axis=1, how='all')
-                            new = data2.loc[data2.isnull().mean(axis=1).lt(0.3)]
-                            new2 = new[new.columns[new.isnull().mean()<0.3]]
-
-                            if 'Unnamed: 2' in new2.columns:
-                                new_header = new2.iloc[0]
-                                new2.columns = new_header
-                                if "-" in new2.columns:
-                                    new_header = new2.iloc[1]
-                                    new2.columns = new_header
-                                new2 = new2[1:]
-                            new2 = new2.fillna('').reset_index(drop = True)
-                            new3 = new2.loc[row_from:row_to]
-                            new3 = new3.iloc[:,col_from:col_to]
-                            
-                            daily_expenses = new3.to_dict(orient='records')
-                            print(daily_expenses)
-                            ohh = json.dumps(daily_expenses)
-                            real_data = json.loads(ohh)
-                            return Response(real_data, status= status.HTTP_200_OK)
-                    
-                        data1 = data.dropna(axis=0, how='all', thresh=3)
-                        
-                        data2 = data1.dropna(axis=1, how='all')                 
-                        new = data2.loc[data.isnull().mean(axis=1).lt(0.3)]
-                        new2 = new[new.columns[new.isnull().mean()<0.3]]
-
-                        if 'Unnamed: 2' in new2.columns:
-                            new_header = new2.iloc[0]
-                            new2.columns = new_header
-                            if "-" in new2.columns:
-                                new_header = new2.iloc[1]
-                                new2.columns = new_header                           
-                            new2 = new2[1:]
-                        new2 = new2.fillna('').reset_index(drop = True)
-                        new3 = new2.loc[row_from:]
-                        new3 = new3.iloc[:,col_from:col_to]
-                        
-                        daily_expenses = new3.to_dict(orient='records')
-                        ohh = json.dumps(daily_expenses)
-                        real_data2 = json.loads(ohh)
-                        return Response(real_data2, status= status.HTTP_200_OK)
-                    elif file_path:
-                        data = pd.read_excel(file_path,sheet_name=sheet)
                         if type(data) is dict:
                             ano = pd.concat(((data[frame]) for frame in data.keys()),ignore_index=True)
                             data1 = ano.dropna(axis=0, how='all', thresh=3)
@@ -202,6 +165,62 @@ class ExcelAPIView(APIView):
                             return Response(real_data, status= status.HTTP_200_OK)
                     
                         data1 = data.dropna(axis=0, how='all', thresh=3)
+                        
+                        data2 = data1.dropna(axis=1, how='all')                 
+                        new = data2.loc[data.isnull().mean(axis=1).lt(0.3)]
+                        new2 = new[new.columns[new.isnull().mean()<0.3]]
+
+                        if 'Unnamed: 2' in new2.columns:
+                            new_header = new2.iloc[0]
+                            new2.columns = new_header
+                            if "-" in new2.columns:
+                                new_header = new2.iloc[1]
+                                new2.columns = new_header                           
+                            new2 = new2[1:]
+                        new2 = new2.fillna('').reset_index(drop = True)
+                        new3 = new2.loc[row_from:]
+                        new3 = new3.iloc[:,col_from:col_to]
+                        
+                        daily_expenses = new3.to_dict(orient='records')
+                        class DateTimeEncoder(JSONEncoder):
+                                def default(self, obj):
+                                    if isinstance(obj, (datetime.date, datetime.datetime)):
+                                        return obj.isoformat()
+                        ohh = json.dumps(daily_expenses,cls=DateTimeEncoder)
+                        
+                        real_data2 = json.loads(ohh)
+                        return Response(real_data2, status= status.HTTP_200_OK)
+                    elif file_path:
+                        data = pd.read_excel(file_path,sheet_name=sheet)
+                        if type(data) is dict:
+                            ano = pd.concat(((data[frame]) for frame in data.keys()),ignore_index=True)
+                            data1 = ano.dropna(axis=0, how='all', thresh=3)
+                            data2 = data1.dropna(axis=1, how='all')
+                            new = data2.loc[data2.isnull().mean(axis=1).lt(0.3)]
+                            new2 = new[new.columns[new.isnull().mean()<0.3]]
+
+                            if 'Unnamed: 2' in new2.columns:
+                                new_header = new2.iloc[0]
+                                new2.columns = new_header
+                                if "-" in new2.columns:
+                                    new_header = new2.iloc[1]
+                                    new2.columns = new_header
+                                new2 = new2[1:]
+                            new2 = new2.fillna('').reset_index(drop = True)
+                            new3 = new2.loc[row_from:row_to]
+                            new3 = new3.iloc[:,col_from:col_to]
+                            
+                            daily_expenses = new3.to_dict(orient='records')
+                            
+                            class DateTimeEncoder(JSONEncoder):
+                                def default(self, obj):
+                                    if isinstance(obj, (datetime.date, datetime.datetime)):
+                                        return obj.isoformat()
+                            ohh = json.dumps(daily_expenses,cls=DateTimeEncoder)
+                            real_data = json.loads(ohh)
+                            return Response(real_data, status= status.HTTP_200_OK)
+                    
+                        data1 = data.dropna(axis=0, how='all', thresh=3)
                         data2 = data1.dropna(axis=1, how='all')
                                             
                         new = data2.loc[data.isnull().mean(axis=1).lt(0.3)]
@@ -217,7 +236,11 @@ class ExcelAPIView(APIView):
                         new2 = new2.fillna('').reset_index(drop = True)
                         new2 = new2.iloc[:,col_from:col_to]
                         daily_expenses = new2.to_dict(orient='records')
-                        ohh = json.dumps(daily_expenses)
+                        class DateTimeEncoder(JSONEncoder):
+                                def default(self, obj):
+                                    if isinstance(obj, (datetime.date, datetime.datetime)):
+                                        return obj.isoformat()
+                        ohh = json.dumps(daily_expenses,cls=DateTimeEncoder)
                         real_data2 = json.loads(ohh)
                         return Response(real_data2, status= status.HTTP_200_OK)
 
