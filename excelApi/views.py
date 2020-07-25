@@ -13,6 +13,7 @@ from .permissions import IsOwnerOrReadOnly
 from rest_framework_jwt.settings import api_settings
 import datetime
 import ssl
+from json import JSONEncoder
 
 ssl._create_default_https_context = ssl._create_unverified_context
 # Create your views here.
@@ -191,7 +192,12 @@ class ExcelAPIView(APIView):
                             new3 = new3.iloc[:,col_from:col_to]
                             
                             daily_expenses = new3.to_dict(orient='records')
-                            ohh = json.dumps(daily_expenses)
+                            print(daily_expenses)
+                            class DateTimeEncoder(JSONEncoder):
+                                def default(self, obj):
+                                    if isinstance(obj, (datetime.date, datetime.datetime)):
+                                        return obj.isoformat()
+                            ohh = json.dumps(daily_expenses,cls=DateTimeEncoder)
                             real_data = json.loads(ohh)
                             return Response(real_data, status= status.HTTP_200_OK)
                     
