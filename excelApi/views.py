@@ -13,6 +13,7 @@ from .permissions import IsOwnerOrReadOnly
 from rest_framework_jwt.settings import api_settings
 import datetime
 import ssl
+from json import JSONEncoder
 
 ssl._create_default_https_context = ssl._create_unverified_context
 # Create your views here.
@@ -99,7 +100,12 @@ class ExcelAPIView(APIView):
                             new3 = new3.iloc[:,col_from:col_to]
                             
                             daily_expenses = new3.to_dict(orient='records')
-                            ohh = json.dumps(daily_expenses)
+                            class DateTimeEncoder(JSONEncoder):
+                                def default(self, obj):
+                                    if isinstance(obj, (datetime.date, datetime.datetime)):
+                                        return obj.isoformat()
+                            ohh = json.dumps(daily_expenses,cls=DateTimeEncoder)
+                            
                             real_data = json.loads(ohh)
                             return Response(real_data, status= status.HTTP_200_OK)
                         data1 = data.dropna(axis=0, how='all', thresh=3)
@@ -119,7 +125,12 @@ class ExcelAPIView(APIView):
                         new3 = new3.iloc[:,col_from:col_to]
                         
                         daily_expenses = new3.to_dict(orient='records')
-                        ohh = json.dumps(daily_expenses)
+                        class DateTimeEncoder(JSONEncoder):
+                                def default(self, obj):
+                                    if isinstance(obj, (datetime.date, datetime.datetime)):
+                                        return obj.isoformat()
+                        ohh = json.dumps(daily_expenses,cls=DateTimeEncoder)
+                       
                         real_data = json.loads(ohh)
                         return Response(real_data, status= status.HTTP_200_OK)
 
@@ -145,7 +156,11 @@ class ExcelAPIView(APIView):
                             
                             daily_expenses = new3.to_dict(orient='records')
                             print(daily_expenses)
-                            ohh = json.dumps(daily_expenses)
+                            class DateTimeEncoder(JSONEncoder):
+                                def default(self, obj):
+                                    if isinstance(obj, (datetime.date, datetime.datetime)):
+                                        return obj.isoformat()
+                            ohh = json.dumps(daily_expenses,cls=DateTimeEncoder)
                             real_data = json.loads(ohh)
                             return Response(real_data, status= status.HTTP_200_OK)
                     
@@ -167,7 +182,12 @@ class ExcelAPIView(APIView):
                         new3 = new3.iloc[:,col_from:col_to]
                         
                         daily_expenses = new3.to_dict(orient='records')
-                        ohh = json.dumps(daily_expenses)
+                        class DateTimeEncoder(JSONEncoder):
+                                def default(self, obj):
+                                    if isinstance(obj, (datetime.date, datetime.datetime)):
+                                        return obj.isoformat()
+                        ohh = json.dumps(daily_expenses,cls=DateTimeEncoder)
+                        
                         real_data2 = json.loads(ohh)
                         return Response(real_data2, status= status.HTTP_200_OK)
                     elif file_path:
@@ -191,7 +211,12 @@ class ExcelAPIView(APIView):
                             new3 = new3.iloc[:,col_from:col_to]
                             
                             daily_expenses = new3.to_dict(orient='records')
-                            ohh = json.dumps(daily_expenses)
+                            
+                            class DateTimeEncoder(JSONEncoder):
+                                def default(self, obj):
+                                    if isinstance(obj, (datetime.date, datetime.datetime)):
+                                        return obj.isoformat()
+                            ohh = json.dumps(daily_expenses,cls=DateTimeEncoder)
                             real_data = json.loads(ohh)
                             return Response(real_data, status= status.HTTP_200_OK)
                     
@@ -211,7 +236,11 @@ class ExcelAPIView(APIView):
                         new2 = new2.fillna('').reset_index(drop = True)
                         new2 = new2.iloc[:,col_from:col_to]
                         daily_expenses = new2.to_dict(orient='records')
-                        ohh = json.dumps(daily_expenses)
+                        class DateTimeEncoder(JSONEncoder):
+                                def default(self, obj):
+                                    if isinstance(obj, (datetime.date, datetime.datetime)):
+                                        return obj.isoformat()
+                        ohh = json.dumps(daily_expenses,cls=DateTimeEncoder)
                         real_data2 = json.loads(ohh)
                         return Response(real_data2, status= status.HTTP_200_OK)
 
