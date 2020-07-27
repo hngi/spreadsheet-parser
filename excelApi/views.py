@@ -84,8 +84,8 @@ class ExcelAPIView(APIView):
                             ano = pd.concat(((data[frame]) for frame in data.keys()),ignore_index=True)
                             data1 = ano.dropna(axis=0, how='all', thresh=3)
                             data2 = data1.dropna(axis=1, how='all')
-                            new = data2.loc[data2.isnull().mean(axis=1).lt(0.3)]
-                            new2 = new[new.columns[new.isnull().mean()<0.3]]
+                            new = data2.loc[data2.isnull().mean(axis=1).lt(0.5)]
+                            new2 = new[new.columns[new.isnull().mean()<0.5]]
 
                             if 'Unnamed: 2' in new2.columns:
                                 new_header = new2.iloc[0]
@@ -109,8 +109,8 @@ class ExcelAPIView(APIView):
                             return Response(real_data, status= status.HTTP_200_OK)
                         data1 = data.dropna(axis=0, how='all', thresh=3)
                         data2 = data1.dropna(axis=1, how='all')
-                        new = data2.loc[data.isnull().mean(axis=1).lt(0.3)]
-                        new2 = new[new.columns[new.isnull().mean()<0.3]]
+                        new = data2.loc[data.isnull().mean(axis=1).lt(0.5)]
+                        new2 = new[new.columns[new.isnull().mean()<0.5]]
 
                         if 'Unnamed: 2' in new2.columns:
                             new_header = new2.iloc[0]
@@ -139,8 +139,8 @@ class ExcelAPIView(APIView):
                             ano = pd.concat(((data[frame]) for frame in data.keys()),ignore_index=True)
                             data1 = ano.dropna(axis=0, how='all', thresh=3)
                             data2 = data1.dropna(axis=1, how='all')
-                            new = data2.loc[data2.isnull().mean(axis=1).lt(0.3)]
-                            new2 = new[new.columns[new.isnull().mean()<0.3]]
+                            new = data2.loc[data2.isnull().mean(axis=1).lt(0.5)]
+                            new2 = new[new.columns[new.isnull().mean()<0.5]]
 
                             if 'Unnamed: 2' in new2.columns:
                                 new_header = new2.iloc[0]
@@ -165,8 +165,8 @@ class ExcelAPIView(APIView):
                         data1 = data.dropna(axis=0, how='all', thresh=3)
                         
                         data2 = data1.dropna(axis=1, how='all')                 
-                        new = data2.loc[data.isnull().mean(axis=1).lt(0.3)]
-                        new2 = new[new.columns[new.isnull().mean()<0.3]]
+                        new = data2.loc[data.isnull().mean(axis=1).lt(0.5)]
+                        new2 = new[new.columns[new.isnull().mean()<0.5]]
 
                         if 'Unnamed: 2' in new2.columns:
                             new_header = new2.iloc[0]
@@ -221,8 +221,8 @@ class ExcelAPIView(APIView):
                         data1 = data.dropna(axis=0, how='all', thresh=3)
                         data2 = data1.dropna(axis=1, how='all')
                                             
-                        new = data2.loc[data.isnull().mean(axis=1).lt(0.3)]
-                        new2 = new[new.columns[new.isnull().mean()<0.3]]
+                        new = data2.loc[data.isnull().mean(axis=1).lt(0.5)]
+                        new2 = new[new.columns[new.isnull().mean()<0.5]]
                         if 'Unnamed: 2' in new2.columns:
                             new_header = new2.iloc[0]
                             new2.columns = new_header
