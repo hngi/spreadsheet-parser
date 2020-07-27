@@ -1,12 +1,13 @@
 from django.urls import path
-from .views import ExcelAPIView
+from .views import ExcelAPIView,ExcelintroAPIView
 
 
 app_name = 'excelApi'
 
 
 urlpatterns = [
-    # path('', ExcelAPIView.as_view(), name='post-parse'),
+  #  path('', ExcelintroAPIView.as_view(), name='post-parse'),
     path('', ExcelAPIView.as_view(), name='pre-parse'),
+    
 
 ]
