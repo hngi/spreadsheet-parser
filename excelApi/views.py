@@ -14,6 +14,7 @@ from rest_framework_jwt.settings import api_settings
 import datetime
 import ssl
 from json import JSONEncoder
+from benedict import benedict
 
 ssl._create_default_https_context = ssl._create_unverified_context
 # Create your views here.
@@ -52,6 +53,8 @@ class ExcelintroAPIView(ListAPIView):
                 data.columns = data.columns.map(lambda x: str(x))
                 data.columns = data.columns.map(lambda x: x.replace('\n', ''))
                 final_data = data.to_dict(orient='records')
+                test = benedict(final_data)
+                print(test)
 
                 return Response(json.loads(json.dumps(final_data)), status=status.HTTP_200_OK)
                 
