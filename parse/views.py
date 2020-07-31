@@ -13,6 +13,7 @@ from pathlib import Path
 from .delete_script import clear_download
 
 
+
 # Create your views here.
 #landing page view
 def about(request):
