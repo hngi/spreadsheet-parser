@@ -1,5 +1,4 @@
 /.idea/
-/.vscode/
 /venv/
 .env
 fenv
@@ -133,9 +132,11 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
-
 # Pyre type checker
 
 .pyre/
 /__pycache__/
 .pyc
+temp_auto_push.bat
+temp_interactive_push.bat
+.gitignore
