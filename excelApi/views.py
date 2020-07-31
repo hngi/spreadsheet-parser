@@ -88,6 +88,8 @@ class ExcelAPIView(APIView):
                         new2 = new2.fillna('').reset_index(drop = True)
                         new3 = new2.loc[row_from:row_to]
                         new3 = new3.iloc[:,col_from:col_to]
+                        new3.rename(columns=lambda x: x.strip(), inplace=True)
+
                         
                         daily_expenses = new3.to_dict(orient='records')
                         class DateTimeEncoder(JSONEncoder):
@@ -113,6 +115,8 @@ class ExcelAPIView(APIView):
                     new2 = new2.fillna('').reset_index(drop = True)
                     new3 = new2.loc[row_from:row_to]
                     new3 = new3.iloc[:,col_from:col_to]
+                    new3.rename(columns=lambda x: x.strip(), inplace=True)
+
                     
                     daily_expenses = new3.to_dict(orient='records')
                     class DateTimeEncoder(JSONEncoder):
@@ -143,7 +147,7 @@ class ExcelAPIView(APIView):
                         new2 = new2.fillna('').reset_index(drop = True)
                         new3 = new2.loc[row_from:row_to]
                         new3 = new3.iloc[:,col_from:col_to]
-                        
+                        new3.rename(columns=lambda x: x.strip(), inplace=True)
                         daily_expenses = new3.to_dict(orient='records')
                         class DateTimeEncoder(JSONEncoder):
                             def default(self, obj):
@@ -158,6 +162,7 @@ class ExcelAPIView(APIView):
                     data2 = data1.dropna(axis=1, how='all')                 
                     new = data2.loc[data.isnull().mean(axis=1).lt(0.5)]
                     new2 = new[new.columns[new.isnull().mean()<0.5]]
+                    
 
                     if 'Unnamed: 2' in new2.columns:
                         new_header = new2.iloc[0]
@@ -169,7 +174,7 @@ class ExcelAPIView(APIView):
                     new2 = new2.fillna('').reset_index(drop = True)
                     new3 = new2.loc[row_from:]
                     new3 = new3.iloc[:,col_from:col_to]
-                    
+                    new3.rename(columns=lambda x: x.strip(), inplace=True)
                     daily_expenses = new3.to_dict(orient='records')
                     class DateTimeEncoder(JSONEncoder):
                             def default(self, obj):
@@ -198,7 +203,7 @@ class ExcelAPIView(APIView):
                         new2 = new2.fillna('').reset_index(drop = True)
                         new3 = new2.loc[row_from:row_to]
                         new3 = new3.iloc[:,col_from:col_to]
-                        
+                        new3.rename(columns=lambda x: x.strip(), inplace=True)
                         daily_expenses = new3.to_dict(orient='records')
                         
                         class DateTimeEncoder(JSONEncoder):
@@ -214,6 +219,7 @@ class ExcelAPIView(APIView):
                                         
                     new = data2.loc[data.isnull().mean(axis=1).lt(0.5)]
                     new2 = new[new.columns[new.isnull().mean()<0.5]]
+                    new3.rename(columns=lambda x: x.strip(), inplace=True)
                     if 'Unnamed: 2' in new2.columns:
                         new_header = new2.iloc[0]
                         new2.columns = new_header
@@ -223,6 +229,7 @@ class ExcelAPIView(APIView):
                         
                         new2 = new2[1:]
                     new2 = new2.fillna('').reset_index(drop = True)
+                    new2.rename(columns=lambda x: x.strip(), inplace=True)
                     new2 = new2.iloc[:,col_from:col_to]
                     daily_expenses = new2.to_dict(orient='records')
                     class DateTimeEncoder(JSONEncoder):
@@ -243,7 +250,7 @@ class ExcelAPIView(APIView):
 #{"file_path":"https://fgn-web-crawler.herokuapp.com/static/expense/2020/01_02_2020.xlsx","API_KEY":"whatiftheworldendstodayum"}
 #{"file_path":"https://opentreasury.gov.ng/images/2020/DAILYPAYMENT/JULY/04-07-20.xlsx","API_KEY":"whatiftheworldendstodayum"}
 # {"file_path":"https://opentreasury.gov.ng/images/2020/DAILYPAYMENT/MARCH/11-03-20.xlsx","API_KEY":"random25stringsisneeded"}
-# {"file_path":"https://opentreasury.gov.ng/images/2020/MONTHLYBUDPERF/FGN/ADMIN/FEB.xlsx","API_KEY":"whatiftheworldendstodayum"}
+# {"file_path":"https://opentreasury.gov.ng/images/2020/MONTHLYBUDPERF/FGN/ADMIN/JAN.xlsx"}
 # {"file_path":"https://fgn-web-crawler.herokuapp.com/static/expense/2020/01_02_2020.xlsx","row_from":20,"row_to":22,"col_from":2,"col_to":4,"API_KEY":"whatiftheworldendstodayum"}
 #{"file_path":"https://drive.google.com/u/0/uc?id=1NSXTR1jaP_YUkpqeatMdyjHWwixoq2YP&export=download","API_KEY":"whatiftheworldendstodayum"}
 # {"file_path":"https://drive.google.com/u/0/uc?id=1NSXTR1jaP_YUkpqeatMdyjHWwixoq2YP&export=download","row_from":3,"row_to":6,"col_from":4,"col_to":5,"sheet":1,"API_KEY":"whatiftheworldendstodayum"}
