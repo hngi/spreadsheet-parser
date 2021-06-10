@@ -7,7 +7,7 @@ dataclasses==0.6
 defusedxml==0.6.0
 diff-match-patch==20181111
 dj-database-url==0.5.0
-Django==3.0.8
+Django==3.1.12
 django-heroku==0.3.1
 djangorestframework==3.11.0
 djangorestframework-jwt==1.11.0
