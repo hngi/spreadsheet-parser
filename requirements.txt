@@ -27,7 +27,7 @@ openpyxl==3.0.4
 packaging==20.4
 pandas==1.0.0
 psycopg2==2.8.5
-PyJWT==1.7.1
+PyJWT==2.4.0
 pyparsing==2.4.7
 python-dateutil==2.8.1
 python-dotenv==0.14.0
